@@ -10,13 +10,16 @@
 		"start": "ts-node build/index.js",
 		"lint": "eslint src --ext .ts",
 		"prettify": "prettier --config .prettierrc 'src/**/*.ts' --write",
-		"prettier-watch": "onchange 'src/**/*.ts' -- prettier --write {{changed}}"
+		"prettier-watch": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
+		"prepare": "husky install"
 	},
-  "husky": {
-    "hooks": {
-      "pre-commit": ["npm run prettify", "npm run lint", "git add ."]
-    }
-  },
+	"lint-staged": {
+		"**/*.{js,ts}": [
+			"npm run prettify",
+			"npm run lint",
+			"git add ."
+		]
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/shahanahmed86/ts-server.git"
@@ -41,7 +44,8 @@
 		"eslint": "^8.33.0",
 		"eslint-config-prettier": "^8.6.0",
 		"eslint-plugin-prettier": "^4.2.1",
-		"husky": "^8.0.3",
+		"husky": "^8.0.0",
+		"lint-staged": "^13.1.0",
 		"nodemon": "^2.0.20",
 		"onchange": "^7.1.0",
 		"prettier": "^2.8.3",
