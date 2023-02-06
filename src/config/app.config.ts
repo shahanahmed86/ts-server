@@ -9,12 +9,8 @@ export const {
 	DB_USER = 'admin',
 	DB_PASS = 'lmelg8',
 	DB_NAME = 'dev_database',
-	DB_DIALECT = 'mysql',
 
 	CRON_REMOVE_TEMP = '15 10 * * *',
-
-	SSL_KEY,
-	SSL_CERTIFICATE,
 } = process.env;
 
 export const IN_PROD = NODE_ENV === 'production';

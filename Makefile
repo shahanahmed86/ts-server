@@ -1,0 +1,25 @@
+run-dev-up:
+	docker-compose -p accounts-app \
+	-f docker-compose.yml -f docker-compose.dev.yml \
+	up -d
+run-dev-up-rebuild:
+	docker-compose -p accounts-app \
+	-f docker-compose.yml -f docker-compose.dev.yml \
+	up -d --build --renew-anon-volumes server --no-deps
+run-dev-down:
+	docker-compose -p accounts-app \
+	-f docker-compose.yml -f docker-compose.dev.yml \
+	down
+run-dev-down-hard:
+	docker-compose -p accounts-app \
+	-f docker-compose.yml -f docker-compose.dev.yml \
+	down -v
+
+run-backup:
+	docker exec -t accounts-app-psqldb-1 pg_dumpall -c -U admin > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+
+# only for dev environment
+run-sync:
+	DB_HOST="localhost" yarn typeorm:sync
+run-migration:
+	DB_HOST="localhost" yarn typeorm:migrate

@@ -1,10 +1,10 @@
 import { ContextFunction } from '../../@types/wrapper.type';
-import { authController, guestController } from '../../controllers/middleware/auth.controller';
+import controllers from '../../controllers';
 import { restCatch } from '../../utils/errors.util';
 
 export const guest: ContextFunction = async (req, res, next) => {
 	try {
-		await guestController(req);
+		await controllers.middleware.guestController(req);
 
 		next();
 	} catch (e) {
@@ -15,7 +15,7 @@ export const guest: ContextFunction = async (req, res, next) => {
 export const auth = (key: string): ContextFunction => {
 	return async (req, res, next) => {
 		try {
-			await authController(key, req);
+			await controllers.middleware.authController(key, req);
 
 			next();
 		} catch (e) {

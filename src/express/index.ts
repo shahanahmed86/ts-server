@@ -1,9 +1,10 @@
-import os from 'os';
 import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
+import scheduledJobs from '../library/cron.library';
 import logger from '../library/morgan.library';
 import { SIZE_LIMIT } from '../utils/constants.util';
+import routes from './routes';
 
 const app = express();
 
@@ -23,10 +24,13 @@ app.use(logger);
 // disable x-powered-by to avoid giving hint to hackers
 app.disable('x-powered-by');
 
-// healthcheck
-app.get('/api/healthcheck', (_, res) => res.send(`I am healthy at ${os.hostname()}`));
+// routings
+app.use('/api', routes);
 
 // when route not found
 app.use((_, res) => res.status(404).send('Route not found'));
+
+// cron jobs
+scheduledJobs();
 
 export default app;
