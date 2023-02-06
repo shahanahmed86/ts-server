@@ -1,3 +1,3 @@
-export type GenderOption = 'MALE' | 'FEMALE' | 'PREFER_NOT_TO_SAY';
+import { Result } from './wrapper.type';
 
-export type LoginType = 'LOCAL' | 'FACEBOOK' | 'GOOGLE';
+export type FormResponse = <T>(status: number, message: string, data: T) => Result<T>;

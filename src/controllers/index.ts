@@ -1,5 +1,5 @@
-import * as commonControllers from './common.controller';
+import * as middleware from './middleware';
 
-const controllers = { commonControllers };
+const controllers = { middleware };
 
 export default controllers;
