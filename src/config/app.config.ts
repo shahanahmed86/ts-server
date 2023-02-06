@@ -33,3 +33,5 @@ export const DB_LOGGING = IN_PROD;
 export const JOBS = {
 	removeTemp: CRON_REMOVE_TEMP,
 };
+
+export const BASE_URL = `${APP_PROTOCOL}//${APP_HOST}`;
