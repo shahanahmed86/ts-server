@@ -109,3 +109,6 @@ dump*.sql
 
 # docker
 secrets
+
+# general
+uploads

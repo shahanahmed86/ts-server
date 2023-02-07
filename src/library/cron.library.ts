@@ -1,11 +1,10 @@
 import fs from 'fs';
 import cron from 'node-cron';
-import { JOBS } from '../config';
+import { IN_PROD, JOBS } from '../config';
 import { TEMP_FOLDER_PATH } from '../utils/constants.util';
 
 function scheduledJobs(): void {
-	console.log('scheduling jobs');
-	// removeTempFolder()
+	if (!IN_PROD) removeTempFolder();
 	cron.schedule(JOBS.removeTemp, removeTempFolder);
 }
 
