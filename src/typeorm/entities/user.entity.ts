@@ -1,10 +1,9 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
+import { Base } from './base.entity';
+import { Role } from './role.entity';
 
-@Entity()
-export class User extends BaseEntity {
-	@PrimaryGeneratedColumn('uuid')
-	id!: string;
-
+@Entity('users')
+export class User extends Base {
 	@Column()
 	firstName?: string;
 
@@ -26,9 +25,9 @@ export class User extends BaseEntity {
 	@Column('boolean', { default: false })
 	phoneVerified?: boolean;
 
-	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-	createdAt?: Date;
+	@Column('uuid')
+	roleId!: string;
 
-	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-	updatedAt?: Date;
+	@ManyToOne(() => Role, (entity) => entity.users)
+	role!: Role;
 }

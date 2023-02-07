@@ -1,15 +1,6 @@
 version: '3.7'
 
 services:
-  web:
-    image: nginx:1.23
-    depends_on:
-      - server
-    networks:
-      - app
-    ports:
-      - 80:80
-
   server:
     depends_on:
       - psqldb
