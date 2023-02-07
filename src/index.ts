@@ -1,4 +1,4 @@
-import { AppDataSource } from './data-source';
+import AppDataSource from './typeorm';
 import http from 'http';
 import { APP_PORT, BASE_URL } from './config';
 import app from './express';
