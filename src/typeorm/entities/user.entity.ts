@@ -1,8 +1,10 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne } from 'typeorm';
+import { compareSync, hashSync } from '../../library/bcrypt.library';
+import { USER_TABLE } from '../constants';
 import { Base } from './base.entity';
 import { Role } from './role.entity';
 
-@Entity('users')
+@Entity(USER_TABLE)
 export class User extends Base {
 	@Column()
 	firstName?: string;
@@ -29,5 +31,22 @@ export class User extends Base {
 	roleId!: string;
 
 	@ManyToOne(() => Role, (entity) => entity.users)
-	role!: Role;
+	role?: Role;
+
+	@Column('uuid')
+	genderId!: string;
+
+	@ManyToOne(() => Role, (entity) => entity.users)
+	gender?: Role;
+
+	// custom hooks
+	comparePassword(password: string) {
+		return compareSync(password, this.password);
+	}
+
+	// hooks
+	@BeforeInsert()
+	beforeInsert() {
+		this.password = hashSync(this.password);
+	}
 }
