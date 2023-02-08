@@ -1,15 +1,13 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { GENDER_TABLE, GENDER_TABLE_INDEXED_COLUMNS } from '../constants';
 import base from './base.migration';
 
-const TABLE_NAME = 'roles';
-const INDEXED_COLUMNS = ['name'];
-
-export class createRoles1675779466160 implements MigrationInterface {
+export class createGender1675845683448 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.createTable(
 			new Table({
-				name: TABLE_NAME,
-				indices: [{ columnNames: INDEXED_COLUMNS }],
+				name: GENDER_TABLE,
+				indices: [{ columnNames: GENDER_TABLE_INDEXED_COLUMNS }],
 				columns: base.concat([{ name: 'name', type: 'varchar' }]),
 			}),
 			true,
@@ -17,6 +15,6 @@ export class createRoles1675779466160 implements MigrationInterface {
 	}
 
 	async down(queryRunner: QueryRunner): Promise<void> {
-		await queryRunner.dropTable(TABLE_NAME);
+		await queryRunner.dropTable(GENDER_TABLE);
 	}
 }

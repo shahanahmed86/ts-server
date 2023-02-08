@@ -1,15 +1,13 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { USER_TABLE, USER_TABLE_INDEXED_COLUMNS } from '../constants';
 import base from './base.migration';
 
-const TABLE_NAME = 'users';
-const INDEXED_COLUMNS = ['email', 'phone'];
-
-export class createUsers1675754567854 implements MigrationInterface {
+export class createUser1675754567854 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.createTable(
 			new Table({
-				name: TABLE_NAME,
-				indices: [{ columnNames: INDEXED_COLUMNS }],
+				name: USER_TABLE,
+				indices: [{ columnNames: USER_TABLE_INDEXED_COLUMNS }],
 				columns: base.concat([
 					{
 						name: 'firstName',
@@ -44,6 +42,14 @@ export class createUsers1675754567854 implements MigrationInterface {
 						type: 'boolean',
 						default: false,
 					},
+					{
+						name: 'roleId',
+						type: 'uuid',
+					},
+					{
+						name: 'genderId',
+						type: 'uuid',
+					},
 				]),
 			}),
 			true,
@@ -51,6 +57,6 @@ export class createUsers1675754567854 implements MigrationInterface {
 	}
 
 	async down(queryRunner: QueryRunner): Promise<void> {
-		await queryRunner.dropTable(TABLE_NAME);
+		await queryRunner.dropTable(USER_TABLE);
 	}
 }

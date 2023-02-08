@@ -1,22 +1,21 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Role } from '../entities/role.entity';
+import { ROLES_DATA, ROLE_TABLE } from '../constants';
 
-const ROLES = ['admin', 'user'];
-
-export class addRoles1675780544875 implements MigrationInterface {
+export class addRole1675780544875 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.manager
-			.createQueryBuilder(Role, 'roles')
+			.createQueryBuilder(Role, ROLE_TABLE)
 			.insert()
-			.values(ROLES.map((name) => ({ name })))
+			.values(ROLES_DATA)
 			.execute();
 	}
 
 	async down(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.manager
-			.createQueryBuilder(Role, 'roles')
+			.createQueryBuilder(Role, ROLE_TABLE)
 			.delete()
-			.where('name IN (:...name)', { name: ROLES })
+			.where('id IS NOT NULL')
 			.execute();
 	}
 }
