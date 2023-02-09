@@ -1,12 +1,16 @@
 import Joi from 'joi';
 import { BCRYPT_MAX_BYTES } from '../config';
+import { EMAIL_REGEX, PASSWORD_REGEX } from '../utils/constants.util';
 
-export const usernameSchema = Joi.string().min(3).max(20).trim().label('username');
+export const uuidSchema = Joi.string().uuid().disallow('');
+
+export const emailSchema = Joi.string().regex(new RegExp(EMAIL_REGEX)).label('email').disallow('');
+
 export const passwordSchema = Joi.string()
 	.min(6)
 	.max(BCRYPT_MAX_BYTES, 'utf8')
 	.trim()
-	.regex(/^(?=.*?[\p{Lu}])(?=.*?[\p{Ll}])(?=.*?\d).*$/u)
+	.regex(new RegExp(PASSWORD_REGEX))
 	.label('password')
 	.messages({
 		'string.pattern.base': '{#label} must contain at least one uppercase/lowercase/digit',

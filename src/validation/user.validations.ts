@@ -1,27 +1,27 @@
 import Joi from 'joi';
-import { PASSWORD_REGEX } from '../utils/constants.util';
-import { usernameSchema, passwordSchema } from './common.validations';
+import { PHONE_REGEX } from '../utils/constants.util';
+import { emailSchema, passwordSchema } from './common.validations';
 
 const avatarSchema = Joi.string().label('avatar').disallow('');
-const fullNameSchema = Joi.string().min(3).max(30).label('full name').disallow('');
-const emailSchema = Joi.string().email().label('email').disallow('');
-const cellSchema = Joi.string()
-	.regex(new RegExp(PASSWORD_REGEX))
-	.label('cell number')
+const firstNameSchema = Joi.string().min(3).max(30).label('first name').disallow('');
+const lastNameSchema = Joi.string().min(3).max(30).label('last name').disallow('');
+const phoneSchema = Joi.string()
+	.regex(new RegExp(PHONE_REGEX))
+	.label('phone number')
 	.messages({ 'string.pattern.base': '{#label} must have 10 digits' });
 const genderSchema = Joi.string().label('gender').disallow('');
 
-export const userSignUpSchema = Joi.object({
-	username: usernameSchema,
-	password: passwordSchema,
+export const signupSchema = Joi.object({
+	firstName: firstNameSchema,
+	lastName: lastNameSchema,
 	avatar: avatarSchema,
-	fullName: fullNameSchema,
 	email: emailSchema,
-	cell: cellSchema,
+	password: passwordSchema,
+	phone: phoneSchema,
 	gender: genderSchema,
 }).required();
 
-export const userLoginSchema = Joi.object({
-	username: usernameSchema,
-	password: usernameSchema.label('password'),
+export const loginSchema = Joi.object({
+	email: Joi.string().label('email').required(),
+	password: Joi.string().label('password').required(),
 }).required();

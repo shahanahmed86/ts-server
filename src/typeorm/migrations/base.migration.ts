@@ -14,6 +14,11 @@ const base: TableColumnOptions[] = [
 		default: 'CURRENT_TIMESTAMP',
 	},
 	{
+		name: 'deletedAt',
+		type: 'timestamp',
+		isNullable: true,
+	},
+	{
 		name: 'updatedAt',
 		type: 'timestamp',
 		default: 'CURRENT_TIMESTAMP',

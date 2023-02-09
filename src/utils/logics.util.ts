@@ -7,7 +7,7 @@ export const formResponse: FormResponse = (status, message, data) => ({ status, 
 
 export const getUniqueId = () => randomUUID();
 
-export async function joiValidator<T>(schema: ObjectSchema, payload: T): Promise<void> {
+export async function joiValidator<T>(schema: ObjectSchema<T>, payload: T): Promise<void> {
 	try {
 		await schema.validateAsync(payload, { abortEarly: false });
 	} catch (e) {
