@@ -38,9 +38,9 @@ run-prod-down:
 
 # backup/restore database
 run-backup:
-	docker exec -t accounts-app-db-1 pg_dumpall -c -U admin dev_database > dumps/`date +%d-%m-%Y"_"%H_%M_%S`.sql
+	docker exec -t accounts-app-db-1 pg_dumpall -c --username="admin" > dumps/`date +%d-%m-%Y"_"%H_%M_%S`.sql
 run-restore:
-	cat ${DUMP} | docker exec -i accounts-app-db-1 psql -U admin dev_database
+	cat ${DUMP} | docker exec -i accounts-app-db-1 psql --username="admin"
 
 # only for dev environment
 
