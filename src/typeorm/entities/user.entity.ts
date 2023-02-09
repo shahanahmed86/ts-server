@@ -1,5 +1,6 @@
 import { BeforeInsert, Column, Entity, ManyToOne } from 'typeorm';
 import { compareSync, hashSync } from '../../library/bcrypt.library';
+import { ConflictError } from '../../utils/errors.util';
 import { USER_TABLE } from '../constants';
 import { Base } from './base.entity';
 import { Role } from './role.entity';
@@ -11,6 +12,9 @@ export class User extends Base {
 
 	@Column()
 	lastName?: string;
+
+	@Column()
+	avatar?: string;
 
 	@Column()
 	email!: string;
@@ -41,7 +45,8 @@ export class User extends Base {
 
 	// custom hooks
 	comparePassword(password: string) {
-		return compareSync(password, this.password);
+		const isMatched = compareSync(password, this.password);
+		if (!isMatched) throw new ConflictError('Password mismatched');
 	}
 
 	// hooks

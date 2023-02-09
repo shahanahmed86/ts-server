@@ -8,6 +8,9 @@ export class Base {
 	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
 	createdAt?: string;
 
+	@Column({ type: 'timestamp', nullable: true })
+	deletedAt?: string;
+
 	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
 	updatedAt?: string;
 
