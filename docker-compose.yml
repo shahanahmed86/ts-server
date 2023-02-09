@@ -2,10 +2,12 @@ version: '3.7'
 
 services:
   server:
+    ports:
+      - 80:8080
     depends_on:
-      - psqldb
+      - db
     networks:
-      - app
+      - accounts-app
     secrets:
       - APP_PORT
       - APP_PROTOCOL
@@ -20,6 +22,8 @@ services:
       - DB_NAME
       - DB_PORT
       - CRON_REMOVE_TEMP
+      - REDIS_PASSWORD
+      - REDIS_HOST
     environment:
       - APP_PORT_FILE=/run/secrets/APP_PORT
       - APP_PROTOCOL_FILE=/run/secrets/APP_PROTOCOL
@@ -34,8 +38,10 @@ services:
       - DB_NAME_FILE=/run/secrets/DB_NAME
       - DB_PORT_FILE=/run/secrets/DB_PORT
       - CRON_REMOVE_TEMP_FILE=/run/secrets/CRON_REMOVE_TEMP
+      - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
+      - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
 
-  psqldb:
+  db:
     image: postgres:15.1-bullseye
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
@@ -43,7 +49,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - app
+      - accounts-app
     secrets:
       - DB_USER
       - DB_PASS
@@ -53,43 +59,62 @@ services:
       - POSTGRES_USER_FILE=/run/secrets/DB_USER
       - POSTGRES_DB_FILE=/run/secrets/DB_NAME
 
+  cache:
+    image: redis:7-bullseye
+    command: --appendonly yes --requirepass "$$(cat $$REDIS_PASSWORD)"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    secrets:
+      - REDIS_PASSWORD
+    environment:
+      - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
+
 secrets:
   APP_PORT:
     file: ./secrets/APP_PORT
-    name: APP_PORT_20230206220300
+    name: APP_PORT_20230209113700
   APP_PROTOCOL:
     file: ./secrets/APP_PROTOCOL
-    name: APP_PROTOCOL_20230206220300
+    name: APP_PROTOCOL_20230209113700
   APP_HOST:
     file: ./secrets/APP_HOST
-    name: APP_HOST_20230206220300
+    name: APP_HOST_20230209113700
   BCRYPT_SALT:
     file: ./secrets/BCRYPT_SALT
-    name: BCRYPT_SALT_20230206220300
+    name: BCRYPT_SALT_20230209113700
   BCRYPT_MAX_BYTES:
     file: ./secrets/BCRYPT_MAX_BYTES
-    name: BCRYPT_MAX_BYTES_20230206220300
+    name: BCRYPT_MAX_BYTES_20230209113700
   JWT_SECRET:
     file: ./secrets/JWT_SECRET
-    name: JWT_SECRET_20230206220300
+    name: JWT_SECRET_20230209113700
   JWT_EXPIRES:
     file: ./secrets/JWT_EXPIRES
-    name: JWT_EXPIRES_20230206220300
+    name: JWT_EXPIRES_20230209113700
   DB_HOST:
     file: ./secrets/DB_HOST
-    name: DB_HOST_20230206220300
+    name: DB_HOST_20230209113700
   DB_USER:
     file: ./secrets/DB_USER
-    name: DB_USER_20230206220300
+    name: DB_USER_20230209113700
   DB_PASS:
     file: ./secrets/DB_PASS
-    name: DB_PASS_20230206220300
+    name: DB_PASS_20230209113700
   DB_NAME:
     file: ./secrets/DB_NAME
-    name: DB_NAME_20230206220300
+    name: DB_NAME_20230209113700
   DB_PORT:
     file: ./secrets/DB_PORT
-    name: DB_PORT_20230206220300
+    name: DB_PORT_20230209113700
   CRON_REMOVE_TEMP:
     file: ./secrets/CRON_REMOVE_TEMP
-    name: CRON_REMOVE_TEMP_20230206220300
+    name: CRON_REMOVE_TEMP_20230209113700
+  REDIS_PASSWORD:
+    file: ./secrets/REDIS_PASSWORD
+    name: REDIS_PASSWORD_20230209113700
+  REDIS_HOST:
+    file: ./secrets/REDIS_HOST
+    name: REDIS_HOST_20230209113700

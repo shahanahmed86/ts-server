@@ -5,10 +5,13 @@ export const {
 
 	JWT_SECRET = 'billa-mama',
 
-	DB_HOST = 'mysqldb',
+	DB_HOST = 'db',
 	DB_USER = 'admin',
 	DB_PASS = 'lmelg8',
 	DB_NAME = 'dev_database',
+
+	REDIS_HOST = 'cache',
+	REDIS_PASSWORD = 'lmelg8',
 
 	CRON_REMOVE_TEMP = '15 10 * * *',
 } = process.env;

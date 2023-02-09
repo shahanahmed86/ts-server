@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER } from '../config';
+import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, IN_PROD } from '../config';
 import entities from './entities';
 import migrations from './migrations';
 
@@ -16,7 +16,7 @@ const AppDataSource = new DataSource({
 	entities,
 	migrations,
 	subscribers: [],
-	migrationsRun: false,
+	migrationsRun: IN_PROD,
 	useUTC: true,
 });
 

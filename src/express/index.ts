@@ -1,8 +1,10 @@
 import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
+import { IN_PROD } from '../config';
 import scheduledJobs from '../library/cron.library';
 import logger from '../library/morgan.library';
+import swagger from '../library/swagger.library';
 import { SIZE_LIMIT } from '../utils/constants.util';
 import routes from './routes';
 
@@ -26,6 +28,9 @@ app.disable('x-powered-by');
 
 // routings
 app.use('/api', routes);
+
+// swagger
+if (!IN_PROD) swagger(app);
 
 // when route not found
 app.use((_, res) => res.status(404).send('Route not found'));

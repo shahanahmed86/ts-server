@@ -1,0 +1,73 @@
+version: '3.7'
+
+services:
+  server:
+    image: 127.0.0.1:5000/ts-server:1.0.0
+    command: npm run start
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 0
+        order: stop-first
+      restart_policy:
+        condition: any
+        delay: 10s
+        max_attempts: 10
+        window: 120s
+
+  db:
+    deploy:
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 0
+        order: stop-first
+      restart_policy:
+        condition: any
+        delay: 10s
+        max_attempts: 10
+        window: 120s
+      placement:
+        constraints:
+          - node.role == manager
+    volumes:
+      - db_prod:/var/lib/postgresql/data
+
+  cache:
+    deploy:
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 0
+        order: stop-first
+      restart_policy:
+        condition: any
+        delay: 10s
+        max_attempts: 10
+        window: 120s
+      placement:
+        constraints:
+          - node.role == manager
+    volumes:
+      - cache_prod:/data
+
+volumes:
+  db_prod:
+    driver: local
+  cache_prod:
+    driver: local
+
+networks:
+  accounts-app:
+    driver: overlay

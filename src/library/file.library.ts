@@ -1,7 +1,6 @@
-import { UploadedFile } from 'express-fileupload';
-import fs from 'fs';
+import { FileArray, UploadedFile } from 'express-fileupload';
+import fs, { readFileSync } from 'fs';
 import path from 'path';
-import { IFileArray } from '../@types/library.type';
 import { IN_PROD } from '../config';
 import { convertUnknownIntoError, NotFound } from '../utils/errors.util';
 import { getUniqueId } from '../utils/logics.util';
@@ -30,8 +29,8 @@ class File {
 		}
 	}
 
-	async localUpload(image: IFileArray): Promise<string | string[]> {
-		const imageFiles = image.uploadedFiles;
+	async localUpload(image: FileArray): Promise<string | string[]> {
+		const imageFiles = image.uploadedFile;
 		if (!Array.isArray(imageFiles)) return this.upload(imageFiles);
 
 		return Promise.all(imageFiles.map(this.upload));
@@ -45,11 +44,11 @@ class File {
 		return true;
 	}
 
-	getFilePath(imagePath: string): string {
-		const path = `${this.path}/${imagePath}`;
-		if (fs.existsSync(path)) return path;
+	getFilePath(imagePath: string): Buffer {
+		let path = `${this.path}/${imagePath}`;
+		if (!fs.existsSync(path)) path = `./${IN_PROD ? 'dist' : 'src'}/assets/404-image.png`;
 
-		return `./${IN_PROD ? 'dist' : 'src'}/assets/404-image.png`;
+		return readFileSync(path);
 	}
 
 	moveImageFromTmp(imagePath: string): Promise<string> {

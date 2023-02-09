@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, ManyToOne } from 'typeorm';
 import { compareSync, hashSync } from '../../library/bcrypt.library';
 import { USER_TABLE } from '../constants';
 import { Base } from './base.entity';
