@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  server:
+    restart: 'no'
+    command: npm run exec-tests
+
+  db:
+    restart: 'no'
+    volumes:
+      - db_test:/var/lib/postgresql/data
+
+  cache:
+    restart: 'no'
+    volumes:
+      - cache_test:/data
+
+volumes:
+  db_test:
+    driver: local
+  cache_test:
+    driver: local

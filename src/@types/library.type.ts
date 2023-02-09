@@ -1,5 +1,5 @@
-import { FileArray, UploadedFile } from 'express-fileupload';
+import { JwtPayload } from 'jsonwebtoken';
 
-export interface IFileArray extends FileArray {
-	uploadedFiles: UploadedFile | UploadedFile[];
-}
+export type EncodePayload = (key: string, password: string, expiresIn?: string | number) => string;
+
+export type DecodePayload = (token: string) => Promise<string | JwtPayload>;

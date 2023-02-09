@@ -4,31 +4,53 @@ services:
   server:
     tty: true
     depends_on:
-      psqldb:
+      db:
+        condition: service_healthy
+      cache:
         condition: service_healthy
     build:
       context: .
       target: dev
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - /app/node_modules
       - ./:/app
-    ports:
-      - 8080:8080
     command: npm run start:dev
 
-  psqldb:
+  db:
     tty: true
-    restart: on-failure
+    restart: unless-stopped
     volumes:
-      - psql_dev:/var/lib/postgresql/data
+      - db_dev:/var/lib/postgresql/data
     ports:
       - '5432:5432'
 
+  adminer:
+    tty: true
+    restart: unless-stopped
+    image: adminer:4.8.1-standalone
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - accounts-app
+
+  cache:
+    tty: true
+    restart: unless-stopped
+    volumes:
+      - cache_dev:/data
+    networks:
+      - accounts-app
+
 volumes:
-  psql_dev:
+  db_dev:
+    driver: local
+  cache_dev:
     driver: local
 
 networks:
-  app:
+  accounts-app:
     driver: bridge
