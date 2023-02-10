@@ -33,4 +33,8 @@ export const JOBS = {
 	removeTemp: CRON_REMOVE_TEMP,
 };
 
+export const REDIS_PORT = +(process.env.REDIS_PORT || '6379');
+
+export const REDIS_URL = `redis://${REDIS_HOST}:${REDIS_PORT}`;
+
 export const BASE_URL = `${APP_PROTOCOL}//${APP_HOST}`;

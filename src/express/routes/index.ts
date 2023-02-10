@@ -1,11 +1,14 @@
 import os from 'os';
 import { Router } from 'express';
-import imageRouter from './image/image.routes';
+import imagesRoutes from './images/images.routes';
+import appRoutes from './app';
 
 const router = Router();
 
+router.use('/app', appRoutes);
+
 // common
-router.use('/images', imageRouter);
+router.use('/images', imagesRoutes);
 
 // healthcheck
 router.get('/healthcheck', (_req, res) => {

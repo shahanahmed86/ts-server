@@ -1,13 +1,13 @@
-// import { common } from '../../validations';
 import { Request, Response } from 'express';
 import file from '../../library/file.library';
 import { restCatch } from '../../utils/errors.util';
-// import { joiValidator } from '../../utils/logics.util';
+import { joiValidator } from '../../utils/logics.util';
+import * as validation from '../../validation';
 
-const getImage = async (req: Request, res: Response) => {
+export const getImage = async (req: Request, res: Response) => {
 	try {
 		const args = Object.assign({}, req.params, req.query);
-		// await joiValidator(common.fileRef, args);
+		await joiValidator(validation.fileRef, args);
 
 		const filePath = file.getFilePath(args.filename);
 		res.attachment(args.filename).send(filePath);
@@ -15,5 +15,3 @@ const getImage = async (req: Request, res: Response) => {
 		restCatch(e, res);
 	}
 };
-
-export default getImage;

@@ -1,3 +1,5 @@
-export { default as users } from './users.dao';
+export * from './users.dao';
 
-export { default as roles } from './roles.dao';
+export * from './roles.dao';
+
+export * from './genders.dao';

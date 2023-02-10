@@ -1,7 +1,5 @@
-import { Role } from './role.entity';
-import { User } from './user.entity';
-import { Gender } from './gender.entity';
+import { Genders } from './genders.entity';
+import { Roles } from './roles.entity';
+import { Users } from './users.entity';
 
-const entities = [User, Role, Gender];
-
-export default entities;
+export default [Users, Roles, Genders];

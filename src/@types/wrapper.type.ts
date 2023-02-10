@@ -12,14 +12,14 @@ export type Context = {
 	next: NextFunction;
 };
 
-export type Controller<T, S> = (
-	root: null | undefined,
-	args: T,
-	context: Context,
-) => S | Promise<S>;
-
 export type Result<T> = {
 	status: number;
 	message: string;
 	data: T;
 };
+
+export type Controller<T> = (
+	root: null | undefined,
+	args: any,
+	context: Context,
+) => Result<T> | Promise<Result<T>>;

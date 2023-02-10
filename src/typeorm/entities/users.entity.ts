@@ -1,12 +1,13 @@
-import { BeforeInsert, Column, Entity, ManyToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { compareSync, hashSync } from '../../library/bcrypt.library';
 import { ConflictError } from '../../utils/errors.util';
 import { USER_TABLE } from '../constants';
 import { Base } from './base.entity';
-import { Role } from './role.entity';
+import { Genders } from './genders.entity';
+import { Roles } from './roles.entity';
 
 @Entity(USER_TABLE)
-export class User extends Base {
+export class Users extends Base {
 	@Column()
 	firstName?: string;
 
@@ -34,24 +35,30 @@ export class User extends Base {
 	@Column('uuid')
 	roleId!: string;
 
-	@ManyToOne(() => Role, (entity) => entity.users)
-	role?: Role;
+	@ManyToOne(() => Roles, (entity) => entity.users)
+	role?: Roles;
 
 	@Column('uuid')
 	genderId!: string;
 
-	@ManyToOne(() => Role, (entity) => entity.users)
-	gender?: Role;
+	@ManyToOne(() => Roles, (entity) => entity.users)
+	gender?: Roles;
+
+	@ManyToOne(() => Users, (entity) => entity.deletedUsers)
+	deletedBy?: Users;
+
+	@OneToMany(() => Users, (entity) => entity.deletedBy)
+	deletedUsers?: Users[];
+
+	@OneToMany(() => Genders, (entity) => entity.deletedBy)
+	deletedGenders?: Genders[];
+
+	@OneToMany(() => Roles, (entity) => entity.deletedBy)
+	deletedRoles?: Roles[];
 
 	// custom hooks
 	comparePassword(password: string) {
 		const isMatched = compareSync(password, this.password);
 		if (!isMatched) throw new ConflictError('Password mismatched');
-	}
-
-	// hooks
-	@BeforeInsert()
-	beforeInsert() {
-		this.password = hashSync(this.password);
 	}
 }

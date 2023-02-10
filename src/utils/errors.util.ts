@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { formatResponse } from './logics.util';
 
 export class HttpError extends Error {
 	public status!: number;
@@ -56,7 +57,9 @@ export const restCatch = (e: unknown, res: Response): void => {
 	const error = convertUnknownIntoError(e);
 
 	res.locals.error = error;
-	res.status(error.status).send(error.message);
+
+	const payload = formatResponse<HttpError>(error.status, error.message, error);
+	res.status(error.status).send(payload);
 };
 
 export const convertUnknownIntoError = (err: unknown): HttpError => {

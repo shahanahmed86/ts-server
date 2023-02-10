@@ -24,8 +24,7 @@ class File {
 
 			return `temp/${filename}`;
 		} catch (e) {
-			const error = convertUnknownIntoError(e);
-			throw error;
+			throw convertUnknownIntoError(e);
 		}
 	}
 

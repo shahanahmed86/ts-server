@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Gender } from '../entities/gender.entity';
+import { Genders } from '../entities/genders.entity';
 import { GENDERS_DATA, GENDER_TABLE } from '../constants';
 
 export class addGender1675845683449 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.manager
-			.createQueryBuilder(Gender, GENDER_TABLE)
+			.createQueryBuilder(Genders, GENDER_TABLE)
 			.insert()
 			.values(GENDERS_DATA)
 			.execute();
@@ -13,7 +13,7 @@ export class addGender1675845683449 implements MigrationInterface {
 
 	async down(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.manager
-			.createQueryBuilder(Gender, GENDER_TABLE)
+			.createQueryBuilder(Genders, GENDER_TABLE)
 			.delete()
 			.where('id IS NOT NULL')
 			.execute();

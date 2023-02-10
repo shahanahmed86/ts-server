@@ -1,5 +1,5 @@
-export * from './user.constant';
+export * from './users.constant';
 
-export * from './role.constant';
+export * from './roles.constant';
 
-export * from './gender.constant';
+export * from './genders.constant';
