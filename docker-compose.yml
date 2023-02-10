@@ -24,6 +24,7 @@ services:
       - CRON_REMOVE_TEMP
       - REDIS_PASSWORD
       - REDIS_HOST
+      - REDIS_PORT
     environment:
       - APP_PORT_FILE=/run/secrets/APP_PORT
       - APP_PROTOCOL_FILE=/run/secrets/APP_PROTOCOL
@@ -40,6 +41,7 @@ services:
       - CRON_REMOVE_TEMP_FILE=/run/secrets/CRON_REMOVE_TEMP
       - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
+      - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
 
   db:
     image: postgres:15.1-bullseye
@@ -61,7 +63,8 @@ services:
 
   cache:
     image: redis:7-bullseye
-    command: --appendonly yes --requirepass "$$(cat $$REDIS_PASSWORD)"
+    command: bash -c "[ "$$REDIS_PASSWORD_FILE" ] &&
+      (cat "$$REDIS_PASSWORD_FILE" | xargs -0 redis-server --appendonly yes --requirepass) || redis-server"
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
@@ -118,3 +121,6 @@ secrets:
   REDIS_HOST:
     file: ./secrets/REDIS_HOST
     name: REDIS_HOST_20230209113700
+  REDIS_PORT:
+    file: ./secrets/REDIS_PORT
+    name: REDIS_PORT_20230209113700

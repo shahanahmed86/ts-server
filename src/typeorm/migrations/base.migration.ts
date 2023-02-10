@@ -19,6 +19,11 @@ const base: TableColumnOptions[] = [
 		isNullable: true,
 	},
 	{
+		name: 'deletedById',
+		type: 'uuid',
+		isNullable: true,
+	},
+	{
 		name: 'updatedAt',
 		type: 'timestamp',
 		default: 'CURRENT_TIMESTAMP',

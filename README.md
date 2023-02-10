@@ -88,6 +88,20 @@ docker exec -it <container_name> psql --username=<user> -W --host=<host> --port=
 -W  # force password prompt (should happen automatically)
 ```
 
+## redis
+```sh
+docker exec -it <container_name> redis-cli -a <password>
+# flags
+-it # for interactive
+redis-cli # to load redis command line interface
+-a # cli password
+# redis commands
+scan 0
+get "unique_identifier"
+ttl "unique_identifier"
+del "unique_identifier"
+```
+
 ## git
 
 ```sh

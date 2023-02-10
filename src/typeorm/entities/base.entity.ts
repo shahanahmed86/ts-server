@@ -11,18 +11,9 @@ export class Base {
 	@Column({ type: 'timestamp', nullable: true })
 	deletedAt?: string;
 
+	@Column({ type: 'uuid', nullable: true })
+	deletedById?: string;
+
 	@Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
 	updatedAt?: string;
-
-	// hooks
-	@BeforeInsert()
-	_beforeInsert() {
-		this.createdAt = new Date().toDateString();
-		this.updatedAt = new Date().toDateString();
-	}
-
-	@BeforeUpdate()
-	_beforeUpdate() {
-		this.updatedAt = new Date().toISOString();
-	}
 }

@@ -1,6 +1,10 @@
-import { User } from '../typeorm/entities/user.entity';
+import { Users } from '../typeorm/entities/users.entity';
 
 export type AuthPayload = {
 	token: string;
-	user: User;
+	user: Users;
+};
+
+export type ImageParams = {
+	filename: string;
 };

@@ -22,16 +22,7 @@
  *                 format: binary
  *     responses:
  *       200:
- *         description: filepath inside of a path property
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 path:
- *                   type: string
- *                   description: path of the uploaded file
- *                   example: temp/uuid-file-name.ext
+ *         description: filepath inside of a data property
  */
 
 /**
@@ -70,9 +61,4 @@
  *     responses:
  *       200:
  *         description: confirmation of deleted file
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *               example: Image deleted successfully.
  */

@@ -1,23 +1,9 @@
-import { FindOneOptions, Repository } from 'typeorm';
 import AppDataSource from '../typeorm';
-import { Role } from '../typeorm/entities/role.entity';
+import { ROLE_TABLE } from '../typeorm/constants';
+import { Roles } from '../typeorm/entities/roles.entity';
 import BaseDao from './base.dao';
 
-class RoleDao extends BaseDao {
-	model: Repository<Role>;
-	modelName: string;
+class RolesDao extends BaseDao<Roles> {}
 
-	constructor(model: Repository<Role>, modelName: string) {
-		super();
-		this.model = model;
-		this.modelName = modelName;
-	}
-
-	findOne(findOption: FindOneOptions<Role>): Promise<Role | null> {
-		return this.model.findOne(findOption);
-	}
-}
-
-const roles = new RoleDao(AppDataSource.getRepository(Role), 'roles');
-
-export default roles;
+const repository = AppDataSource.getRepository(Roles);
+export const roles = new RolesDao(repository, ROLE_TABLE);

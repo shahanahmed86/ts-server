@@ -1,11 +1,13 @@
 import { createClient } from 'redis';
-import { DB_HOST, REDIS_PASSWORD, REDIS_HOST, JWT_EXPIRY } from '../config';
+import { DB_HOST, JWT_EXPIRY, REDIS_PASSWORD, REDIS_URL } from '../config';
 
-const redisClient = createClient({ password: REDIS_PASSWORD, url: REDIS_HOST });
+const redisClient = createClient({ password: REDIS_PASSWORD, url: REDIS_URL });
 
 redisClient.get('isConnected').catch((e: Error) => {
 	const hasRunSync = DB_HOST === 'localhost';
-	if (e.message === 'The client is closed' && !hasRunSync) redisClient.connect();
+	if (e.message === 'The client is closed' && !hasRunSync) {
+		redisClient.connect().catch(console.error);
+	}
 });
 
 export const AddToken = async (key: string, token: string) => {

@@ -1,6 +1,7 @@
 import * as middleware from './middleware';
-import image from './image';
+import * as images from './images';
+import * as users from './users';
 
-const controllers = { middleware, image };
+const controllers = { middleware, images, users };
 
 export default controllers;
