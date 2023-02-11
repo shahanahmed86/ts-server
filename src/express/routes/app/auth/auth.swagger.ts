@@ -58,22 +58,18 @@
  * @openapi
  * /api/app/auth:
  *   get:
- *     summary: Returns logged in user
+ *     summary: Logged In
  *     tags: [User_Authentications]
  *     responses:
  *       200:
- *         description: Logged In
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
+ *         description: Returns logged in user
  */
 
 /**
  * @openapi
  * /api/app/auth:
  *   post:
- *     summary: Returns token and user's payload
+ *     summary: Login
  *     tags: [User_Authentications]
  *     requestBody:
  *       required: true
@@ -82,37 +78,24 @@
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
- *                 description: username
- *                 example: shahanahmed86
+ *                 description: email
+ *                 example: shahan.ahmed@apify.ai
  *               password:
  *                 type: string
  *                 description: password
  *                 example: 123Abc456
  *     responses:
  *       200:
- *         description: Login
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *                   description: JWT token to include in headers
- *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..........9TaqCIfHvkFAtA5vLbvvmcR8Z8ttq_Wxs4vMCsfvoZw
- *                 data:
- *                   allOf:
- *                     - type: object
- *                     - $ref: '#/components/schemas/User'
+ *         description: Returns token and user's payload
  */
 
 /**
  * @openapi
- * /api/app/auth:
+ * /api/app/auth/change-password:
  *   put:
- *     summary: Returns change password success message
+ *     summary: Change password
  *     tags: [User_Authentications]
  *     requestBody:
  *       required: true
@@ -131,19 +114,14 @@
  *                 example: 123456Abc
  *     responses:
  *       200:
- *         description: Change password
- *         content:
- *           text/plain:
- *             schema:
- *               type: string
- *               example: Password changed successfully
+ *         description: Returns change password success message
  */
 
 /**
  * @openapi
  * /api/app/auth/signup:
  *   post:
- *     summary: Returns token and user's payload
+ *     summary: Sign Up
  *     tags: [User_Authentications]
  *     requestBody:
  *       required: true
@@ -182,5 +160,43 @@
  *                 example: 04521c7b-a128-4f5f-bfb2-96053c0a31b0
  *     responses:
  *       200:
- *         description: token and user is inside of a data property
+ *         description: Returns profile update success message
+ */
+
+/**
+ * @openapi
+ * /api/app/auth:
+ *   put:
+ *     summary: Update Profile
+ *     tags: [User_Authentications]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               avatar:
+ *                 type: string
+ *                 description: avatar
+ *                 example: temp/uuid-filename.ext
+ *               firstName:
+ *                 type: string
+ *                 description: first name
+ *                 example: Shahan
+ *               lastName:
+ *                 type: string
+ *                 description: last name
+ *                 example: Ahmed
+ *               phone:
+ *                 type: string
+ *                 description: phone
+ *                 example: '+923331234563'
+ *               genderId:
+ *                 type: string
+ *                 description: gender Id
+ *                 example: 04521c7b-a128-4f5f-bfb2-96053c0a31b0
+ *     responses:
+ *       200:
+ *         description: Returns token and user's payload
  */

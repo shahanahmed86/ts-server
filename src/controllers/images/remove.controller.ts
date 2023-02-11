@@ -1,4 +1,4 @@
-import { ImageParams } from '../../@types/api.types';
+import { ImageParams } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import file from '../../library/file.library';
 import { NotFound } from '../../utils/errors.util';
@@ -12,5 +12,5 @@ export const removeImage: Controller<null> = async (_, args: ImageParams) => {
 		throw new NotFound("Image has already been deleted or doesn't exists");
 	}
 
-	return formatResponse<null>(200, 'Image deleted successfully', null);
+	return formatResponse(200, 'Image deleted successfully', null);
 };

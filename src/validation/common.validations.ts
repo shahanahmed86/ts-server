@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { ChangePasswordArgs, ImageParams } from '../@types/api.type';
 import { BCRYPT_MAX_BYTES } from '../config';
 import { PASSWORD_REGEX } from '../utils/constants.util';
 
@@ -15,7 +16,7 @@ export const passwordSchema = Joi.string()
 		'string.pattern.base': '{#label} must contain at least one uppercase/lowercase/digit',
 	});
 
-export const changePasswordSchema = Joi.object({
+export const changePasswordSchema = Joi.object<ChangePasswordArgs>({
 	oldPassword: passwordSchema.required().label('old password'),
 	password: passwordSchema
 		.disallow(Joi.ref('oldPassword'))
@@ -26,6 +27,6 @@ export const changePasswordSchema = Joi.object({
 		.required(),
 }).required();
 
-export const fileRef = Joi.object({
+export const fileRef = Joi.object<ImageParams>({
 	filename: Joi.string().required().label('filename'),
 }).required();

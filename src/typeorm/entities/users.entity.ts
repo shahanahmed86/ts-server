@@ -1,11 +1,12 @@
-import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import { compareSync, hashSync } from '../../library/bcrypt.library';
-import { ConflictError } from '../../utils/errors.util';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { AuthPayload } from '../../@types/api.type';
+import { compareSync } from '../../library/bcrypt.library';
+import { encodePayload } from '../../library/jwt.library';
+import * as redis from '../../library/redis.library';
 import { USER_TABLE } from '../constants';
 import { Base } from './base.entity';
 import { Genders } from './genders.entity';
 import { Roles } from './roles.entity';
-
 @Entity(USER_TABLE)
 export class Users extends Base {
 	@Column()
@@ -57,8 +58,16 @@ export class Users extends Base {
 	deletedRoles?: Roles[];
 
 	// custom hooks
-	comparePassword(password: string) {
-		const isMatched = compareSync(password, this.password);
-		if (!isMatched) throw new ConflictError('Password mismatched');
+	comparePassword(password: string): boolean {
+		return compareSync(password, this.password);
+	}
+
+	async postLogin(role: string): Promise<AuthPayload> {
+		const user = this;
+
+		const token = encodePayload(role, user.id);
+		await redis.AddToken(user.id, token);
+
+		return { token, user };
 	}
 }

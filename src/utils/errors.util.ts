@@ -58,7 +58,7 @@ export const restCatch = (e: unknown, res: Response): void => {
 
 	res.locals.error = error;
 
-	const payload = formatResponse<HttpError>(error.status, error.message, error);
+	const payload = formatResponse(error.status, error.message, error);
 	res.status(error.status).send(payload);
 };
 

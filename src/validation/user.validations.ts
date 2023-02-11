@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { LoginArgs, UserArgs } from '../@types/api.type';
 import { PHONE_REGEX } from '../utils/constants.util';
 import { emailSchema, passwordSchema, uuidSchema } from './common.validations';
 
@@ -12,17 +13,22 @@ const phoneSchema = Joi.string()
 	.optional();
 const genderIdSchema = uuidSchema.label('genderId');
 
-export const signupSchema = Joi.object({
+export const profileSchema = Joi.object<UserArgs>({
 	firstName: firstNameSchema,
 	lastName: lastNameSchema,
 	avatar: avatarSchema,
-	email: emailSchema,
-	password: passwordSchema,
 	phone: phoneSchema,
 	genderId: genderIdSchema,
 }).required();
 
-export const loginSchema = Joi.object({
+export const signupSchema = profileSchema
+	.keys({
+		email: emailSchema,
+		password: passwordSchema,
+	})
+	.required();
+
+export const loginSchema = Joi.object<LoginArgs>({
 	email: Joi.string().label('email').disallow('').required(),
 	password: Joi.string().label('password').disallow('').required(),
 }).required();

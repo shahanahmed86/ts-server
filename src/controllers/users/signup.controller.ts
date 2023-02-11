@@ -1,16 +1,12 @@
-import { DeepPartial } from 'typeorm';
-import { AuthPayload } from '../../@types/api.types';
+import { AuthPayload, UserArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
-import { Users } from '../../typeorm/entities/users.entity';
 import { ConflictError, NotFound } from '../../utils/errors.util';
 import { formatResponse, joiValidator } from '../../utils/logics.util';
 import { signupSchema } from '../../validation';
 
-type Args = DeepPartial<Users>;
-
-export const signup: Controller<AuthPayload> = async (_, args: Args) => {
-	await joiValidator<Args>(signupSchema, args);
+export const signup: Controller<AuthPayload> = async (_, args: UserArgs) => {
+	await joiValidator(signupSchema, args);
 
 	const user = await Dao.users.findOne({ where: { email: args.email! } });
 	if (user) throw new ConflictError('User already exists with this email address');
@@ -19,7 +15,7 @@ export const signup: Controller<AuthPayload> = async (_, args: Args) => {
 	if (!role) throw new NotFound('Role not found');
 
 	args.roleId = role.id;
-	const data = await Dao.users.signup(args);
+	const data = await Dao.users.signup(args, role.name);
 
-	return formatResponse<AuthPayload>(201, "You've successfully signed up", data);
+	return formatResponse(201, "You've successfully signed up", data);
 };

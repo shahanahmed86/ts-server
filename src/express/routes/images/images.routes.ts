@@ -7,7 +7,7 @@ const router = express.Router();
 router
 	.route('/:filename?')
 	.get(controllers.images.getImage)
-	.post(restWrapper<string | string[]>(controllers.images.upload))
-	.delete(restWrapper<null>(controllers.images.removeImage));
+	.post(restWrapper(controllers.images.upload))
+	.delete(restWrapper(controllers.images.removeImage));
 
 export default router;

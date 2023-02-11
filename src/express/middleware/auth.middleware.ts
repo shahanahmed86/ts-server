@@ -15,7 +15,7 @@ export const guest: ContextFunction = async (req, res, next) => {
 export const auth = (key: string): ContextFunction => {
 	return async (req, res, next) => {
 		try {
-			await controllers.middleware.authController(key, req);
+			await controllers.middleware.authController(key, req, res);
 
 			next();
 		} catch (e) {
