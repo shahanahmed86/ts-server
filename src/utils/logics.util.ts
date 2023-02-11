@@ -1,50 +1,53 @@
 import { randomUUID } from 'crypto';
-import { ObjectSchema } from 'joi';
-import { isArray, isObject, omit } from 'radash';
-import { Result } from '../@types/wrapper.type';
-import { SHOULD_OMIT_PROPS } from './constants.util';
+import { isDate, omit } from 'radash';
+import { FormatResponse } from '../@types/api.type';
+import { JoiValidator } from '../@types/library.type';
+import { NEITHER_OBJECT_NOR_ARRAY, SHOULD_OMIT_PROPS } from './constants.util';
 import { convertUnknownIntoError } from './errors.util';
 
-export const formatResponse = <T>(status: number, message: string, data: T): Result<T> => {
-	return { status, message, data: omitProps<T>(data) };
+export const formatResponse: FormatResponse = (status, message, data) => {
+	return { status, message, data: omitProps(data) };
 };
+
+export const getISODate = (dt: string | Date | number = Date.now()) => new Date(dt).toISOString();
 
 export const getUniqueId = () => randomUUID();
 
-export async function joiValidator<T>(schema: ObjectSchema<T>, payload: T): Promise<void> {
+export const joiValidator: JoiValidator = async (schema, payload) => {
 	try {
 		await schema.validateAsync(payload, { abortEarly: false });
 	} catch (e) {
 		throw convertUnknownIntoError(e);
 	}
-}
+};
 
 export function omitProps<T>(payload: T): T {
-	if (!payload || (!isObject(payload) && !isArray(payload))) return payload;
+	if (!payload) return payload;
 
-	if (isArray(payload)) {
+	const isIrrelevant = NEITHER_OBJECT_NOR_ARRAY.includes(typeof payload);
+	if (isIrrelevant) return payload;
+
+	if (Array.isArray(payload)) {
 		for (let i = 0; i < payload.length; i++) {
 			const value = payload[i];
-			if (!isObject(value) && !isArray(value)) continue;
 
-			payload[i] = omitProps(value);
+			if (isObject(value)) payload[i] = omitProps(value);
+			else if (Array.isArray(value)) payload[i] = omitProps(payload[i]);
 		}
-	} else {
+	} else if (isObject(payload)) {
 		for (const key in payload) {
 			const value = payload[key];
-			if (!isObject(value) && !isArray(value)) continue;
 
-			if (isObject(value)) {
-				payload[key] = omitProps(value);
-			} else {
-				for (let i = 0; i < value['length' as keyof Array<any>]; i++) {
-					if (!isObject(value[i]) && !isArray(value[i])) continue;
-
-					payload[key as keyof object][i] = omitProps(payload[key as keyof object][i]);
-				}
+			if (isObject(value)) payload[key] = omitProps(value);
+			else if (Array.isArray(value)) {
+				payload[key as keyof object] = omitProps(payload[key as keyof object]);
 			}
 		}
 	}
 
 	return omit(payload, SHOULD_OMIT_PROPS as never[]);
+}
+
+export function isObject<T>(payload: T): boolean {
+	return typeof payload === 'object' && !Array.isArray(payload) && !isDate(payload);
 }

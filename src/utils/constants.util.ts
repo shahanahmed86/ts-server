@@ -21,7 +21,9 @@ export const MORGAN_TOKENS: string = [
 	':error',
 ].join(' ');
 
-export const JWT_EXPIRY_IN_SECONDS = JWT_EXPIRY / 1000;
+export const MS = 1000;
+
+export const JWT_EXPIRY_IN_SECONDS = JWT_EXPIRY / MS;
 
 export const SIZE_LIMIT = 10 * 1024 * 1024;
 
@@ -37,3 +39,7 @@ export const PHONE_REGEX =
 export const LIMIT = 10;
 
 export const OFFSET = 0;
+
+export const CHUNK_SIZE = 5000;
+
+export const NEITHER_OBJECT_NOR_ARRAY = ['boolean', 'number', 'string'];

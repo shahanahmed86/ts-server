@@ -1,4 +1,4 @@
-import { ContextFunction, Controller, Result } from '../@types/wrapper.type';
+import { ContextFunction, Controller } from '../@types/wrapper.type';
 import { restCatch } from './errors.util';
 
 export function restWrapper<T>(controller: Controller<T>): ContextFunction {

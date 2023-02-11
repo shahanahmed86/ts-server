@@ -1,21 +1,32 @@
-import { FindManyOptions, FindOneOptions, ObjectLiteral, Repository } from 'typeorm';
-import { LIMIT, OFFSET } from '../utils/constants.util';
+import {
+	DeepPartial,
+	FindManyOptions,
+	FindOneOptions,
+	FindOptionsWhere,
+	ObjectLiteral,
+	Repository,
+} from 'typeorm';
+import { Base } from '../typeorm/entities/base.entity';
+import { CHUNK_SIZE, LIMIT, OFFSET } from '../utils/constants.util';
+import { getISODate } from '../utils/logics.util';
 
-class BaseDao<T extends ObjectLiteral> {
-	model: Repository<T>;
+type BaseArgs = DeepPartial<Base>;
+
+class BaseDao<BaseEntity extends ObjectLiteral> {
+	model: Repository<BaseEntity>;
 	modelName: string;
 
-	constructor(model: Repository<T>, modelName: string) {
+	constructor(model: Repository<BaseEntity>, modelName: string) {
 		this.model = model;
 		this.modelName = modelName;
 	}
 
-	findOne(options: FindOneOptions<T>): Promise<T | null> {
+	findOne(options: FindOneOptions<BaseEntity>): Promise<BaseEntity | null> {
 		options.where = Object.assign({}, options.where, { deletedAt: null });
 		return this.model.findOne(options);
 	}
 
-	findMany(options: FindManyOptions<T>): Promise<T[]> {
+	findMany(options: FindManyOptions<BaseEntity>): Promise<BaseEntity[]> {
 		const { where, skip = OFFSET * (options.take ?? LIMIT), take = LIMIT } = options;
 
 		options.where = Object.assign({}, where, { deletedAt: null });
@@ -23,6 +34,26 @@ class BaseDao<T extends ObjectLiteral> {
 		options.take = take;
 
 		return this.model.find(options);
+	}
+
+	async save<T extends BaseEntity>(data: T): Promise<T> {
+		return this.model.save<T>(data, { chunk: CHUNK_SIZE });
+	}
+
+	async update<T>(criteria: FindOptionsWhere<string>, data: T): Promise<boolean> {
+		const postData: BaseArgs = { updatedAt: getISODate() };
+		const payload = Object.assign<ObjectLiteral, T, BaseArgs>({}, data, postData);
+
+		const result = await this.model.update(criteria, payload);
+		return !!result.affected;
+	}
+
+	async delete(criteria: FindOptionsWhere<string>, userId: string): Promise<boolean> {
+		const postData: BaseArgs = { deletedAt: getISODate(), deletedById: userId };
+		const payload = Object.assign<ObjectLiteral, BaseArgs>({}, postData);
+
+		const result = await this.model.update(criteria, payload);
+		return !!result.affected;
 	}
 }
 

@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { DecodePayload, EncodePayload } from '../@types/library.type';
 import { JWT_SECRET } from '../config';
 import { JWT_EXPIRY_IN_SECONDS } from '../utils/constants.util';
@@ -12,7 +12,7 @@ export const decodePayload: DecodePayload = (token) => {
 		jwt.verify(token, JWT_SECRET, (err, decoded) => {
 			if (err) reject(err);
 			else if (!decoded) reject(new Error('Token payload is empty'));
-			else resolve(decoded);
+			else resolve(decoded as JwtPayload);
 		});
 	});
 };

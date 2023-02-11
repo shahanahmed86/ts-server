@@ -1,26 +1,22 @@
-import { DeepPartial } from 'typeorm';
+import { AuthPayload, UserArgs } from '../@types/api.type';
 import { hashSync } from '../library/bcrypt.library';
 import file from '../library/file.library';
-import { encodePayload } from '../library/jwt.library';
-import * as redis from '../library/redis.library';
 import AppDataSource from '../typeorm';
 import { USER_TABLE } from '../typeorm/constants';
 import { Users } from '../typeorm/entities/users.entity';
 import BaseDao from './base.dao';
 
-const TOKEN_KEY = 'userId';
-
 class UsersDao extends BaseDao<Users> {
-	async signup(payload: DeepPartial<Users>): Promise<{ token: string; user: Users }> {
-		if (payload.avatar) payload.avatar = await file.moveImageFromTmp(payload.avatar);
-		payload.password = hashSync(payload.password!);
+	async signup(payload: UserArgs, role: string): Promise<AuthPayload> {
+		const { password, avatar } = payload;
 
-		const user = await this.model.save(payload);
+		payload.password = hashSync(password!);
+		if (avatar) payload.avatar = await file.moveImageFromTmp(avatar);
 
-		const token = encodePayload(TOKEN_KEY, user.id);
-		await redis.AddToken(user.id, token);
+		const saved = await this.model.save(payload);
+		const user = await this.findOne({ where: { id: saved.id }, relations: { role: true } });
 
-		return { token, user };
+		return user!.postLogin(role);
 	}
 }
 

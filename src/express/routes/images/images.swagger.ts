@@ -9,7 +9,7 @@
  * @openapi
  * /api/images:
  *   post:
- *     summary: Returns path name of the uploaded file
+ *     summary: Upload Image
  *     tags: [File_Uploads]
  *     requestBody:
  *       content:
@@ -22,14 +22,14 @@
  *                 format: binary
  *     responses:
  *       200:
- *         description: filepath inside of a data property
+ *         description: Returns path of the uploaded file
  */
 
 /**
  * @openapi
  * /api/images:
  *   get:
- *     summary: Returns File Buffer
+ *     summary: Image Buffer
  *     tags: [File_Uploads]
  *     parameters:
  *       - in: query
@@ -48,7 +48,7 @@
  * @openapi
  * /api/images:
  *   delete:
- *     summary: Returns deleted file confirmation
+ *     summary: Delete Image
  *     tags: [File_Uploads]
  *     parameters:
  *       - in: query
@@ -60,5 +60,5 @@
  *         example: temp/uuid-file-name.ext
  *     responses:
  *       200:
- *         description: confirmation of deleted file
+ *         description: Returns deleted file confirmation
  */
