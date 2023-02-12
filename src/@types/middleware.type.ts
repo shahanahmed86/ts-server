@@ -6,4 +6,4 @@ export type ValidateToken = (bearerToken: string, key: string) => Promise<string
 
 export type GuestController = (req: Request) => void;
 
-export type AuthController = (key: string, req: Request, res: Response) => Promise<void>;
+export type AuthController = (role: string, req: Request, res: Response) => Promise<void>;

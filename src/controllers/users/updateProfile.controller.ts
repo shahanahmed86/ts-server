@@ -6,7 +6,7 @@ import { ConflictError } from '../../utils/errors.util';
 import { formatResponse, joiValidator } from '../../utils/logics.util';
 import { profileSchema } from '../../validation';
 
-export const updateProfile: Controller<null> = async (_, args: UserArgs, { res }) => {
+export const updateProfile: Controller<null, UserArgs> = async (_, args, { res }) => {
 	await joiValidator(profileSchema, args);
 
 	const isValid = Object.keys(args).some((key) => args[key as keyof UserArgs]);
@@ -14,7 +14,7 @@ export const updateProfile: Controller<null> = async (_, args: UserArgs, { res }
 
 	const user = res.locals.user as Users;
 
-	const isUpdated = await Dao.users.update<UserArgs>(user.id, args);
+	const isUpdated = await Dao.users.update(user.id, args);
 	if (!isUpdated) throw new ConflictError('Unable to update your account');
 
 	return formatResponse(201, "You've successfully updated your accounts", null);

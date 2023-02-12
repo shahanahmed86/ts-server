@@ -1,5 +1,6 @@
 import { FileArray, UploadedFile } from 'express-fileupload';
 import fs, { readFileSync } from 'fs';
+import isArray from 'lodash/isArray';
 import path from 'path';
 import { IN_PROD } from '../config';
 import { convertUnknownIntoError, NotFound } from '../utils/errors.util';
@@ -30,7 +31,7 @@ class File {
 
 	async localUpload(image: FileArray): Promise<string | string[]> {
 		const imageFiles = image.uploadedFile;
-		if (!Array.isArray(imageFiles)) return this.upload(imageFiles);
+		if (!isArray(imageFiles)) return this.upload(imageFiles);
 
 		return Promise.all(imageFiles.map(this.upload));
 	}

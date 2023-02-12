@@ -1,8 +1,11 @@
 import { randomUUID } from 'crypto';
-import { isDate, omit } from 'radash';
+import isArray from 'lodash/isArray';
+import isDate from 'lodash/isDate';
+import isObject from 'lodash/isObject';
+import omit from 'lodash/omit';
 import { FormatResponse } from '../@types/api.type';
 import { JoiValidator } from '../@types/library.type';
-import { NEITHER_OBJECT_NOR_ARRAY, SHOULD_OMIT_PROPS } from './constants.util';
+import { SHOULD_OMIT_PROPS } from './constants.util';
 import { convertUnknownIntoError } from './errors.util';
 
 export const formatResponse: FormatResponse = (status, message, data) => {
@@ -21,33 +24,25 @@ export const joiValidator: JoiValidator = async (schema, payload) => {
 	}
 };
 
-export function omitProps<T>(payload: T): T {
-	if (!payload) return payload;
-
-	const isIrrelevant = NEITHER_OBJECT_NOR_ARRAY.includes(typeof payload);
-	if (isIrrelevant) return payload;
-
-	if (Array.isArray(payload)) {
+export const omitProps = <T>(payload: T, props: string[] = SHOULD_OMIT_PROPS): T => {
+	if (isArray(payload)) {
 		for (let i = 0; i < payload.length; i++) {
 			const value = payload[i];
 
-			if (isObject(value)) payload[i] = omitProps(value);
-			else if (Array.isArray(value)) payload[i] = omitProps(payload[i]);
+			if (isObject(value)) payload[i] = omitProps(value, props);
+			if (isArray(value)) payload[i] = omitProps(value, props);
 		}
 	} else if (isObject(payload)) {
 		for (const key in payload) {
 			const value = payload[key];
 
-			if (isObject(value)) payload[key] = omitProps(value);
-			else if (Array.isArray(value)) {
-				payload[key as keyof object] = omitProps(payload[key as keyof object]);
-			}
+			if (isArray(value)) payload[key] = omitProps(value, props);
+			else if (isDate(value)) payload[key] = value;
+			else if (isObject(value)) payload[key] = omitProps(value, props);
 		}
+
+		return omit(payload, props) as T;
 	}
 
-	return omit(payload, SHOULD_OMIT_PROPS as never[]);
-}
-
-export function isObject<T>(payload: T): boolean {
-	return typeof payload === 'object' && !Array.isArray(payload) && !isDate(payload);
-}
+	return payload;
+};
