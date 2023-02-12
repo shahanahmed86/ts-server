@@ -2,13 +2,18 @@ import {
 	AuthController,
 	GuestController,
 	HasToken,
-	ValidateToken
+	ValidateToken,
 } from '../../@types/middleware.type';
 import * as Dao from '../../dao';
 import { decodePayload } from '../../library/jwt.library';
 import { ROLES_DATA } from '../../typeorm/constants';
 import { MS, NO_OR_INVALID_SESSION } from '../../utils/constants.util';
-import { BadRequest, NotAuthenticated, NotAuthorized } from '../../utils/errors.util';
+import {
+	BadRequest,
+	ConflictError,
+	NotAuthenticated,
+	NotAuthorized,
+} from '../../utils/errors.util';
 
 const hasToken: HasToken = (req) => req.headers.authorization;
 
@@ -49,6 +54,7 @@ export const authController: AuthController = async (key, req, res) => {
 	});
 	if (!user) throw new NotAuthenticated();
 	if (user.role!.name !== key) throw new NotAuthorized();
+	if (!user.emailVerified) throw new ConflictError('Please verify your email address first');
 
 	res.locals.user = user;
 };

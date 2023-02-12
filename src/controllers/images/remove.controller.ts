@@ -5,7 +5,7 @@ import { NotFound } from '../../utils/errors.util';
 import { formatResponse, joiValidator } from '../../utils/logics.util';
 import * as validation from '../../validation';
 
-export const removeImage: Controller<null> = async (_, args: ImageParams) => {
+export const removeImage: Controller<null, ImageParams> = async (_, args) => {
 	await joiValidator(validation.fileRef, args);
 
 	if (!file.deleteOldFileLocally(args.filename)) {

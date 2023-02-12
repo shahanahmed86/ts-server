@@ -3,12 +3,11 @@ import controllers from '../../../../controllers';
 import { restWrapper } from '../../../../utils/wrappers.util';
 import { auth, guest, includeRole } from '../../../middleware/auth.middleware';
 
-const ROLE = 'user';
+const ROLE = 'admin';
 
 const router = express.Router();
 
 router.post('/', guest, includeRole(ROLE), restWrapper(controllers.users.login));
-router.post('/signup', guest, includeRole(ROLE), restWrapper(controllers.users.signup));
 
 router.use(auth(ROLE));
 

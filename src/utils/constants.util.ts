@@ -41,5 +41,3 @@ export const LIMIT = 10;
 export const OFFSET = 0;
 
 export const CHUNK_SIZE = 5000;
-
-export const NEITHER_OBJECT_NOR_ARRAY = ['boolean', 'number', 'string'];

@@ -3,6 +3,7 @@ import {
 	FindManyOptions,
 	FindOneOptions,
 	FindOptionsWhere,
+	IsNull,
 	ObjectLiteral,
 	Repository,
 } from 'typeorm';
@@ -21,15 +22,21 @@ class BaseDao<BaseEntity extends ObjectLiteral> {
 		this.modelName = modelName;
 	}
 
+	get deleteParams() {
+		return { deletedAt: IsNull(), deletedById: IsNull() };
+	}
+
 	findOne(options: FindOneOptions<BaseEntity>): Promise<BaseEntity | null> {
-		options.where = Object.assign({}, options.where, { deletedAt: null });
+		const { where } = options;
+		options.where = Object.assign({}, where, this.deleteParams);
+
 		return this.model.findOne(options);
 	}
 
 	findMany(options: FindManyOptions<BaseEntity>): Promise<BaseEntity[]> {
 		const { where, skip = OFFSET * (options.take ?? LIMIT), take = LIMIT } = options;
 
-		options.where = Object.assign({}, where, { deletedAt: null });
+		options.where = Object.assign({}, where, this.deleteParams);
 		options.skip = skip * take;
 		options.take = take;
 

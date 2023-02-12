@@ -1,16 +1,15 @@
 /**
  * @openapi
  * tags:
- *   name: File_Uploads
- *   description: The APIs for images
+ *   name: Common
  */
 
 /**
  * @openapi
- * /api/images:
+ * /api/common/images:
  *   post:
  *     summary: Upload Image
- *     tags: [File_Uploads]
+ *     tags: [Common]
  *     requestBody:
  *       content:
  *         multipart/form-data:
@@ -27,10 +26,10 @@
 
 /**
  * @openapi
- * /api/images:
+ * /api/common/images:
  *   get:
  *     summary: Image Buffer
- *     tags: [File_Uploads]
+ *     tags: [Common]
  *     parameters:
  *       - in: query
  *         name: filename
@@ -46,10 +45,10 @@
 
 /**
  * @openapi
- * /api/images:
+ * /api/common/images:
  *   delete:
  *     summary: Delete Image
- *     tags: [File_Uploads]
+ *     tags: [Common]
  *     parameters:
  *       - in: query
  *         name: filename

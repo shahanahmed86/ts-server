@@ -18,8 +18,8 @@ export type Result<T> = {
 	data: T;
 };
 
-export type Controller<T> = (
+export type Controller<T, A> = (
 	root: null | undefined,
-	args: any,
+	args: A,
 	context: Context,
 ) => Result<T> | Promise<Result<T>>;

@@ -7,6 +7,7 @@ import { USER_TABLE } from '../constants';
 import { Base } from './base.entity';
 import { Genders } from './genders.entity';
 import { Roles } from './roles.entity';
+
 @Entity(USER_TABLE)
 export class Users extends Base {
 	@Column()
@@ -63,11 +64,9 @@ export class Users extends Base {
 	}
 
 	async postLogin(role: string): Promise<AuthPayload> {
-		const user = this;
+		const token = encodePayload(role, this.id);
+		await redis.AddToken(this.id, token);
 
-		const token = encodePayload(role, user.id);
-		await redis.AddToken(user.id, token);
-
-		return { token, user };
+		return { token, user: this };
 	}
 }

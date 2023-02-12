@@ -5,13 +5,13 @@ import { ConflictError, NotFound } from '../../utils/errors.util';
 import { formatResponse, joiValidator } from '../../utils/logics.util';
 import { signupSchema } from '../../validation';
 
-export const signup: Controller<AuthPayload> = async (_, args: UserArgs) => {
+export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { res }) => {
 	await joiValidator(signupSchema, args);
 
 	const user = await Dao.users.findOne({ where: { email: args.email! } });
 	if (user) throw new ConflictError('User already exists with this email address');
 
-	const role = await Dao.roles.findOne({ where: { name: 'user' } });
+	const role = await Dao.roles.findOne({ where: { name: res.locals.role } });
 	if (!role) throw new NotFound('Role not found');
 
 	args.roleId = role.id;
