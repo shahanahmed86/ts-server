@@ -100,6 +100,7 @@ scan 0
 get "unique_identifier"
 ttl "unique_identifier"
 del "unique_identifier"
+flushall # delete all transactions
 ```
 
 ## git
@@ -110,7 +111,7 @@ git commit -m "message" --no-verify
 --no-verify # it will not call pre-hook of commit where tests/linting will execute
 ```
 
-## GraphQL is actually an extended version Restful API
+## GraphQL is actually an extended version REST API
 
 ```sh
 curl localhost/graphql -X POST \
@@ -135,7 +136,7 @@ ssh ssh-app
 # the script in the Makefile
 
 # make short aliases to run bigger commands
-alias ssh_deploy_server_prod="scp path/to/image.tar ssh-app:file.ext && ssh ssh-app 'cd path/to/project && git pull && make run-prod-up'"
+alias ssh_deploy_server="scp -R path/to/folder ssh-app:path && ssh ssh-app 'cd path/to/project && git pull && make run-prod-up'"
 
 # Now only need to know is to run the aliases which you've created.
 ```

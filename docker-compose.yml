@@ -63,8 +63,13 @@ services:
 
   cache:
     image: redis:7-bullseye
-    command: bash -c "[ "$$REDIS_PASSWORD_FILE" ] &&
-      (cat "$$REDIS_PASSWORD_FILE" | xargs -0 redis-server --appendonly yes --requirepass) || redis-server"
+    command:
+      - bash
+      - -c
+      - |
+        [ "$$REDIS_PASSWORD_FILE" ] \
+          && (cat "$$REDIS_PASSWORD_FILE" | xargs -0 redis-server --appendonly yes --requirepass) \
+          || redis-server --appendonly yes
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
