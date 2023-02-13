@@ -1,5 +1,6 @@
 import { createClient } from 'redis';
-import { DB_HOST, JWT_EXPIRY, REDIS_PASSWORD, REDIS_URL } from '../config';
+import { DB_HOST, REDIS_PASSWORD, REDIS_URL } from '../config';
+import { JWT_EXPIRY_IN_SECONDS } from '../utils/constants.util';
 
 const redisClient = createClient({ password: REDIS_PASSWORD, url: REDIS_URL });
 
@@ -11,7 +12,7 @@ redisClient.get('isConnected').catch((e: Error) => {
 });
 
 export const AddToken = async (key: string, token: string) => {
-	return redisClient.set(key, token, { EX: JWT_EXPIRY });
+	return redisClient.set(key, token, { EX: JWT_EXPIRY_IN_SECONDS });
 };
 
 export const GetToken = async (key: string) => redisClient.get(key);
