@@ -1,7 +1,7 @@
 export const {
 	NODE_ENV = 'development',
 	APP_PROTOCOL = 'http:',
-	APP_HOST = 'localhost:8080',
+	APP_HOST = 'localhost:7000',
 
 	JWT_SECRET = 'billa-mama',
 
@@ -18,7 +18,7 @@ export const {
 
 export const IN_PROD = NODE_ENV === 'production';
 
-export const APP_PORT = +(process.env.APP_PORT || '8080');
+export const APP_PORT = +(process.env.APP_PORT || '7000');
 
 export const BCRYPT_SALT = +(process.env.BCRYPT_SALT || '10');
 

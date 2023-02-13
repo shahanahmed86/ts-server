@@ -13,7 +13,7 @@ const AppDataSource = new DataSource({
 	database: DB_NAME,
 	synchronize: false,
 	logging: true,
-	entities: entities,
+	entities,
 	migrations,
 	subscribers: [],
 	migrationsRun: IN_PROD,

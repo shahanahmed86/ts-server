@@ -1,9 +1,21 @@
 version: '3.7'
 
 services:
-  server:
+  web:
+    image: nginx:1.23
+    depends_on:
+      - server
+    networks:
+      - accounts-app
     ports:
-      - 80:8080
+      - 80:80
+    configs:
+      - source: NGINX_CONFIG
+        target: /etc/nginx/conf.d/default.conf
+      - source: NGINX_HTML
+        target: /usr/share/nginx/html/index.html
+
+  server:
     depends_on:
       - db
     networks:
@@ -129,3 +141,11 @@ secrets:
   REDIS_PORT:
     file: ./secrets/REDIS_PORT
     name: REDIS_PORT_20230209113700
+
+configs:
+  NGINX_CONFIG:
+    file: ./nginx/default.conf
+    name: NGINX_CONFIG_20230209113700
+  NGINX_HTML:
+    file: ./nginx/default.html
+    name: NGINX_HTML_20230209113700
