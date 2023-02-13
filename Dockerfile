@@ -4,7 +4,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends postgresql postgresql-contrib curl \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
-EXPOSE 8080
+EXPOSE 7000
 RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
 USER node
@@ -12,7 +12,7 @@ COPY --chown=node:node ./package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
-HEALTHCHECK --retries=5 --timeout=5s CMD curl -f localhost:8080/api/healthcheck || exit 1
+HEALTHCHECK --retries=5 --timeout=5s CMD curl -f localhost:7000/api/healthcheck || exit 1
 
 ### dev stage
 FROM base as dev
