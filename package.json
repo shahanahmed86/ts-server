@@ -15,7 +15,7 @@
 		"prestart": "npm run build",
 		"start": "node .",
 		"lint": "eslint src --ext .ts",
-		"prettify": "prettier --config .prettierrc 'src/**/*.ts'",
+		"prettify": "prettier --config .prettierrc 'src/**/*.ts' --write",
 		"prettify-watch": "onchange 'src/**/*.ts' -- prettier --config .prettierrc --write {{changed}}",
 		"dev:up": "make run-dev-up",
 		"dev:down": "make run-dev-down",
