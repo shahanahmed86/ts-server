@@ -1,20 +1,6 @@
 version: '3.7'
 
 services:
-  web:
-    image: nginx:1.23
-    depends_on:
-      - server
-    networks:
-      - accounts-app
-    ports:
-      - 80:80
-    configs:
-      - source: NGINX_CONFIG
-        target: /etc/nginx/conf.d/default.conf
-      - source: NGINX_HTML
-        target: /usr/share/nginx/html/index.html
-
   server:
     depends_on:
       - db

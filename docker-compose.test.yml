@@ -1,25 +1,39 @@
 version: '3.7'
 
 services:
-  web:
-    restart: 'no'
-
   server:
+    tty: true
     restart: 'no'
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    build:
+      context: .
+      target: dev
     command: npm run exec-tests
 
   db:
+    tty: true
     restart: 'no'
     volumes:
       - db_test:/var/lib/postgresql/data
 
   cache:
+    tty: true
     restart: 'no'
     volumes:
       - cache_test:/data
+    networks:
+      - accounts-app
 
 volumes:
   db_test:
     driver: local
   cache_test:
     driver: local
+
+networks:
+  accounts-app:
+    driver: bridge

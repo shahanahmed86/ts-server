@@ -19,11 +19,11 @@ run-dev-down-hard:
 # test
 run-test-up:
 	docker-compose -p accounts-app \
-	-f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.test.yml up \
+	-f docker-compose.yml -f docker-compose.test.yml up \
 	--abort-on-container-exit --build
 run-test-down:
 	docker-compose -p accounts-app \
-	-f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.test.yml \
+	-f docker-compose.yml -f docker-compose.test.yml \
 	down -v
 run-test:
 	DB_HOST="localhost" npm run --ignore-scripts exec-tests
