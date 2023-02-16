@@ -1,6 +1,6 @@
 import chai from 'chai';
-import { UserArgs } from '../../../@types/api.type';
-import { SHOULD_OMIT_PROPS } from '../../../utils/constants.util';
+import { UserArgs } from '../../../src/@types/api.type';
+import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
 import { uploadImage } from '../../common/common.helper';
 import { changePassword, loggedIn, login, updateProfile } from './admin.helper';
 
