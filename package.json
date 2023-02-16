@@ -24,7 +24,7 @@
 		"test": "make run-test-up",
 		"posttest": "make run-test-down",
 		"preexec-tests": "npm run typeorm:up",
-		"exec-tests": "mocha -r ts-node/register 'src/__tests__/**/*.spec.ts' --exit",
+		"exec-tests": "mocha -r ts-node/register '__tests__/**/*.spec.ts' --exit",
 		"typeorm": "typeorm-ts-node-commonjs -d src/typeorm",
 		"typeorm:up": "npm run typeorm migration:run",
 		"typeorm:down": "npm run typeorm migration:revert"

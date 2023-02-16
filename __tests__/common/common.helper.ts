@@ -1,7 +1,7 @@
 import fs from 'fs';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import httpServer from '../../';
+import httpServer from '../../src';
 
 const BASE_URL = '/api/common';
 
