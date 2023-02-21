@@ -15,8 +15,8 @@
 		"prestart": "npm run build",
 		"start": "node .",
 		"lint": "eslint src --ext .ts",
-		"prettify": "prettier --config .prettierrc 'src/**/*.ts' --write",
-		"prettify-watch": "onchange 'src/**/*.ts' -- prettier --config .prettierrc --write {{changed}}",
+		"prettify": "prettier --config .prettierrc '**/*.{ts,js}' --write",
+		"prettify-watch": "onchange '**/*.ts' -- prettier --config .prettierrc --write {{changed}}",
 		"dev:up": "make run-dev-up",
 		"dev:down": "make run-dev-down",
 		"predev:down_hard": "make run-backup",
@@ -30,7 +30,7 @@
 		"typeorm:down": "npm run typeorm migration:revert"
 	},
 	"lint-staged": {
-		"src/**/*.{ts,js}": [
+		"**/*.{ts,js}": [
 			"npm run prettify",
 			"npm run lint",
 			"git add ."

@@ -5,9 +5,17 @@ import { UserArgs } from '../../../src/@types/api.type';
 
 chai.use(chaiHttp);
 
-const BASE_URL = '/api/admin/auth';
+const BASE_URL = '/api/app/auth';
 
-export const login = async (email = 'admin@accounts.com.pk', password = '123Abc456') => {
+export const signup = async (payload: UserArgs) => {
+	return chai
+		.request(httpServer)
+		.post(`${BASE_URL}/signup`)
+		.set('content-type', 'application/json')
+		.send(payload);
+};
+
+export const login = async (email = 'shahan.khaan@gmail.com', password = '123Abc456') => {
 	return chai
 		.request(httpServer)
 		.post(BASE_URL)
