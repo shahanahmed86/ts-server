@@ -2,7 +2,7 @@ import { AuthPayload, LoginArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
 import { NotAuthenticated, NotAuthorized } from '../../utils/errors.util';
-import { formatResponse, joiValidator } from '../../utils/logics.util';
+import { joiValidator } from '../../utils/logics.util';
 import { loginSchema } from '../../validation';
 
 export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { res }) => {
@@ -10,7 +10,7 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { res }
 
 	const user = await Dao.users.findOne({
 		where: { email: args.email, role: Dao.users.deleteParams },
-		relations: { role: true },
+		relations: { role: true, gender: true },
 	});
 	if (!user) throw new NotAuthenticated();
 
@@ -21,7 +21,5 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { res }
 	const isMatched = user.comparePassword(args.password);
 	if (!isMatched) throw new NotAuthenticated();
 
-	const payload = await user.postLogin(user.role!.name);
-
-	return formatResponse(200, "You've your login session", payload);
+	return user.postLogin(user.role!.name);
 };

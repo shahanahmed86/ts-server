@@ -1,28 +1,28 @@
 # development
 run-dev-up:
-	docker-compose -p accounts-app \
+	docker compose -p accounts-app \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	up -d
 run-dev-up-rebuild:
-	docker-compose -p accounts-app \
+	docker compose -p accounts-app \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	up -d --build --renew-anon-volumes server --no-deps
 run-dev-down:
-	docker-compose -p accounts-app \
+	docker compose -p accounts-app \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	down
 run-dev-down-hard:
-	docker-compose -p accounts-app \
+	docker compose -p accounts-app \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	down -v
 
 # test
 run-test-up:
-	docker-compose -p accounts-app \
+	docker compose -p accounts-app \
 	-f docker-compose.yml -f docker-compose.test.yml up \
 	--abort-on-container-exit --build
 run-test-down:
-	docker-compose -p accounts-app \
+	docker compose -p accounts-app \
 	-f docker-compose.yml -f docker-compose.test.yml \
 	down -v
 run-test:

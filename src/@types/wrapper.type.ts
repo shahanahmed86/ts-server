@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
+import { GraphQLResolveInfo } from 'graphql';
 
-export type ContextFunction = (
+export type ContextFunction<T> = (
 	req: Request,
 	res: Response,
 	next: NextFunction,
-) => void | Promise<void>;
+) => T | Promise<T>;
 
 export type Context = {
 	req: Request;
@@ -22,4 +23,12 @@ export type Controller<T, A> = (
 	root: null | undefined,
 	args: A,
 	context: Context,
-) => Result<T> | Promise<Result<T>>;
+	info?: GraphQLResolveInfo,
+) => T | Promise<T>;
+
+export type ControllerFunction<T, A> = (
+	root: null | undefined,
+	args: A,
+	context: Context,
+	info: GraphQLResolveInfo,
+) => T | Promise<T>;

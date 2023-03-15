@@ -3,7 +3,7 @@ import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
 import { Users } from '../../typeorm/entities/users.entity';
 import { ConflictError } from '../../utils/errors.util';
-import { formatResponse, joiValidator } from '../../utils/logics.util';
+import { joiValidator } from '../../utils/logics.util';
 import { profileSchema } from '../../validation';
 
 export const updateProfile: Controller<null, UserArgs> = async (_, args, { res }) => {
@@ -17,5 +17,5 @@ export const updateProfile: Controller<null, UserArgs> = async (_, args, { res }
 	const isUpdated = await Dao.users.update(user.id, args);
 	if (!isUpdated) throw new ConflictError('Unable to update your account');
 
-	return formatResponse(201, "You've successfully updated your accounts", null);
+	return null;
 };

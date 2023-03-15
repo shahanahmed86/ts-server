@@ -1,5 +1,7 @@
 import { JWT_EXPIRY } from '../config';
 
+export const GRAPHQL_ROUTE = '/graphql';
+
 export const SHOULD_OMIT_PROPS = [
 	'password',
 	'deletedAt',
@@ -41,3 +43,8 @@ export const LIMIT = 10;
 export const OFFSET = 0;
 
 export const CHUNK_SIZE = 5000;
+
+export const ROLES = {
+	admin: 'admin',
+	user: 'user',
+};

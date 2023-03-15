@@ -2,7 +2,7 @@ import { AuthPayload, UserArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
 import { ConflictError, NotFound } from '../../utils/errors.util';
-import { formatResponse, joiValidator } from '../../utils/logics.util';
+import { joiValidator } from '../../utils/logics.util';
 import { signupSchema } from '../../validation';
 
 export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { res }) => {
@@ -15,7 +15,5 @@ export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { res }
 	if (!role) throw new NotFound('Role not found');
 
 	args.roleId = role.id;
-	const data = await Dao.users.signup(args, role.name);
-
-	return formatResponse(201, "You've successfully signed up", data);
+	return Dao.users.signup(args, role.name);
 };
