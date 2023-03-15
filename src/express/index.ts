@@ -5,7 +5,7 @@ import { IN_PROD } from '../config';
 import scheduledJobs from '../library/cron.library';
 import logger from '../library/morgan.library';
 import swagger from '../library/swagger.library';
-import { SIZE_LIMIT } from '../utils/constants.util';
+import { GRAPHQL_ROUTE, SIZE_LIMIT } from '../utils/constants.util';
 import routes from './routes';
 
 const app = express();
@@ -33,7 +33,11 @@ app.use('/api', routes);
 if (!IN_PROD) swagger(app);
 
 // when route not found
-app.use((_, res) => res.status(404).send('Route not found'));
+app.use((req, res, next) => {
+	if (GRAPHQL_ROUTE === req.path) return next();
+
+	res.status(404).send('Route not found');
+});
 
 // cron jobs
 scheduledJobs();

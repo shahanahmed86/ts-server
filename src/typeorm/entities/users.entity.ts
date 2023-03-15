@@ -43,8 +43,8 @@ export class Users extends Base {
 	@Column('uuid')
 	genderId!: string;
 
-	@ManyToOne(() => Roles, (entity) => entity.users)
-	gender?: Roles;
+	@ManyToOne(() => Genders, (entity) => entity.users)
+	gender?: Genders;
 
 	@ManyToOne(() => Users, (entity) => entity.deletedUsers)
 	deletedBy?: Users;

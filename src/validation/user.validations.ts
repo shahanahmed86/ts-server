@@ -11,7 +11,7 @@ const phoneSchema = Joi.string()
 	.label('phone number')
 	.messages({ 'string.pattern.base': '{#label} must have 10 digits' })
 	.optional();
-const genderIdSchema = uuidSchema.label('genderId');
+const genderIdSchema = uuidSchema.label('genderId').optional();
 
 export const profileSchema = Joi.object<UserArgs>({
 	firstName: firstNameSchema,

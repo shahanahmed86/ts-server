@@ -1,8 +1,8 @@
-import { ContextFunction } from '../../@types/wrapper.type';
+import { NextFunction, Request, Response } from 'express';
 import controllers from '../../controllers';
 import { restCatch } from '../../utils/errors.util';
 
-export const guest: ContextFunction = (req, res, next) => {
+export const guest = (req: Request, res: Response, next: NextFunction) => {
 	try {
 		controllers.middleware.guestController(req);
 
@@ -12,8 +12,8 @@ export const guest: ContextFunction = (req, res, next) => {
 	}
 };
 
-export const auth = (key: string): ContextFunction => {
-	return async (req, res, next) => {
+export const auth = (key: string) => {
+	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			await controllers.middleware.authController(key, req, res);
 
@@ -24,8 +24,8 @@ export const auth = (key: string): ContextFunction => {
 	};
 };
 
-export const includeRole = (key: string): ContextFunction => {
-	return (req, res, next) => {
+export const includeRole = (key: string) => {
+	return (req: Request, res: Response, next: NextFunction) => {
 		res.locals.role = key;
 		next();
 	};

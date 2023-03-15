@@ -14,7 +14,10 @@ class UsersDao extends BaseDao<Users> {
 		if (avatar) payload.avatar = await file.moveImageFromTmp(avatar);
 
 		const saved = await this.model.save(payload);
-		const user = await this.findOne({ where: { id: saved.id }, relations: { role: true } });
+		const user = await this.findOne({
+			where: { id: saved.id },
+			relations: { role: true, gender: true },
+		});
 
 		return user!.postLogin(role);
 	}

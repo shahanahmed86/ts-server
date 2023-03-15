@@ -50,7 +50,7 @@ export const authController: AuthController = async (key, req, res) => {
 
 	const user = await Dao.users.findOne({
 		where: { id: userId },
-		relations: { role: true },
+		relations: { role: true, gender: true },
 	});
 	if (!user) throw new NotAuthenticated();
 	if (user.role!.name !== key) throw new NotAuthorized();
