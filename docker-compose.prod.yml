@@ -6,7 +6,7 @@ services:
     depends_on:
       - server
     networks:
-      - accounts-app
+      - app
     ports:
       - 80:80
     configs:
@@ -98,5 +98,5 @@ volumes:
     driver: local
 
 networks:
-  accounts-app:
+  app:
     driver: overlay

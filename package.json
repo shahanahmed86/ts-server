@@ -12,7 +12,6 @@
 		"start:dev": "nodemon",
 		"build": "rimraf ./dist && tsc",
 		"postbuild": "cp -r src/assets dist/assets",
-		"prestart": "npm run build",
 		"start": "node .",
 		"lint": "eslint src --ext .ts",
 		"prettify": "prettier --config .prettierrc '**/*.{ts,js}' --write",
