@@ -1,28 +1,32 @@
+create-image:
+	docker build -t 127.0.0.1:5000/ts-server:1.0.0 . && \
+	docker push 127.0.0.1:5000/ts-server:1.0.0
+
 # development
 run-dev-up:
-	docker compose -p accounts-app \
+	docker compose -p accounts \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	up -d
 run-dev-up-rebuild:
-	docker compose -p accounts-app \
+	docker compose -p accounts \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	up -d --build --renew-anon-volumes server --no-deps
 run-dev-down:
-	docker compose -p accounts-app \
+	docker compose -p accounts \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	down
 run-dev-down-hard:
-	docker compose -p accounts-app \
+	docker compose -p accounts \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	down -v
 
 # test
 run-test-up:
-	docker compose -p accounts-app \
+	docker compose -p accounts-test \
 	-f docker-compose.yml -f docker-compose.test.yml up \
-	--abort-on-container-exit --build
+	--abort-on-container-exit --renew-anon-volumes --build
 run-test-down:
-	docker compose -p accounts-app \
+	docker compose -p accounts-test \
 	-f docker-compose.yml -f docker-compose.test.yml \
 	down -v
 run-test:
@@ -32,15 +36,15 @@ run-test:
 run-prod-up:
 	docker stack deploy \
 	-c docker-compose.yml -c docker-compose.prod.yml \
-	accounts-app
+	accounts
 run-prod-down:
-	docker stack rm accounts-app
+	docker stack rm accounts
 
 # backup/restore database
 run-backup:
-	docker exec -t accounts-app-db-1 pg_dumpall -c --username="admin" > dumps/`date +%d-%m-%Y"_"%H_%M_%S`.sql
+	docker exec -t accounts-db-1 pg_dumpall -c --username="admin" > dumps/`date +%d-%m-%Y"_"%H_%M_%S`.sql
 run-restore:
-	cat ${DUMP} | docker exec -i accounts-app-db-1 psql --username="admin"
+	cat ${DUMP} | docker exec -i accounts-db-1 psql --username="admin"
 
 # only for dev environment
 

@@ -1,4 +1,5 @@
 import { AuthPayload, UserArgs } from '../@types/api.type';
+import { NODE_ENV } from '../config';
 import { hashSync } from '../library/bcrypt.library';
 import file from '../library/file.library';
 import AppDataSource from '../typeorm';
@@ -12,6 +13,8 @@ class UsersDao extends BaseDao<Users> {
 
 		payload.password = hashSync(password!);
 		if (avatar) payload.avatar = await file.moveImageFromTmp(avatar);
+
+		if (NODE_ENV === 'test') payload.emailVerified = true;
 
 		const saved = await this.model.save(payload);
 		const user = await this.findOne({

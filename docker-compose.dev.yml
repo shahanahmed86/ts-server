@@ -9,7 +9,7 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - accounts-app
+      - app
     ports:
       - 80:80
     configs:
@@ -52,15 +52,13 @@ services:
       db:
         condition: service_healthy
     networks:
-      - accounts-app
+      - app
 
   cache:
     tty: true
     restart: unless-stopped
     volumes:
       - cache_dev:/data
-    networks:
-      - accounts-app
 
 volumes:
   db_dev:
@@ -69,5 +67,5 @@ volumes:
     driver: local
 
 networks:
-  accounts-app:
+  app:
     driver: bridge
