@@ -6,6 +6,7 @@ import * as redis from '../../library/redis.library';
 import { USER_TABLE } from '../constants';
 import { Base } from './base.entity';
 import { Genders } from './genders.entity';
+import { Heads } from './heads.entity';
 import { Roles } from './roles.entity';
 
 @Entity(USER_TABLE)
@@ -57,6 +58,9 @@ export class Users extends Base {
 
 	@OneToMany(() => Roles, (entity) => entity.deletedBy)
 	deletedRoles?: Roles[];
+
+	@OneToMany(() => Heads, (entity) => entity.deletedBy)
+	deletedHeads?: Heads[];
 
 	// custom hooks
 	comparePassword(password: string): boolean {
