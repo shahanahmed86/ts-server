@@ -1,0 +1,41 @@
+{
+	"error": {
+		"badRequest": "Bad Request!",
+		"notFound": "Not Found!",
+		"conflict": "Conflict Error!",
+		"notAuthorized": "Not Authorized!",
+		"notAuthenticated": "Not Authenticated!",
+		"internalError": "Internal server error!",
+		"invalidLanguage": "Invalid language!"
+	},
+	"auth": {
+		"signup": "You've successfully signed up!",
+		"login": "You've logged in successfully!",
+		"loggedIn": "You have a valid logged in session!",
+		"updateProfile": "You've successfully updated your account!",
+		"updateProfileFailed": "Unable to update the account!",
+		"changePassword": "You've successfully updated the password!",
+		"changePasswordFailed": "Unable to update the password!",
+		"invalidRole": "{{role}} is an invalid role!",
+		"invalidSession": "No or invalid session!",
+		"alreadyLoggedIn": "You are already logged in!",
+		"requiredLogin": "You must be logged in!",
+		"verifyEmail": "Please verify your email address first!",
+		"oldPasswordMismatched": "Old password mismatched!",
+		"insufficientPriviledge": "A user with '{{role}}' role cannot login from here!",
+		"userExists": "User already exists with this email address!"
+	},
+	"common": {
+		"images": {
+			"upload": "Image uploaded successfully!",
+			"noAttachment": "File attachment not found!",
+			"removeImage": "Image deleted successfully!",
+			"removeImageFailed": "Image has already been deleted or doesn't exists!"
+		},
+		"genders": {
+			"getGenders": "You've successfully fetched genders' list!"
+		},
+		"notFound": "{{entity}} not found!",
+		"emptyArgument": "At least one argument to pass"
+	}
+}

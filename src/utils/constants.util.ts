@@ -29,8 +29,6 @@ export const JWT_EXPIRY_IN_SECONDS = JWT_EXPIRY / MS;
 
 export const SIZE_LIMIT = 10 * 1024 * 1024;
 
-export const NO_OR_INVALID_SESSION = 'No or invalid session';
-
 export const TEMP_FOLDER_PATH = './uploads/temp';
 
 export const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
@@ -48,3 +46,7 @@ export const ROLES = {
 	admin: 'admin',
 	user: 'user',
 };
+
+export const LANGUAGES = ['en'];
+
+export const LANGUAGE_HEADER = 'LANGUAGE';

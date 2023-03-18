@@ -6,7 +6,7 @@
 
 /**
  * @openapi
- * /api/app/common/genders:
+ * /api/common/genders:
  *   get:
  *     summary: Get Genders
  *     tags: [Common]

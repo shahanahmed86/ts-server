@@ -14,7 +14,7 @@ router.post('/', guest, includeRole(user), async (...args) => {
 	const [, res] = args;
 	try {
 		const payload = await restWrapper(controllers.users.login)(...args);
-		const result = formatResponse(200, "You've your login session", payload);
+		const result = formatResponse(200, 'auth.login', payload);
 
 		res.status(result.status).send(result);
 	} catch (e) {
@@ -26,7 +26,7 @@ router.post('/signup', guest, includeRole(user), async (...args) => {
 	const [, res] = args;
 	try {
 		const payload = await restWrapper(controllers.users.signup)(...args);
-		const result = formatResponse(201, "You've successfully signed up", payload);
+		const result = formatResponse(201, 'auth.signup', payload);
 
 		res.status(result.status).send(result);
 	} catch (e) {
@@ -40,7 +40,7 @@ router.get('/', async (...args) => {
 	const [, res] = args;
 	try {
 		const payload = await restWrapper(controllers.users.loggedIn)(...args);
-		const result = formatResponse(200, "You've your login session", payload);
+		const result = formatResponse(200, 'auth.loggedIn', payload);
 
 		res.status(result.status).send(result);
 	} catch (e) {
@@ -52,7 +52,7 @@ router.put('/', async (...args) => {
 	const [, res] = args;
 	try {
 		const payload = await restWrapper(controllers.users.updateProfile)(...args);
-		const result = formatResponse(201, "You've successfully updated your accounts", payload);
+		const result = formatResponse(201, payload, null);
 
 		res.status(result.status).send(result);
 	} catch (e) {
@@ -64,7 +64,7 @@ router.put('/change-password', async (...args) => {
 	const [, res] = args;
 	try {
 		const payload = await restWrapper(controllers.users.changePassword)(...args);
-		const result = formatResponse(201, "You've successfully updated the password", payload);
+		const result = formatResponse(201, payload, null);
 
 		res.status(result.status).send(result);
 	} catch (e) {

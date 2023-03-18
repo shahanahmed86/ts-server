@@ -15,7 +15,7 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { res }
 	if (!user) throw new NotAuthenticated();
 
 	if (user.role!.name !== res.locals.role) {
-		throw new NotAuthorized(`A user with ${user.role!.name} role cannot login from here`);
+		throw new NotAuthorized(['auth.insufficientPriviledge', user.role!.name]);
 	}
 
 	const isMatched = user.comparePassword(args.password);

@@ -4,19 +4,19 @@ create-image:
 
 # development
 run-dev-up:
-	docker compose -p accounts \
+	docker compose -p accounts-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	up -d
 run-dev-up-rebuild:
-	docker compose -p accounts \
+	docker compose -p accounts-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
-	up -d --build --renew-anon-volumes server --no-deps
+	up -d --build --renew-anon-volumes server
 run-dev-down:
-	docker compose -p accounts \
+	docker compose -p accounts-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	down
 run-dev-down-hard:
-	docker compose -p accounts \
+	docker compose -p accounts-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	down -v
 
@@ -42,9 +42,9 @@ run-prod-down:
 
 # backup/restore database
 run-backup:
-	docker exec -t accounts-db-1 pg_dumpall -c --username="admin" > dumps/`date +%d-%m-%Y"_"%H_%M_%S`.sql
+	docker exec -t accounts-dev-db-1 pg_dumpall -c --username="admin" > dumps/`date +%d-%m-%Y"_"%H_%M_%S`.sql
 run-restore:
-	cat ${DUMP} | docker exec -i accounts-db-1 psql --username="admin"
+	cat ${DUMP} | docker exec -i accounts-dev-db-1 psql --username="admin"
 
 # only for dev environment
 
