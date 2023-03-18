@@ -1,8 +1,8 @@
 import express from 'express';
-import { restWrapper } from '../../../../utils/wrappers.util';
 import controllers from '../../../../controllers';
-import { formatResponse } from '../../../../utils/logics.util';
 import { restCatch } from '../../../../utils/errors.util';
+import { formatResponse } from '../../../../utils/logics.util';
+import { restWrapper } from '../../../../utils/wrappers.util';
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.get('/', async (...args) => {
 	const [, res] = args;
 	try {
 		const payload = await restWrapper(controllers.genders.getGenders)(...args);
-		const result = formatResponse(200, "You've successfully fetched genders", payload);
+		const result = formatResponse(200, 'common.genders.getGenders', payload);
 
 		res.status(result.status).send(result);
 	} catch (e) {

@@ -41,11 +41,10 @@ const server = new ApolloServer({
 
 AppDataSource.initialize()
 	.then(async () => {
-		if (httpServer.listening) return console.log(httpServer.listening);
-
 		await server.start();
 		app.use(expressMiddleware(server, { context: async ({ req, res }) => ({ req, res }) }));
 
+		if (httpServer.listening) return console.log(httpServer.listening);
 		httpServer.listen(APP_PORT, () => console.log(`⚡️[server]: ${BASE_URL}`));
 	})
 	.catch(console.error);

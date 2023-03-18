@@ -9,10 +9,10 @@ export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { res }
 	await joiValidator(signupSchema, args);
 
 	const user = await Dao.users.findOne({ where: { email: args.email! } });
-	if (user) throw new ConflictError('User already exists with this email address');
+	if (user) throw new ConflictError('auth.userExists');
 
 	const role = await Dao.roles.findOne({ where: { name: res.locals.role } });
-	if (!role) throw new NotFound('Role not found');
+	if (!role) throw new NotFound(['common.notFound', 'Role']);
 
 	args.roleId = role.id;
 	return Dao.users.signup(args, role.name);

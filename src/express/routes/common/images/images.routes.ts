@@ -21,7 +21,7 @@ router
 		const [, res] = args;
 		try {
 			const payload = await restWrapper(controllers.images.upload)(...args);
-			const result = formatResponse(201, 'Image uploaded successfully', payload);
+			const result = formatResponse(201, 'common.images.upload', payload);
 
 			res.status(result.status).send(result);
 		} catch (e) {
@@ -32,7 +32,7 @@ router
 		const [, res] = args;
 		try {
 			const payload = await restWrapper(controllers.images.removeImage)(...args);
-			const result = formatResponse(200, 'Image deleted successfully', payload);
+			const result = formatResponse(200, payload, null);
 
 			res.status(result.status).send(result);
 		} catch (e) {

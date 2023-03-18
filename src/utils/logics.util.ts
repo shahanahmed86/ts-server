@@ -5,11 +5,12 @@ import isObject from 'lodash/isObject';
 import omit from 'lodash/omit';
 import { FormatResponse } from '../@types/api.type';
 import { JoiValidator } from '../@types/library.type';
+import { translate } from '../library/i18n.library';
 import { SHOULD_OMIT_PROPS } from './constants.util';
 import { convertUnknownIntoError } from './errors.util';
 
 export const formatResponse: FormatResponse = (status, message, data) => {
-	return { status, message, data: omitProps(data) };
+	return { status, message: translate(message), data: omitProps(data) };
 };
 
 export const getISODate = (dt: string | Date | number = Date.now()) => new Date(dt).toISOString();

@@ -46,11 +46,8 @@ describe('RESTful - App Authentication APIs', function () {
 	it('app loggedIn', async () => {
 		const { body } = await login();
 		const token = body.data.token;
-		console.log('token...', token);
 
 		const res = await loggedIn(token);
-		console.log('res.error', res.error);
-		console.log('res.status', res.status);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 		SHOULD_OMIT_PROPS.map((prop) => expect(res.body).not.to.have.property(prop));
