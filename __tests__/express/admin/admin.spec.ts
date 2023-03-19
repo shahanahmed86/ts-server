@@ -1,18 +1,8 @@
 import chai from 'chai';
-import { UserArgs } from '../../../src/@types/api.type';
 import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
-import { uploadImage } from '../../images/images.helper';
-import { changePassword, loggedIn, login, updateProfile } from './admin.helper';
+import { changePassword, loggedIn, login } from './admin.helper';
 
 const { expect } = chai;
-
-const UPDATE_PROFILE_DATA: UserArgs = {
-	avatar: 'temp/uuid-filename.txt',
-	firstName: 'Shahan',
-	lastName: 'Ahmed Khan',
-	phone: '+923422662425',
-	genderId: '04521c7b-a128-4f5f-bfb2-96053c0a31b0',
-};
 
 describe('RESTful - Admin Authentication APIs', function () {
 	it('admin login', async () => {
@@ -36,20 +26,6 @@ describe('RESTful - Admin Authentication APIs', function () {
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 		SHOULD_OMIT_PROPS.map((prop) => expect(res.body).not.to.have.property(prop));
-	});
-
-	it('admin updateProfile', async () => {
-		const { body } = await login();
-		const token = body.data.token;
-
-		const { body: uploadedFile } = await uploadImage();
-		const payload = Object.assign<UserArgs, UserArgs, UserArgs>({}, UPDATE_PROFILE_DATA, {
-			avatar: uploadedFile.data,
-		});
-
-		const res = await updateProfile(payload, token);
-		expect(res.error).to.be.false;
-		expect(res.status).to.be.equal(201);
 	});
 
 	it('admin changePassword', async () => {

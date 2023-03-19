@@ -5,7 +5,7 @@ const { admin, user } = ROLES;
 const authSchema = `#graphql
   extend type Query {
     # admin
-    adminLoggedIn: User! @auth(type: "${admin}")
+    adminLoggedIn: Admin! @auth(type: "${admin}")
 
     # user
     userLoggedIn: User! @auth(type: "${user}")
@@ -13,15 +13,8 @@ const authSchema = `#graphql
   
   extend type Mutation {
     # admin
-    adminUpdateProfile(
-      firstName: String
-      lastName: String
-      avatar: String
-      phone: String
-      genderId: String
-    ): String! @auth(type: "${admin}")
     adminChangePassword(oldPassword: String!, password: String!): String! @auth(type: "${admin}")
-    adminLogin(email: String!, password: String!): AuthUser! @guest(type: "${admin}")
+    adminLogin(email: String!, password: String!): AuthAdmin! @guest(type: "${admin}")
 
     # user
     userUpdateProfile(

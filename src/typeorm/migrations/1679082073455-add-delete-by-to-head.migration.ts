@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner, TableForeignKey } from 'typeorm';
-import { HEAD_TABLE, USER_TABLE } from '../constants';
+import { HEAD_TABLE, ADMIN_TABLE } from '../constants';
 
 export class addDeleteByToHead1679082073455 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
@@ -8,7 +8,7 @@ export class addDeleteByToHead1679082073455 implements MigrationInterface {
 			new TableForeignKey({
 				columnNames: ['deletedById'],
 				referencedColumnNames: ['id'],
-				referencedTableName: USER_TABLE,
+				referencedTableName: ADMIN_TABLE,
 			}),
 		);
 	}

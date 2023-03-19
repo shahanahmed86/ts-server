@@ -3,15 +3,14 @@ import { graphqlWrapper } from '../../../utils/wrappers.util';
 
 const auth = {
 	// admin
-	adminUpdateProfile: graphqlWrapper(controllers.users.updateProfile),
-	adminChangePassword: graphqlWrapper(controllers.users.changePassword),
-	adminLogin: graphqlWrapper(controllers.users.login),
+	adminChangePassword: graphqlWrapper(controllers.admin.changePassword),
+	adminLogin: graphqlWrapper(controllers.admin.login),
 
 	// user
-	userUpdateProfile: graphqlWrapper(controllers.users.updateProfile),
-	userChangePassword: graphqlWrapper(controllers.users.changePassword),
-	userLogin: graphqlWrapper(controllers.users.login),
-	userSignup: graphqlWrapper(controllers.users.signup),
+	userUpdateProfile: graphqlWrapper(controllers.user.updateProfile),
+	userChangePassword: graphqlWrapper(controllers.user.changePassword),
+	userLogin: graphqlWrapper(controllers.user.login),
+	userSignup: graphqlWrapper(controllers.user.signup),
 };
 
 export default auth;

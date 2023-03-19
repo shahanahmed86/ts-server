@@ -3,24 +3,15 @@ export const LOGIN = `#graphql
     values: adminLogin(email: $email, password: $password) {
       token
       user {
-        avatar
-        createdAt
-        email
-        firstName
-        genderId
         id
-        lastName
-        phone
+        email
         roleId
-        updatedAt
-        gender {
-          id
-          name
-        }
         role {
           id
           name
         }
+        createdAt
+        updatedAt
       }
     }
   }
@@ -29,24 +20,15 @@ export const LOGIN = `#graphql
 export const LOGGED_IN = `#graphql
   query LoggedIn {
     values: adminLoggedIn {
-      avatar
-      createdAt
-      email
-      firstName
-      genderId
       id
-      lastName
-      phone
+      email
       roleId
-      updatedAt
-      gender {
-        id
-        name
-      }
       role {
         id
         name
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -54,23 +36,5 @@ export const LOGGED_IN = `#graphql
 export const CHANGE_PASSWORD = `#graphql
   mutation ChangePassword($oldPassword: String!, $password: String!) {
     values: adminChangePassword(oldPassword: $oldPassword, password: $password)
-  }
-`;
-
-export const UPDATE_PROFILE = `#graphql
-  mutation AdminUpdateProfile(
-      $firstName: String,
-      $lastName: String,
-      $avatar: String,
-      $phone: String,
-      $genderId: String
-    ) {
-    values: adminUpdateProfile(
-      firstName: $firstName,
-      lastName: $lastName,
-      avatar: $avatar,
-      phone: $phone,
-      genderId: $genderId
-    )
   }
 `;

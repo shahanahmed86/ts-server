@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/', async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.genders.getGenders)(...args);
+		const payload = await restWrapper(controllers.gender.getGenders)(...args);
 		const result = formatResponse(200, 'common.genders.getGenders', payload);
 
 		res.status(result.status).send(result);

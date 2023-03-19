@@ -1,23 +1,23 @@
 import { DeepPartial, MigrationInterface, QueryRunner } from 'typeorm';
-import { Heads } from '../entities/heads.entity';
-import { HEADS_DATA, HEAD_TABLE } from '../constants';
+import { Head } from '../entities/head.entity';
+import { HEAD_DATA, HEAD_TABLE } from '../constants';
 
 export class addHead1679086351690 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
-		await runSeeds(queryRunner, HEADS_DATA.slice(0));
+		await runSeeds(queryRunner, HEAD_DATA.slice(0));
 	}
 
 	async down(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.manager
-			.createQueryBuilder(Heads, HEAD_TABLE)
+			.createQueryBuilder(Head, HEAD_TABLE)
 			.delete()
 			.where('id IS NOT NULL')
 			.execute();
 	}
 }
 
-async function runSeeds(queryRunner: QueryRunner, _data: DeepPartial<Heads[]>): Promise<void> {
-	await queryRunner.manager.createQueryBuilder(Heads, HEAD_TABLE).insert().values(_data).execute();
+async function runSeeds(queryRunner: QueryRunner, _data: DeepPartial<Head[]>): Promise<void> {
+	await queryRunner.manager.createQueryBuilder(Head, HEAD_TABLE).insert().values(_data).execute();
 
 	for (const data of _data) {
 		if (data.children) {

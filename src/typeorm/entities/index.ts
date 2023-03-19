@@ -1,6 +1,7 @@
-import { Genders } from './genders.entity';
-import { Roles } from './roles.entity';
-import { Users } from './users.entity';
-import { Heads } from './heads.entity';
+import { Gender } from './gender.entity';
+import { Role } from './role.entity';
+import { Admin } from './admin.entity';
+import { User } from './user.entity';
+import { Head } from './head.entity';
 
-export default [Users, Roles, Genders, Heads];
+export default [Admin, User, Role, Gender, Head];

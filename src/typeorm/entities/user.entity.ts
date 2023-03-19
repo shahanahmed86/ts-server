@@ -1,16 +1,16 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { AuthPayload } from '../../@types/api.type';
 import { compareSync } from '../../library/bcrypt.library';
 import { encodePayload } from '../../library/jwt.library';
 import * as redis from '../../library/redis.library';
 import { USER_TABLE } from '../constants';
+import { Admin } from './admin.entity';
 import { Base } from './base.entity';
-import { Genders } from './genders.entity';
-import { Heads } from './heads.entity';
-import { Roles } from './roles.entity';
+import { Gender } from './gender.entity';
+import { Role } from './role.entity';
 
 @Entity(USER_TABLE)
-export class Users extends Base {
+export class User extends Base {
 	@Column()
 	firstName?: string;
 
@@ -38,29 +38,17 @@ export class Users extends Base {
 	@Column('uuid')
 	roleId!: string;
 
-	@ManyToOne(() => Roles, (entity) => entity.users)
-	role?: Roles;
+	@ManyToOne(() => Role, (entity) => entity.users)
+	role?: Role;
 
 	@Column('uuid')
 	genderId!: string;
 
-	@ManyToOne(() => Genders, (entity) => entity.users)
-	gender?: Genders;
+	@ManyToOne(() => Gender, (entity) => entity.users)
+	gender?: Gender;
 
-	@ManyToOne(() => Users, (entity) => entity.deletedUsers)
-	deletedBy?: Users;
-
-	@OneToMany(() => Users, (entity) => entity.deletedBy)
-	deletedUsers?: Users[];
-
-	@OneToMany(() => Genders, (entity) => entity.deletedBy)
-	deletedGenders?: Genders[];
-
-	@OneToMany(() => Roles, (entity) => entity.deletedBy)
-	deletedRoles?: Roles[];
-
-	@OneToMany(() => Heads, (entity) => entity.deletedBy)
-	deletedHeads?: Heads[];
+	@ManyToOne(() => Admin, (entity) => entity.deletedUsers)
+	deletedBy?: Admin;
 
 	// custom hooks
 	comparePassword(password: string): boolean {

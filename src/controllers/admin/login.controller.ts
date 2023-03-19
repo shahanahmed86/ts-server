@@ -8,18 +8,18 @@ import { loginSchema } from '../../validation';
 export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { res }) => {
 	await joiValidator(loginSchema, args);
 
-	const user = await Dao.users.findOne({
-		where: { email: args.email, role: Dao.users.deleteParams },
-		relations: { role: true, gender: true },
+	const admin = await Dao.admin.findOne({
+		where: { email: args.email, role: Dao.admin.deleteParams },
+		relations: { role: true },
 	});
-	if (!user) throw new NotAuthenticated();
+	if (!admin) throw new NotAuthenticated();
 
-	if (user.role!.name !== res.locals.role) {
-		throw new NotAuthorized(['auth.insufficientPriviledge', user.role!.name]);
+	if (admin.role!.name !== res.locals.role) {
+		throw new NotAuthorized(['auth.insufficientPriviledge', admin.role!.name]);
 	}
 
-	const isMatched = user.comparePassword(args.password);
+	const isMatched = admin.comparePassword(args.password);
 	if (!isMatched) throw new NotAuthenticated();
 
-	return user.postLogin(user.role!.name);
+	return admin.postLogin(admin.role!.name);
 };

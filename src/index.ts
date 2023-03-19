@@ -44,7 +44,7 @@ AppDataSource.initialize()
 		await server.start();
 		app.use(expressMiddleware(server, { context: async ({ req, res }) => ({ req, res }) }));
 
-		if (httpServer.listening) return console.log(httpServer.listening);
+		if (httpServer.listening) return console.log('Already listening to the port');
 		httpServer.listen(APP_PORT, () => console.log(`⚡️[server]: ${BASE_URL}`));
 	})
 	.catch(console.error);

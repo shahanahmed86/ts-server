@@ -1,10 +1,10 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { HEAD_TABLE } from '../constants';
+import { Admin } from './admin.entity';
 import { Base } from './base.entity';
-import { Users } from './users.entity';
 
 @Entity(HEAD_TABLE)
-export class Heads extends Base {
+export class Head extends Base {
 	@Column()
 	name!: string;
 
@@ -14,12 +14,12 @@ export class Heads extends Base {
 	@Column('uuid', { nullable: true })
 	parentId?: string;
 
-	@ManyToOne(() => Heads, (entity) => entity.children)
-	parent?: Heads;
+	@ManyToOne(() => Head, (entity) => entity.children)
+	parent?: Head;
 
-	@OneToMany(() => Heads, (entity) => entity.parent)
-	children?: Heads[];
+	@OneToMany(() => Head, (entity) => entity.parent)
+	children?: Head[];
 
-	@ManyToOne(() => Users, (entity) => entity.deletedHeads)
-	deletedBy?: Users;
+	@ManyToOne(() => Admin, (entity) => entity.deletedHeads)
+	deletedBy?: Admin;
 }
