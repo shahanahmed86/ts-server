@@ -1,19 +1,12 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { deleteImage, getGenders, getImage, healthcheck, uploadImage } from './common.helper';
+import { deleteImage, getImage, uploadImage } from './images.helper';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
 describe('RESTful - Common APIs', function () {
-	it('healthcheck', async () => {
-		const res = await healthcheck();
-
-		expect(res.status).to.be.equal(200);
-		expect(res.text).to.be.a('string');
-	});
-
 	it('upload image', async () => {
 		const { error, body, status } = await uploadImage();
 
@@ -47,12 +40,5 @@ describe('RESTful - Common APIs', function () {
 		res = await deleteImage(body.data);
 		expect(res.error).not.to.be.false;
 		expect(res.status).to.be.equal(404);
-	});
-
-	it('get genders', async () => {
-		const res = await getGenders();
-
-		expect(res.error).to.be.false;
-		expect(res.status).to.be.equal(200);
 	});
 });

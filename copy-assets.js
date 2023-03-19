@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const cp = require('child_process');
 
+// copy all images from assets folder
 executeCommand('cp -R src/assets dist/assets');
 
+// copy all ejs files from views folder
 executeCommand('cp -R src/express/views dist/express/views');
 
 /**

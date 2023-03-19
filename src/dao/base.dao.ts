@@ -62,6 +62,11 @@ class BaseDao<BaseEntity extends ObjectLiteral> {
 		const result = await this.model.update(criteria, payload);
 		return !!result.affected;
 	}
+
+	async hardDelete(criteria: FindOptionsWhere<string>): Promise<boolean> {
+		const result = await this.model.delete(criteria);
+		return !!result.affected;
+	}
 }
 
 export default BaseDao;

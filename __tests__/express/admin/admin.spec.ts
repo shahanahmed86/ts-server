@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { UserArgs } from '../../../src/@types/api.type';
 import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
-import { uploadImage } from '../../common/common.helper';
+import { uploadImage } from '../../images/images.helper';
 import { changePassword, loggedIn, login, updateProfile } from './admin.helper';
 
 const { expect } = chai;

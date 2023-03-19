@@ -27,8 +27,8 @@ run-test-up:
 	--abort-on-container-exit --renew-anon-volumes --build
 run-test-down:
 	docker compose -p accounts-test \
-	-f docker-compose.yml -f docker-compose.test.yml \
-	down -v
+	-f docker-compose.yml -f docker-compose.test.yml down \
+	-v
 run-test:
 	DB_HOST="localhost" npm run --ignore-scripts exec-tests
 
