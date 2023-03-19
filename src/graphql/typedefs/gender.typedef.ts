@@ -5,7 +5,11 @@ const genderSchema = `#graphql
     users: [User!]!
     createdAt: Date!
     updatedAt: Date!
-  }  
+  }
+
+  extend type Query {
+    genders: [Gender!]!
+  }
 `;
 
 export default genderSchema;

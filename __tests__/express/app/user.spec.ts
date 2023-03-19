@@ -1,8 +1,9 @@
 import chai from 'chai';
 import { UserArgs } from '../../../src/@types/api.type';
 import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
-import { uploadImage } from '../../common/common.helper';
+import { uploadImage } from '../../images/images.helper';
 import { changePassword, loggedIn, login, signup, updateProfile } from './user.helper';
+import { deleteUsers } from '../../helper';
 
 const { expect } = chai;
 
@@ -84,4 +85,6 @@ describe('RESTful - App Authentication APIs', function () {
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(201);
 	});
+
+	after(() => deleteUsers());
 });

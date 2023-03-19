@@ -1,13 +1,11 @@
-import fs from 'fs';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import fs from 'fs';
 import httpServer from '../../src';
 
 const BASE_URL = '/api/common';
 
 chai.use(chaiHttp);
-
-export const healthcheck = () => chai.request(httpServer).get('/api/healthcheck');
 
 export const uploadImage = (imagePath = './src/assets/appstore.png') => {
 	return chai
@@ -27,5 +25,3 @@ export const getImage = (filename: string) => {
 export const deleteImage = (filename: string) => {
 	return chai.request(httpServer).delete(`${BASE_URL}/images?filename=${filename}`);
 };
-
-export const getGenders = () => chai.request(httpServer).get(`${BASE_URL}/genders`);
