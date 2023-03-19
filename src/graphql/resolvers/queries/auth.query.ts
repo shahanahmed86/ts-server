@@ -3,10 +3,10 @@ import { graphqlWrapper } from '../../../utils/wrappers.util';
 
 const auth = {
 	// admin
-	adminLoggedIn: graphqlWrapper(controllers.users.loggedIn),
+	adminLoggedIn: graphqlWrapper(controllers.admin.loggedIn),
 
 	// user
-	userLoggedIn: graphqlWrapper(controllers.users.loggedIn),
+	userLoggedIn: graphqlWrapper(controllers.user.loggedIn),
 };
 
 export default auth;

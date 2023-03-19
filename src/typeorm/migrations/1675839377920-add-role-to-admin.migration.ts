@@ -1,25 +1,25 @@
 import { MigrationInterface, QueryRunner, TableForeignKey } from 'typeorm';
 import { ROLE_TABLE, ADMIN_TABLE } from '../constants';
 
-export class addDeleteByToRole1676039297372 implements MigrationInterface {
+export class addRoleToAdmin1675839377920 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.createForeignKey(
-			ROLE_TABLE,
+			ADMIN_TABLE,
 			new TableForeignKey({
-				columnNames: ['deletedById'],
+				columnNames: ['roleId'],
 				referencedColumnNames: ['id'],
-				referencedTableName: ADMIN_TABLE,
+				referencedTableName: ROLE_TABLE,
 			}),
 		);
 	}
 
 	async down(queryRunner: QueryRunner): Promise<void> {
-		const table = await queryRunner.getTable(ROLE_TABLE);
+		const table = await queryRunner.getTable(ADMIN_TABLE);
 		if (!table) return;
 
-		const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('deletedById') !== -1);
+		const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('roleId') !== -1);
 		if (!foreignKey) return;
 
-		await queryRunner.dropForeignKey(ROLE_TABLE, foreignKey);
+		await queryRunner.dropForeignKey(ADMIN_TABLE, foreignKey);
 	}
 }

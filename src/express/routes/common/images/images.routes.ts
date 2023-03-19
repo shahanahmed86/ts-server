@@ -10,7 +10,7 @@ router
 	.route('/:filename?')
 	.get(async (req, res) => {
 		try {
-			const { filename, path } = await controllers.images.getImage(req);
+			const { filename, path } = await controllers.image.getImage(req);
 
 			res.attachment(filename).send(path);
 		} catch (e) {
@@ -20,7 +20,7 @@ router
 	.post(async (...args) => {
 		const [, res] = args;
 		try {
-			const payload = await restWrapper(controllers.images.upload)(...args);
+			const payload = await restWrapper(controllers.image.upload)(...args);
 			const result = formatResponse(201, 'common.images.upload', payload);
 
 			res.status(result.status).send(result);
@@ -31,7 +31,7 @@ router
 	.delete(async (...args) => {
 		const [, res] = args;
 		try {
-			const payload = await restWrapper(controllers.images.removeImage)(...args);
+			const payload = await restWrapper(controllers.image.removeImage)(...args);
 			const result = formatResponse(200, payload, null);
 
 			res.status(result.status).send(result);

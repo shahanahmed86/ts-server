@@ -4,10 +4,10 @@ import { hashSync } from '../library/bcrypt.library';
 import file from '../library/file.library';
 import AppDataSource from '../typeorm';
 import { USER_TABLE } from '../typeorm/constants';
-import { Users } from '../typeorm/entities/users.entity';
+import { User } from '../typeorm/entities/user.entity';
 import BaseDao from './base.dao';
 
-class UsersDao extends BaseDao<Users> {
+class UsersDao extends BaseDao<User> {
 	async signup(payload: UserArgs, role: string): Promise<AuthPayload> {
 		const { password, avatar } = payload;
 
@@ -26,5 +26,5 @@ class UsersDao extends BaseDao<Users> {
 	}
 }
 
-const repository = AppDataSource.getRepository(Users);
-export const users = new UsersDao(repository, USER_TABLE);
+const repository = AppDataSource.getRepository(User);
+export const user = new UsersDao(repository, USER_TABLE);

@@ -1,19 +1,19 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Users } from '../entities/users.entity';
-import { USER_DATA, USER_TABLE } from '../constants';
+import { Admin } from '../entities/admin.entity';
+import { ADMIN_DATA, ADMIN_TABLE } from '../constants';
 
-export class addUser1675846028707 implements MigrationInterface {
+export class addAdmin1675846028707 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.manager
-			.createQueryBuilder(Users, USER_TABLE)
+			.createQueryBuilder(Admin, ADMIN_TABLE)
 			.insert()
-			.values(USER_DATA)
+			.values(ADMIN_DATA)
 			.execute();
 	}
 
 	async down(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.manager
-			.createQueryBuilder(Users, USER_TABLE)
+			.createQueryBuilder(Admin, ADMIN_TABLE)
 			.delete()
 			.where('id IS NOT NULL')
 			.execute();

@@ -13,7 +13,7 @@ const router = express.Router();
 router.post('/', guest, includeRole(user), async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.users.login)(...args);
+		const payload = await restWrapper(controllers.user.login)(...args);
 		const result = formatResponse(200, 'auth.login', payload);
 
 		res.status(result.status).send(result);
@@ -25,7 +25,7 @@ router.post('/', guest, includeRole(user), async (...args) => {
 router.post('/signup', guest, includeRole(user), async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.users.signup)(...args);
+		const payload = await restWrapper(controllers.user.signup)(...args);
 		const result = formatResponse(201, 'auth.signup', payload);
 
 		res.status(result.status).send(result);
@@ -39,7 +39,7 @@ router.use(auth(user));
 router.get('/', async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.users.loggedIn)(...args);
+		const payload = await restWrapper(controllers.user.loggedIn)(...args);
 		const result = formatResponse(200, 'auth.loggedIn', payload);
 
 		res.status(result.status).send(result);
@@ -51,7 +51,7 @@ router.get('/', async (...args) => {
 router.put('/', async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.users.updateProfile)(...args);
+		const payload = await restWrapper(controllers.user.updateProfile)(...args);
 		const result = formatResponse(201, payload, null);
 
 		res.status(result.status).send(result);
@@ -63,7 +63,7 @@ router.put('/', async (...args) => {
 router.put('/change-password', async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.users.changePassword)(...args);
+		const payload = await restWrapper(controllers.user.changePassword)(...args);
 		const result = formatResponse(201, payload, null);
 
 		res.status(result.status).send(result);

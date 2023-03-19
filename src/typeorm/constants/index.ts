@@ -1,7 +1,9 @@
-export * from './users.constant';
+export * from './admin.constant';
 
-export * from './roles.constant';
+export * from './user.constant';
 
-export * from './genders.constant';
+export * from './role.constant';
 
-export * from './heads.constant';
+export * from './gender.constant';
+
+export * from './head.constant';

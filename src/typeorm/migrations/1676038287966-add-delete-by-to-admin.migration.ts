@@ -1,25 +1,25 @@
 import { MigrationInterface, QueryRunner, TableForeignKey } from 'typeorm';
-import { USER_TABLE } from '../constants';
+import { ADMIN_TABLE } from '../constants';
 
-export class addDeleteByToUser1676038287966 implements MigrationInterface {
+export class addDeleteByToAdmin1676038287966 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.createForeignKey(
-			USER_TABLE,
+			ADMIN_TABLE,
 			new TableForeignKey({
 				columnNames: ['deletedById'],
 				referencedColumnNames: ['id'],
-				referencedTableName: USER_TABLE,
+				referencedTableName: ADMIN_TABLE,
 			}),
 		);
 	}
 
 	async down(queryRunner: QueryRunner): Promise<void> {
-		const table = await queryRunner.getTable(USER_TABLE);
+		const table = await queryRunner.getTable(ADMIN_TABLE);
 		if (!table) return;
 
 		const foreignKey = table.foreignKeys.find((fk) => fk.columnNames.indexOf('deletedById') !== -1);
 		if (!foreignKey) return;
 
-		await queryRunner.dropForeignKey(USER_TABLE, foreignKey);
+		await queryRunner.dropForeignKey(ADMIN_TABLE, foreignKey);
 	}
 }

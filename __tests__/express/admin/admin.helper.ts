@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import httpServer from '../../../src';
-import { UserArgs } from '../../../src/@types/api.type';
 
 chai.use(chaiHttp);
 
@@ -21,15 +20,6 @@ export const loggedIn = (token: string) => {
 		.get(BASE_URL)
 		.set('content-type', 'application/json')
 		.set('Authorization', `Bearer ${token}`);
-};
-
-export const updateProfile = async (payload: UserArgs, token: string) => {
-	return chai
-		.request(httpServer)
-		.put(BASE_URL)
-		.set('content-type', 'application/json')
-		.set('Authorization', `Bearer ${token}`)
-		.send(payload);
 };
 
 export const changePassword = async (oldPassword: string, password: string, token: string) => {

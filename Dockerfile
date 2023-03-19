@@ -22,9 +22,12 @@ RUN npm ci && npm cache clean --force
 COPY --chown=node:node . .
 RUN npm run build
 
-### dev stage
-FROM dev as test
+### test stage
+FROM base as test
 ENV NODE_ENV=test
+ENV PATH=/app/node_modules/.bin:$PATH
+RUN npm ci && npm cache clean --force
+COPY --chown=node:node . .
 
 FROM base as source
 COPY --chown=node:node . .

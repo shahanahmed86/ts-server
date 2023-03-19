@@ -1,10 +1,10 @@
 import { DeepPartial } from 'typeorm';
-import { Heads } from '../entities/heads.entity';
+import { Head } from '../entities/head.entity';
 
-export const HEAD_TABLE = 'heads';
+export const HEAD_TABLE = 'head';
 export const HEAD_TABLE_INDEXED_COLUMNS = ['name', 'transactable', 'parentId'];
 
-export const HEADS_DATA: DeepPartial<Heads[]> = [
+export const HEAD_DATA: DeepPartial<Head[]> = [
 	{
 		id: 'ece26a28-603c-4dd7-b165-6831d965faa9',
 		name: 'Assets',

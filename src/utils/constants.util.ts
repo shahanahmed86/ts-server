@@ -3,6 +3,7 @@ import { JWT_EXPIRY } from '../config';
 export const GRAPHQL_ROUTE = '/graphql';
 
 export const SHOULD_OMIT_PROPS = [
+	'isSuper',
 	'password',
 	'deletedAt',
 	'deletedBy',

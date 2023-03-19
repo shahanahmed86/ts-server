@@ -1,7 +1,9 @@
-export * from './users.dao';
+export * from './admin.dao';
 
-export * from './roles.dao';
+export * from './user.dao';
 
-export * from './genders.dao';
+export * from './role.dao';
 
-export * from './heads.dao';
+export * from './gender.dao';
+
+export * from './head.dao';
