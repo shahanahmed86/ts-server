@@ -39,7 +39,7 @@ export const PHONE_REGEX =
 
 export const LIMIT = 10;
 
-export const OFFSET = 0;
+export const OFFSET = 1;
 
 export const CHUNK_SIZE = 5000;
 

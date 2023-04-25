@@ -31,8 +31,8 @@ router
 	.delete(async (...args) => {
 		const [, res] = args;
 		try {
-			const payload = await restWrapper(controllers.image.removeImage)(...args);
-			const result = formatResponse(200, payload, null);
+			const message = await restWrapper(controllers.image.removeImage)(...args);
+			const result = formatResponse(200, message, null);
 
 			res.status(result.status).send(result);
 		} catch (e) {
