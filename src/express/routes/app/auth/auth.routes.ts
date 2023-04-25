@@ -51,8 +51,8 @@ router.get('/', async (...args) => {
 router.put('/', async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.user.updateProfile)(...args);
-		const result = formatResponse(201, payload, null);
+		const message = await restWrapper(controllers.user.updateProfile)(...args);
+		const result = formatResponse(201, message, null);
 
 		res.status(result.status).send(result);
 	} catch (e) {
@@ -63,8 +63,8 @@ router.put('/', async (...args) => {
 router.put('/change-password', async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.user.changePassword)(...args);
-		const result = formatResponse(201, payload, null);
+		const message = await restWrapper(controllers.user.changePassword)(...args);
+		const result = formatResponse(201, message, null);
 
 		res.status(result.status).send(result);
 	} catch (e) {

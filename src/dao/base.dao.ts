@@ -10,6 +10,7 @@ import {
 import { Base } from '../typeorm/entities/base.entity';
 import { CHUNK_SIZE, LIMIT, OFFSET } from '../utils/constants.util';
 import { getISODate } from '../utils/logics.util';
+import { Paginated } from '../@types/api.type';
 
 type BaseArgs = DeepPartial<Base>;
 
@@ -33,12 +34,31 @@ class BaseDao<BaseEntity extends ObjectLiteral> {
 		return this.model.findOne(options);
 	}
 
-	findMany(options: FindManyOptions<BaseEntity>): Promise<BaseEntity[]> {
-		const { where, skip = OFFSET * (options.take ?? LIMIT), take = LIMIT } = options;
+	async findManyAndCount(options: FindManyOptions<BaseEntity>): Promise<Paginated<BaseEntity>> {
+		const {
+			where,
+			skip = OFFSET * (options.take ?? LIMIT),
+			take = LIMIT,
+			order = { createdAt: 'DESC' },
+		} = options;
 
 		options.where = Object.assign({}, where, this.deleteParams);
-		options.skip = skip * take;
-		options.take = take;
+		Object.assign(options, { skip: (skip - 1) * take, take, order });
+
+		const [rows, count] = await this.model.findAndCount(options);
+		return { count, pages: Math.ceil(count / take), page: +skip, rows };
+	}
+
+	findMany(options: FindManyOptions<BaseEntity>): Promise<BaseEntity[]> {
+		const {
+			where,
+			skip = OFFSET * (options.take ?? LIMIT),
+			take = LIMIT,
+			order = { createdAt: 'DESC' },
+		} = options;
+
+		options.where = Object.assign({}, where, this.deleteParams);
+		Object.assign(options, { skip: skip * take, take, order });
 
 		return this.model.find(options);
 	}

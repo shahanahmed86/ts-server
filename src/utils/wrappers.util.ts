@@ -15,7 +15,8 @@ export function restWrapper<T, S>(controller: Controller<T, S>): ContextFunction
 export function graphqlWrapper<T, S>(controller: Controller<T, S>): ControllerFunction<T, S> {
 	return async (...args) => {
 		try {
-			return await controller(...args);
+			const result = await controller(...args);
+			return result;
 		} catch (e) {
 			const error = convertUnknownIntoError(e);
 			throw new GraphQLError(error.message, { extensions: { code: error.status } });

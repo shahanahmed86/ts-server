@@ -39,8 +39,8 @@ router.get('/', async (...args) => {
 router.put('/change-password', async (...args) => {
 	const [, res] = args;
 	try {
-		const payload = await restWrapper(controllers.admin.changePassword)(...args);
-		const result = formatResponse(201, payload, null);
+		const message = await restWrapper(controllers.admin.changePassword)(...args);
+		const result = formatResponse(201, message, null);
 
 		res.status(result.status).send(result);
 	} catch (e) {

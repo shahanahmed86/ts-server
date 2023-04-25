@@ -37,5 +37,8 @@
 		},
 		"notFound": "{{entity}} not found!",
 		"emptyArgument": "At least one argument to pass"
+	},
+	"head": {
+		"getHeads": "You've successfully fetched heads list!"
 	}
 }

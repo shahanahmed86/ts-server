@@ -20,11 +20,11 @@ async function runSeeds(queryRunner: QueryRunner, _data: DeepPartial<Head[]>): P
 	await queryRunner.manager.createQueryBuilder(Head, HEAD_TABLE).insert().values(_data).execute();
 
 	for (const data of _data) {
-		if (data.children) {
-			const l = data.children.length;
-			for (let i = 0; i < l; i++) data.children[i].parentId = data.id;
+		if (!data.children || !Array.isArray(data.children)) continue;
 
-			await runSeeds(queryRunner, data.children);
-		}
+		const l = data.children.length;
+		for (let i = 0; i < l; i++) data.children[i].parentId = data.id;
+
+		await runSeeds(queryRunner, data.children);
 	}
 }
