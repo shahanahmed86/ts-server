@@ -9,7 +9,7 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { res }
 	await joiValidator(loginSchema, args);
 
 	const admin = await Dao.admin.findOne({
-		where: { email: args.email, role: Dao.admin.deleteParams },
+		where: { email: args.email, role: Dao.admin.preDeleteParams() },
 		relations: { role: true },
 	});
 	if (!admin) throw new NotAuthenticated();
