@@ -7,10 +7,10 @@ import {
 	ObjectLiteral,
 	Repository,
 } from 'typeorm';
+import { Paginated } from '../@types/api.type';
 import { Base } from '../typeorm/entities/base.entity';
 import { CHUNK_SIZE, LIMIT, OFFSET } from '../utils/constants.util';
 import { getISODate } from '../utils/logics.util';
-import { Paginated } from '../@types/api.type';
 
 type BaseArgs = DeepPartial<Base>;
 
@@ -23,26 +23,33 @@ class BaseDao<BaseEntity extends ObjectLiteral> {
 		this.modelName = modelName;
 	}
 
-	get deleteParams() {
-		return { deletedAt: IsNull(), deletedById: IsNull() };
+	deleteParams<T>() {
+		return { deletedAt: IsNull(), deletedById: IsNull() } as T;
+	}
+
+	preDeleteParams(where?: FindOptionsWhere<BaseEntity> | FindOptionsWhere<BaseEntity>[]) {
+		if (where) Object.assign(where, this.deleteParams());
+		where ||= this.deleteParams();
+
+		return where!;
 	}
 
 	findOne(options: FindOneOptions<BaseEntity>): Promise<BaseEntity | null> {
-		const { where } = options;
-		options.where = Object.assign({}, where, this.deleteParams);
+		options.where = this.preDeleteParams(options.where);
 
 		return this.model.findOne(options);
 	}
 
 	async findManyAndCount(options: FindManyOptions<BaseEntity>): Promise<Paginated<BaseEntity>> {
-		const {
-			where,
-			skip = OFFSET * (options.take ?? LIMIT),
-			take = LIMIT,
-			order = { createdAt: 'DESC' },
-		} = options;
+		const { order = { createdAt: 'DESC' } } = options;
 
-		options.where = Object.assign({}, where, this.deleteParams);
+		options.take ||= LIMIT;
+		options.skip ||= OFFSET;
+
+		options.where = this.preDeleteParams(options.where);
+
+		const { skip, take } = options;
+
 		Object.assign(options, { skip: (skip - 1) * take, take, order });
 
 		const [rows, count] = await this.model.findAndCount(options);
@@ -50,15 +57,10 @@ class BaseDao<BaseEntity extends ObjectLiteral> {
 	}
 
 	findMany(options: FindManyOptions<BaseEntity>): Promise<BaseEntity[]> {
-		const {
-			where,
-			skip = OFFSET * (options.take ?? LIMIT),
-			take = LIMIT,
-			order = { createdAt: 'DESC' },
-		} = options;
+		const { order = { createdAt: 'DESC' } } = options;
 
-		options.where = Object.assign({}, where, this.deleteParams);
-		Object.assign(options, { skip: skip * take, take, order });
+		Object.assign(options, { order });
+		options.where = this.preDeleteParams(options.where);
 
 		return this.model.find(options);
 	}

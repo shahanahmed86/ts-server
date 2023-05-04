@@ -51,19 +51,6 @@ services:
 
   db:
     deploy:
-      update_config:
-        parallelism: 1
-        order: start-first
-        failure_action: rollback
-        delay: 10s
-      rollback_config:
-        parallelism: 0
-        order: stop-first
-      restart_policy:
-        condition: any
-        delay: 10s
-        max_attempts: 10
-        window: 120s
       placement:
         constraints:
           - node.role == manager
@@ -72,19 +59,6 @@ services:
 
   cache:
     deploy:
-      update_config:
-        parallelism: 1
-        order: start-first
-        failure_action: rollback
-        delay: 10s
-      rollback_config:
-        parallelism: 0
-        order: stop-first
-      restart_policy:
-        condition: any
-        delay: 10s
-        max_attempts: 10
-        window: 120s
       placement:
         constraints:
           - node.role == manager

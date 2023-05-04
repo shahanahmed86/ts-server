@@ -24,6 +24,12 @@ export type GenderArgs = DeepPartial<Gender>;
 
 export type HeadArgs = DeepPartial<Head>;
 
+export type HeadParams = {
+	offset: number | string | null | undefined;
+	limit: number | string | null | undefined;
+	search: string | null | undefined;
+};
+
 export type Paginated<T> = {
 	count: number;
 	rows: T[];
