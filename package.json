@@ -4,8 +4,10 @@
 	"description": "A typescript nodejs server",
 	"main": "dist/index.js",
 	"engines": {
-		"node": "^18"
-	},
+		"node": "^18.15.0",
+		"npm": "^9.5.0",
+		"yarn": "please-use-npm-instead"
+  },
 	"engineStrict": true,
 	"scripts": {
 		"prepare": "echo 'installing husky...' && husky install",
