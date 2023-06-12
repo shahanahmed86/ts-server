@@ -14,8 +14,9 @@
 		"postbuild": "node ./copy-assets",
 		"start": "node .",
 		"lint": "eslint src --ext .ts",
-		"prettify": "prettier --config .prettierrc '**/*.{ts,js}' --write",
-		"prettify-watch": "onchange '**/*.ts' -- prettier --config .prettierrc --write {{changed}}",
+		"prettify": "prettier --config .prettierrc '**/*.{ts,js}'",
+		"prettify:write": "prettier --config .prettierrc '**/*.{ts,js}' --write",
+		"prettify:watch": "onchange '**/*.{ts,js}' -- prettier --config .prettierrc --write {{changed}}",
 		"dev:up": "make run-dev-up",
 		"dev:down": "make run-dev-down",
 		"predev:down_hard": "make run-backup",
@@ -27,13 +28,6 @@
 		"typeorm": "typeorm-ts-node-commonjs -d src/typeorm",
 		"typeorm:up": "npm run typeorm migration:run",
 		"typeorm:down": "npm run typeorm migration:revert"
-	},
-	"lint-staged": {
-		"**/*.{ts,js}": [
-			"npm run prettify",
-			"npm run lint",
-			"git add ."
-		]
 	},
 	"repository": {
 		"type": "git",
