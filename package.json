@@ -27,7 +27,8 @@
 		"exec-tests": "mocha -r ts-node/register '__tests__/**/*.spec.ts' --exit",
 		"typeorm": "typeorm-ts-node-commonjs -d src/typeorm",
 		"typeorm:up": "npm run typeorm migration:run",
-		"typeorm:down": "npm run typeorm migration:revert"
+		"typeorm:down": "npm run typeorm migration:revert",
+		"commit": "commit"
 	},
 	"repository": {
 		"type": "git",
@@ -75,6 +76,7 @@
 	"devDependencies": {
 		"@commitlint/cli": "^17.6.5",
 		"@commitlint/config-conventional": "^17.6.5",
+		"@commitlint/prompt-cli": "^17.6.5",
 		"@types/bcryptjs": "^2.4.2",
 		"@types/chai": "^4.3.4",
 		"@types/cors": "^2.8.13",
