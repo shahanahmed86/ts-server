@@ -19,7 +19,6 @@ services:
       - DB_PASS
       - DB_NAME
       - DB_PORT
-      - CRON_REMOVE_TEMP
       - REDIS_PASSWORD
       - REDIS_HOST
       - REDIS_PORT
@@ -36,7 +35,6 @@ services:
       - DB_PASS_FILE=/run/secrets/DB_PASS
       - DB_NAME_FILE=/run/secrets/DB_NAME
       - DB_PORT_FILE=/run/secrets/DB_PORT
-      - CRON_REMOVE_TEMP_FILE=/run/secrets/CRON_REMOVE_TEMP
       - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
@@ -117,9 +115,6 @@ secrets:
   DB_PORT:
     file: ./secrets/DB_PORT
     name: DB_PORT_20230209113700
-  CRON_REMOVE_TEMP:
-    file: ./secrets/CRON_REMOVE_TEMP
-    name: CRON_REMOVE_TEMP_20230209113700
   REDIS_PASSWORD:
     file: ./secrets/REDIS_PASSWORD
     name: REDIS_PASSWORD_20230209113700

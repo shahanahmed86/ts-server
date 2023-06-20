@@ -1,7 +1,9 @@
 import Joi from 'joi';
 import { ChangePasswordArgs, ImageParams } from '../@types/api.type';
-import { BCRYPT_MAX_BYTES } from '../config';
+import configs from '../config';
 import { PASSWORD_REGEX } from '../utils/constants.util';
+
+const { BCRYPT_MAX_BYTES } = configs.BASE_CONFIG;
 
 export const uuidSchema = Joi.string().uuid().disallow('');
 

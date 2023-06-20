@@ -1,7 +1,7 @@
-export type SetupOptions = {
-	forceReInstall: boolean;
-	skipPrompts: boolean;
-	args?: string;
+export type BaseEnvironment = {
+	APP_PROTOCOL: string;
+	APP_HOST: string;
+	APP_PORT: number;
 	BCRYPT_SALT: number;
 	BCRYPT_MAX_BYTES: number;
 	JWT_SECRET: string;
@@ -12,7 +12,13 @@ export type SetupOptions = {
 	DB_NAME: string;
 	DB_PORT: number;
 	REDIS_HOST: string;
-	REDIS_PORT: number;
 	REDIS_PASSWORD: string;
-	CRON_REMOVE_TEMP: string;
+	REDIS_PORT: number;
 };
+
+export interface SetupOptions extends BaseEnvironment {
+	fromCloud: boolean;
+	forceReInstall: boolean;
+	skipPrompts: boolean;
+	args?: string;
+}

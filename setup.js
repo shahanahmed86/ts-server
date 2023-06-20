@@ -1,26 +1,33 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const {
-	existsSync,
-	rmSync,
-	createWriteStream,
-	readFileSync,
-	mkdirSync,
-	appendFileSync,
-} = require('fs');
+const { existsSync, rmSync, mkdirSync, appendFileSync } = require('fs');
 const cp = require('child_process');
 
 shouldInstallModules();
 
+require('dotenv/config');
 const inquirer = require('inquirer');
+const InfisicalClient = require('infisical-node');
 const arg = require('arg');
 
 const rawArgs = arg(
-	{ '--yes': Boolean, '-Y': '--yes', '--force-reinstall': Boolean, '-F': '--force-reinstall' },
+	{
+		'--yes': Boolean,
+		'-Y': '--yes',
+		'--force-reinstall': Boolean,
+		'-F': '--force-reinstall',
+		'--fromCloud': Boolean,
+		'-C': '--fromCloud',
+	},
 	{ argv: process.argv.slice(2) },
 );
 
-/** @type {import('./src/@types/common.type').SetupOptions} */
+/**
+ * @typedef {import('./src/@types/common.type').SetupOptions} SetupOptions
+ */
+
+/** @type {SetupOptions} */
 let options = {
+	fromCloud: rawArgs['--fromCloud'] || false,
 	forceReInstall: rawArgs['--force-reinstall'] || false,
 	skipPrompts: rawArgs['--yes'] || false,
 	args: rawArgs._[0],
@@ -28,6 +35,24 @@ let options = {
 
 /** @type {import('inquirer').QuestionCollection} */
 const questions = [
+	{
+		type: 'input',
+		name: 'APP_PORT',
+		message: 'Please enter the port for the app',
+		default: '7000',
+	},
+	{
+		type: 'input',
+		name: 'APP_PROTOCOL',
+		message: 'Please enter the protocol for the app',
+		default: 'http:',
+	},
+	{
+		type: 'input',
+		name: 'APP_HOST',
+		message: 'Please enter the host for the app',
+		default: 'localhost:7000',
+	},
 	{
 		type: 'input',
 		name: 'BCRYPT_SALT',
@@ -100,47 +125,52 @@ const questions = [
 		message: "Please enter the password of Redis' host",
 		default: 'lmelg8',
 	},
-	{
-		type: 'input',
-		name: 'CRON_REMOVE_TEMP',
-		message: 'Please enter the interval to delete temp folder of file uploads',
-		default: '15 10 * * *',
-	},
 ];
+
+const infisicalQuestion = {
+	type: 'password',
+	name: 'INFISICAL_TOKEN',
+	message: 'Please enter the TOKEN to fetch all secrets',
+};
 
 (async () => {
 	try {
 		options = await promptForMissingOptions(options);
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { forceReInstall, skipPrompts, args, ...env } = options;
+		const { forceReInstall, skipPrompts, args, fromCloud, ...envs } = options;
+
+		if (fromCloud && skipPrompts) throw new Error('Either use --yes/-Y or --from-cloud/-C flag');
 
 		if (forceReInstall) {
 			if (existsSync('node_modules')) rmSync('node_modules', { recursive: true });
 			if (existsSync('.husky/_')) rmSync('.husky/_', { recursive: true });
 			if (existsSync('secrets')) rmSync('secrets', { recursive: true });
-			if (existsSync('.env')) rmSync('.env');
+
+			shouldInstallModules();
 		}
 
-		shouldInstallModules();
-
-		const isEnvExists = existsSync('.env');
-
-		const envs = createWriteStream('.env', { flags: 'a' });
-		if (!isEnvExists) {
-			const envExample = readFileSync('.env.example', 'utf8');
-			await insertContent(envs, envExample);
-		}
-
-		let allVars = getJSON('.env');
-
-		for (const key in env) {
-			if (!(key in allVars)) await insertContent(envs, `\n${key}=${env[key]}`);
-		}
-
-		allVars = getJSON('.env');
 		if (!existsSync('secrets')) mkdirSync('secrets');
-		Object.keys(allVars).forEach((k) => {
-			if (!existsSync(`secrets/${k}`)) appendFileSync(`secrets/${k}`, allVars[k]);
+
+		let allEnvs;
+
+		if (!fromCloud) allEnvs = { ...envs };
+		else {
+			const answer = await inquirer.prompt(infisicalQuestion);
+
+			const token = answer[infisicalQuestion.name];
+			const client = new InfisicalClient({ token });
+
+			const secrets = await client.getAllSecrets();
+
+			const obj = {};
+			for (const { secretName: k, secretValue: v } of secrets) obj[k] = v;
+
+			allEnvs = { ...obj };
+		}
+
+		Object.keys(allEnvs).forEach((k) => {
+			const filename = `secrets/${k}`;
+			if (!existsSync(filename)) appendFileSync(filename, allEnvs[k]);
 		});
 
 		coloredLogs('Setup Finished', undefined, true);
@@ -189,11 +219,19 @@ function coloredLogs(message, failed = false, shouldExit = false) {
 
 /**
  * It will return the asked questions for creating environment variables
- * @param {object} opts
- * @returns {object|Promise<object>} object|Promise<object>
+ * @param {SetupOptions} opts
+ * @returns {Promise<SetupOptions>} Promise<Options>
  */
-function promptForMissingOptions(opts) {
+async function promptForMissingOptions(opts) {
+	if (opts.fromCloud) return opts;
+
 	if (opts.skipPrompts) {
+		const ind = questions.findIndex((question) => typeof question.default === 'undefined');
+		if (ind !== -1) {
+			const ans = await inquirer.prompt(questions[ind]);
+			questions[ind].default = ans[questions[ind].name];
+		}
+
 		return questions.reduce(
 			(acc, cur) => Object.assign(opts, acc, { [cur.name]: cur.default }),
 			{},
@@ -208,41 +246,9 @@ function promptForMissingOptions(opts) {
 }
 
 /**
- * It will return a JSON object by converting a file
- * @param {string} filePath
- * @param {string=} separate
- * @returns {object}
- */
-function getJSON(filePath, separate = '=') {
-	return readFileSync(filePath, 'utf8')
-		.split('\n')
-		.reduce((acc, cur) => {
-			const [key, value] = cur.trim().split(separate);
-			if (key.trim()) acc = { ...acc, [key]: value };
-			return acc;
-		}, {});
-}
-
-/**
- * It will install node packages with npm ci command
+ * It will install node packages with npm install command
  * @returns {void} void
  */
 function shouldInstallModules() {
-	if (!existsSync('node_modules')) executeCommand('npm ci');
-}
-
-/**
- * It will insert the text into the file
- * @param {import('fs').WriteStream} envs
- * @param {string} content
- * @returns {Promise<boolean>} boolean
- */
-function insertContent(envs, content) {
-	return new Promise((resolve, reject) => {
-		envs.write(content, (err) => {
-			if (err) reject(err.message);
-
-			resolve(true);
-		});
-	});
+	executeCommand('npm install');
 }

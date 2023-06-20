@@ -1,9 +1,11 @@
 import fs from 'fs';
 import os from 'os';
 import morgan from 'morgan';
-import { IN_PROD } from '../config';
+import configs from '../config';
 import { Request, Response } from 'express';
 import { MORGAN_TOKENS } from '../utils/constants.util';
+
+const { IN_PROD } = configs.BASE_CONFIG;
 
 morgan.token('host', os.hostname);
 morgan.token('error', (_, res: Response) => {

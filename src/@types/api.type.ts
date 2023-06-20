@@ -25,9 +25,9 @@ export type GenderArgs = DeepPartial<Gender>;
 export type HeadArgs = DeepPartial<Head>;
 
 export type HeadParams = {
-	offset: number | string | null | undefined;
-	limit: number | string | null | undefined;
-	search: string | null | undefined;
+	offset?: number | string | null;
+	limit?: number | string | null;
+	search?: string | null;
 };
 
 export type Paginated<T> = {

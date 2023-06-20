@@ -1,10 +1,12 @@
 import fs from 'fs';
 import cron from 'node-cron';
-import { JOBS } from '../config';
+import configs from '../config';
 import { TEMP_FOLDER_PATH } from '../utils/constants.util';
 
+const JOBS = configs.CRON_CONFIG;
+
 function scheduledJobs(): void {
-	cron.schedule(JOBS.removeTemp, removeTempFolder);
+	cron.schedule(JOBS.REMOVE_TEMP_AT, removeTempFolder);
 }
 
 function removeTempFolder() {

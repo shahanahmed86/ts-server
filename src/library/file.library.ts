@@ -2,9 +2,11 @@ import { FileArray, UploadedFile } from 'express-fileupload';
 import fs, { readFileSync } from 'fs';
 import isArray from 'lodash/isArray';
 import path from 'path';
-import { IN_PROD } from '../config';
+import configs from '../config';
 import { convertUnknownIntoError, NotFound } from '../utils/errors.util';
 import { getUniqueId } from '../utils/logics.util';
+
+const { IN_PROD } = configs.BASE_CONFIG;
 
 class File {
 	path = './uploads';

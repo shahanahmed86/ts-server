@@ -5,11 +5,13 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import http from 'http';
 import { WebSocketServer } from 'ws';
-import { APP_PORT, BASE_URL, NODE_ENV } from './config';
+import configs from './config';
 import app from './express';
 import graphQLSchema from './graphql';
 import directives from './graphql/directives';
 import AppDataSource from './typeorm';
+
+const { APP_PORT, BASE_ENDPOINT, NODE_ENV } = configs.BASE_CONFIG;
 
 let schema = makeExecutableSchema(graphQLSchema);
 
@@ -45,7 +47,7 @@ AppDataSource.initialize()
 		app.use(expressMiddleware(server, { context: async ({ req, res }) => ({ req, res }) }));
 
 		if (httpServer.listening) return console.log('Already listening to the port');
-		httpServer.listen(APP_PORT, () => console.log(`⚡️[server]: ${BASE_URL}`));
+		httpServer.listen(APP_PORT, () => console.log(`⚡️[server]: ${BASE_ENDPOINT}`));
 	})
 	.catch(console.error);
 

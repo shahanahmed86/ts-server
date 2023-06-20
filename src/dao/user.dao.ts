@@ -1,11 +1,13 @@
 import { AuthPayload, UserArgs } from '../@types/api.type';
-import { NODE_ENV } from '../config';
+import configs from '../config';
 import { hashSync } from '../library/bcrypt.library';
 import file from '../library/file.library';
 import AppDataSource from '../typeorm';
 import { USER_TABLE } from '../typeorm/constants';
 import { User } from '../typeorm/entities/user.entity';
 import BaseDao from './base.dao';
+
+const { NODE_ENV } = configs.BASE_CONFIG;
 
 class UsersDao extends BaseDao<User> {
 	async signup(payload: UserArgs, role: string): Promise<AuthPayload> {

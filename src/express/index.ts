@@ -2,13 +2,15 @@ import path from 'path';
 import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
-import { IN_PROD } from '../config';
+import configs from '../config';
 import scheduledJobs from '../library/cron.library';
 import { setLanguage } from '../library/i18n.library';
 import logger from '../library/morgan.library';
 import swagger from '../library/swagger.library';
 import { GRAPHQL_ROUTE, SIZE_LIMIT } from '../utils/constants.util';
 import routes from './routes';
+
+const { IN_PROD } = configs.BASE_CONFIG;
 
 const app = express();
 
