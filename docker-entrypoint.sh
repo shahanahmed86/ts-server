@@ -35,7 +35,7 @@ file_env 'DB_USER'
 file_env 'DB_PASS'
 file_env 'DB_NAME'
 file_env 'DB_PORT'
-file_env 'CRON_REMOVE_TEMP'
+file_env 'REDIS_HOST'
 file_env 'REDIS_PASSWORD'
 file_env 'REDIS_HOST'
 

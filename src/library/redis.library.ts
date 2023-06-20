@@ -1,6 +1,8 @@
 import { createClient } from 'redis';
-import { DB_HOST, REDIS_PASSWORD, REDIS_URL } from '../config';
+import configs from '../config';
 import { JWT_EXPIRY_IN_SECONDS } from '../utils/constants.util';
+
+const { DB_HOST, REDIS_PASSWORD, REDIS_URL } = configs.BASE_CONFIG;
 
 const redisClient = createClient({ password: REDIS_PASSWORD, url: REDIS_URL });
 

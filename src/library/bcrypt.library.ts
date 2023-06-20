@@ -1,5 +1,7 @@
 import bcrypt from 'bcryptjs';
-import { BCRYPT_SALT } from '../config';
+import configs from '../config';
+
+const { BCRYPT_SALT } = configs.BASE_CONFIG;
 
 type HashSync = (salt: string) => string;
 export const hashSync: HashSync = (salt) => bcrypt.hashSync(salt, BCRYPT_SALT);

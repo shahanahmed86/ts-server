@@ -1,4 +1,6 @@
-import { JWT_EXPIRY } from '../config';
+import configs from '../config';
+
+const { JWT_EXPIRY } = configs.BASE_CONFIG;
 
 export const GRAPHQL_ROUTE = '/graphql';
 

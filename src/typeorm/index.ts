@@ -1,8 +1,10 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, IN_PROD, NODE_ENV } from '../config';
+import configs from '../config';
 import entities from './entities';
 import migrations from './migrations';
+
+const { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, IN_PROD, DB_LOGGING } = configs.BASE_CONFIG;
 
 const AppDataSource = new DataSource({
 	type: 'postgres',
@@ -12,7 +14,7 @@ const AppDataSource = new DataSource({
 	password: DB_PASS,
 	database: DB_NAME,
 	synchronize: false,
-	logging: NODE_ENV !== 'test',
+	logging: DB_LOGGING,
 	entities,
 	migrations,
 	subscribers: [],
