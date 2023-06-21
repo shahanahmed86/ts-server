@@ -39,9 +39,9 @@ export const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,
 export const PHONE_REGEX =
 	/^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/;
 
-export const LIMIT = 10;
+export const LIMIT = '10';
 
-export const OFFSET = 1;
+export const OFFSET = '1';
 
 export const CHUNK_SIZE = 5000;
 
