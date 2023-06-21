@@ -50,6 +50,6 @@ run-restore:
 
 # migration scripts
 run-typeorm-up:
-	DB_HOST="localhost" npm run typeorm:up
+	DB_HOST="localhost" DB_PORT=5433 npm run typeorm:up
 run-typeorm-down:
-	DB_HOST="localhost" npm run typeorm:down
+	DB_HOST="localhost" DB_PORT=5433 npm run typeorm:down
