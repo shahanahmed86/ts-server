@@ -29,7 +29,7 @@
 git clone git@github.com:shahanahmed86/ts-server.git ts-server && cd $_
 
 # to initiate the server run
-node setup
+npm exec init -- -FY
 
 # flags
 --yes || -Y # to skip question and go with default options
@@ -63,7 +63,7 @@ docker exec -it <container_name> bash
 # copy the DATABASE_URL from your secrets or .env file and
 # paste the url and replace the @<host> with @localhost
 # for example:
-DB_HOST="localhost" npm run typeorm:up
+DB_HOST="localhost" DB_PORT=5433 npm run typeorm:up
 # or replace the run-migration value in the Makefile like above and run
 make run-typeorm:up
 
