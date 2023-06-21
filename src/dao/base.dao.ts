@@ -43,8 +43,8 @@ class BaseDao<BaseEntity extends ObjectLiteral> {
 	async findManyAndCount(options: FindManyOptions<BaseEntity>): Promise<Paginated<BaseEntity>> {
 		const { order = { createdAt: 'DESC' } } = options;
 
-		options.take ||= LIMIT;
-		options.skip ||= OFFSET;
+		options.take ??= +LIMIT;
+		options.skip ??= +OFFSET;
 
 		options.where = this.preDeleteParams(options.where);
 

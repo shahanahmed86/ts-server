@@ -39,6 +39,7 @@
 		"emptyArgument": "At least one argument to pass"
 	},
 	"head": {
-		"getHeads": "You've successfully fetched heads list!"
+		"getHeads": "You've successfully fetched heads list!",
+		"addHead": "You've created the head successfully!"
 	}
 }
