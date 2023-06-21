@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "A typescript nodejs server",
 	"main": "dist/index.js",
+	"bin": {
+		"init": "setup.js"
+	},
 	"engines": {
 		"node": "^18",
 		"npm": "^9",

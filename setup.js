@@ -1,10 +1,11 @@
+#!/usr/bin/env node
+
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { existsSync, rmSync, mkdirSync, appendFileSync } = require('fs');
 const cp = require('child_process');
 
 shouldInstallModules();
 
-require('dotenv/config');
 const inquirer = require('inquirer');
 const InfisicalClient = require('infisical-node');
 const arg = require('arg');
