@@ -22,3 +22,9 @@ export interface SetupOptions extends BaseEnvironment {
 	skipPrompts: boolean;
 	args?: string;
 }
+
+export type Pagination = {
+	offset?: string;
+	limit?: string;
+	search?: string;
+};
