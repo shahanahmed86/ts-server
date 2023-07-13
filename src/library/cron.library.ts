@@ -3,10 +3,10 @@ import cron from 'node-cron';
 import configs from '../config';
 import { TEMP_FOLDER_PATH } from '../utils/constants.util';
 
-const JOBS = configs.CRON_CONFIG;
+const jobs = configs.cron;
 
 function scheduledJobs(): void {
-	cron.schedule(JOBS.REMOVE_TEMP_AT, removeTempFolder);
+	cron.schedule(jobs.removeTempAt, removeTempFolder);
 }
 
 function removeTempFolder() {

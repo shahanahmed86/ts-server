@@ -6,7 +6,7 @@ import {
 } from '../../@types/middleware.type';
 import * as Dao from '../../dao';
 import { decodePayload } from '../../library/jwt.library';
-import { MS } from '../../utils/constants.util';
+import { ONE_SECOND } from '../../utils/constants.util';
 import {
 	BadRequest,
 	ConflictError,
@@ -30,7 +30,7 @@ const validateToken: ValidateToken = async (bearerToken, key) => {
 	if (!payload) throw new NotAuthenticated('auth.invalidSession');
 
 	if (typeof payload.exp === 'number') {
-		const now = Date.now() / MS;
+		const now = Date.now() / ONE_SECOND;
 		const isSessionExpired = payload.exp <= now;
 		if (isSessionExpired) throw new NotAuthenticated('auth.invalidSession');
 	}

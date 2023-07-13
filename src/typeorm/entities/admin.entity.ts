@@ -6,7 +6,6 @@ import * as redis from '../../library/redis.library';
 import { ADMIN_TABLE } from '../constants';
 import { Base } from './base.entity';
 import { Gender } from './gender.entity';
-import { Head } from './head.entity';
 import { Role } from './role.entity';
 import { User } from './user.entity';
 
@@ -41,9 +40,6 @@ export class Admin extends Base {
 
 	@OneToMany(() => Role, (entity) => entity.deletedBy)
 	deletedRoles?: Role[];
-
-	@OneToMany(() => Head, (entity) => entity.deletedBy)
-	deletedHeads?: Head[];
 
 	// custom hooks
 	comparePassword(password: string): boolean {

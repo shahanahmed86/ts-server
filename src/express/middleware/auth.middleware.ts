@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import controllers from '../../controllers';
-import { restCatch } from '../../utils/errors.util';
 
 export const guest = (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -8,7 +7,7 @@ export const guest = (req: Request, res: Response, next: NextFunction) => {
 
 		next();
 	} catch (e) {
-		restCatch(e, res);
+		next(e);
 	}
 };
 
@@ -19,7 +18,7 @@ export const auth = (key: string) => {
 
 			next();
 		} catch (e) {
-			restCatch(e, res);
+			next(e);
 		}
 	};
 };

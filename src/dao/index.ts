@@ -5,5 +5,3 @@ export * from './user.dao';
 export * from './role.dao';
 
 export * from './gender.dao';
-
-export * from './head.dao';

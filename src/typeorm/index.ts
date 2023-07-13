@@ -4,21 +4,22 @@ import configs from '../config';
 import entities from './entities';
 import migrations from './migrations';
 
-const { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, IN_PROD, DB_LOGGING } = configs.BASE_CONFIG;
+const { host, database, password, port, username, logging } = configs.db;
+const { inProd } = configs.app;
 
 const AppDataSource = new DataSource({
 	type: 'postgres',
-	host: DB_HOST,
-	port: DB_PORT,
-	username: DB_USER,
-	password: DB_PASS,
-	database: DB_NAME,
+	host,
+	port: +port,
+	username,
+	password,
+	database,
 	synchronize: false,
-	logging: DB_LOGGING,
+	logging,
 	entities,
 	migrations,
 	subscribers: [],
-	migrationsRun: IN_PROD,
+	migrationsRun: inProd,
 	useUTC: true,
 });
 

@@ -7,7 +7,7 @@ import { USER_TABLE } from '../typeorm/constants';
 import { User } from '../typeorm/entities/user.entity';
 import BaseDao from './base.dao';
 
-const { NODE_ENV } = configs.BASE_CONFIG;
+const { env } = configs.app;
 
 class UsersDao extends BaseDao<User> {
 	async signup(payload: UserArgs, role: string): Promise<AuthPayload> {
@@ -16,7 +16,7 @@ class UsersDao extends BaseDao<User> {
 		payload.password = hashSync(password!);
 		if (avatar) payload.avatar = await file.moveImageFromTmp(avatar);
 
-		if (NODE_ENV === 'test') payload.emailVerified = true;
+		if (env === 'test') payload.emailVerified = true;
 
 		const saved = await this.model.save(payload);
 		const user = await this.findOne({

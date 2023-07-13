@@ -1,16 +1,17 @@
-import path from 'path';
 import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
+import path from 'path';
 import configs from '../config';
 import scheduledJobs from '../library/cron.library';
 import { setLanguage } from '../library/i18n.library';
 import logger from '../library/morgan.library';
 import swagger from '../library/swagger.library';
-import { GRAPHQL_ROUTE, SIZE_LIMIT } from '../utils/constants.util';
+import { SIZE_LIMIT } from '../utils/constants.util';
+import { errorHandler, notFound } from './middleware/error.middleware';
 import routes from './routes';
 
-const { IN_PROD } = configs.BASE_CONFIG;
+const { inProd } = configs.app;
 
 const app = express();
 
@@ -43,14 +44,13 @@ app.use('/api', routes);
 app.get('/test-html', (_, res) => res.render('index'));
 
 // swagger
-if (!IN_PROD) swagger(app);
+if (!inProd) swagger(app);
 
 // when route not found
-app.use((req, res, next) => {
-	if (GRAPHQL_ROUTE === req.path) return next();
+app.use(notFound);
 
-	res.status(404).send('Route not found');
-});
+// error handler
+app.use(errorHandler);
 
 // cron jobs
 scheduledJobs();

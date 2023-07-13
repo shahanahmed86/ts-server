@@ -6,7 +6,7 @@ import configs from '../config';
 import { convertUnknownIntoError, NotFound } from '../utils/errors.util';
 import { getUniqueId } from '../utils/logics.util';
 
-const { IN_PROD } = configs.BASE_CONFIG;
+const { inProd } = configs.app;
 
 class File {
 	path = './uploads';
@@ -48,7 +48,7 @@ class File {
 
 	getFilePath(imagePath: string): Buffer {
 		let path = `${this.path}/${imagePath}`;
-		if (!fs.existsSync(path)) path = `./${IN_PROD ? 'dist' : 'src'}/assets/404-image.png`;
+		if (!fs.existsSync(path)) path = `./${inProd ? 'dist' : 'src'}/assets/404-image.png`;
 
 		return readFileSync(path);
 	}

@@ -11,7 +11,7 @@ import graphQLSchema from './graphql';
 import directives from './graphql/directives';
 import AppDataSource from './typeorm';
 
-const { APP_PORT, BASE_ENDPOINT, NODE_ENV } = configs.BASE_CONFIG;
+const { port, baseUrl, env } = configs.app;
 
 let schema = makeExecutableSchema(graphQLSchema);
 
@@ -25,7 +25,7 @@ const wsServer = new WebSocketServer({ server: httpServer, path: '/graphql' });
 const serverCleanup = useServer({ schema }, wsServer);
 
 const server = new ApolloServer({
-	nodeEnv: NODE_ENV,
+	nodeEnv: env,
 	schema,
 	plugins: [
 		ApolloServerPluginDrainHttpServer({ httpServer }),
@@ -47,7 +47,7 @@ AppDataSource.initialize()
 		app.use(expressMiddleware(server, { context: async ({ req, res }) => ({ req, res }) }));
 
 		if (httpServer.listening) return console.log('Already listening to the port');
-		httpServer.listen(APP_PORT, () => console.log(`⚡️[server]: ${BASE_ENDPOINT}`));
+		httpServer.listen(port, () => console.log(`⚡️[server]: ${baseUrl}`));
 	})
 	.catch(console.error);
 

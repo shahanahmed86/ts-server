@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { existsSync, rmSync, mkdirSync, appendFileSync } = require('fs');
+const {
+	existsSync,
+	rmSync,
+	mkdirSync,
+	appendFileSync,
+	createWriteStream,
+	readFileSync,
+} = require('fs');
 const cp = require('child_process');
 
 shouldInstallModules();
 
 const inquirer = require('inquirer');
-const InfisicalClient = require('infisical-node');
 const arg = require('arg');
 
 const rawArgs = arg(
@@ -16,10 +22,10 @@ const rawArgs = arg(
 		'-Y': '--yes',
 		'--force-reinstall': Boolean,
 		'-F': '--force-reinstall',
-		'--fromCloud': Boolean,
-		'-C': '--fromCloud',
 	},
-	{ argv: process.argv.slice(2) },
+	{
+		argv: process.argv.slice(2),
+	},
 );
 
 /**
@@ -28,7 +34,6 @@ const rawArgs = arg(
 
 /** @type {SetupOptions} */
 let options = {
-	fromCloud: rawArgs['--fromCloud'] || false,
 	forceReInstall: rawArgs['--force-reinstall'] || false,
 	skipPrompts: rawArgs['--yes'] || false,
 	args: rawArgs._[0],
@@ -74,7 +79,7 @@ const questions = [
 	},
 	{
 		type: 'number',
-		name: 'JWT_EXPIRES',
+		name: 'JWT_EXPIRY',
 		message: 'Please enter the milliseconds to expire the JWT token',
 		default: '3600000',
 	},
@@ -128,51 +133,41 @@ const questions = [
 	},
 ];
 
-const infisicalQuestion = {
-	type: 'password',
-	name: 'INFISICAL_TOKEN',
-	message: 'Please enter the TOKEN to fetch all secrets',
-};
-
 (async () => {
 	try {
 		options = await promptForMissingOptions(options);
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { forceReInstall, skipPrompts, args, fromCloud, ...envs } = options;
-
-		if (fromCloud && skipPrompts) throw new Error('Either use --yes/-Y or --from-cloud/-C flag');
+		const { forceReInstall, skipPrompts, args, ...envs } = options;
 
 		if (forceReInstall) {
 			if (existsSync('node_modules')) rmSync('node_modules', { recursive: true });
 			if (existsSync('.husky/_')) rmSync('.husky/_', { recursive: true });
 			if (existsSync('secrets')) rmSync('secrets', { recursive: true });
+			if (existsSync('.env')) rmSync('.env');
 
 			shouldInstallModules();
 		}
 
 		if (!existsSync('secrets')) mkdirSync('secrets');
 
-		let allEnvs;
+		const dotEnv = createWriteStream('.env', { flags: 'a' });
 
-		if (!fromCloud) allEnvs = { ...envs };
-		else {
-			const answer = await inquirer.prompt(infisicalQuestion);
+		const keys = Object.keys(envs);
 
-			const token = answer[infisicalQuestion.name];
-			const client = new InfisicalClient({ token });
+		for (const key of keys) {
+			const filename = `secrets/${key}`;
+			const value = envs[key];
 
-			const secrets = await client.getAllSecrets();
+			if (!existsSync(filename)) appendFileSync(filename, value);
 
-			const obj = {};
-			for (const { secretName: k, secretValue: v } of secrets) obj[k] = v;
+			const lineValue = `${key}=${value}`;
+			if (existsSync('.env')) {
+				const savedDotEnvs = readFileSync('.env', 'utf-8');
+				if (savedDotEnvs.includes(lineValue)) continue;
+			}
 
-			allEnvs = { ...obj };
+			await insertContent(dotEnv, `${lineValue}\n`);
 		}
-
-		Object.keys(allEnvs).forEach((k) => {
-			const filename = `secrets/${k}`;
-			if (!existsSync(filename)) appendFileSync(filename, allEnvs[k]);
-		});
 
 		coloredLogs('Setup Finished', undefined, true);
 		process.exitCode = 0;
@@ -224,8 +219,6 @@ function coloredLogs(message, failed = false, shouldExit = false) {
  * @returns {Promise<SetupOptions>} Promise<Options>
  */
 async function promptForMissingOptions(opts) {
-	if (opts.fromCloud) return opts;
-
 	if (opts.skipPrompts) {
 		const ind = questions.findIndex((question) => typeof question.default === 'undefined');
 		if (ind !== -1) {
@@ -252,4 +245,20 @@ async function promptForMissingOptions(opts) {
  */
 function shouldInstallModules() {
 	executeCommand('npm install');
+}
+
+/**
+ * It will insert the text into the file
+ * @param {import('fs').WriteStream} envs
+ * @param {string} content
+ * @returns {Promise<boolean>} boolean
+ */
+function insertContent(envs, content) {
+	return new Promise((resolve, reject) => {
+		envs.write(content, (err) => {
+			if (err) reject(err.message);
+
+			resolve(true);
+		});
+	});
 }

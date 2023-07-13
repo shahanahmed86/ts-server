@@ -38,10 +38,10 @@ describe('RESTful - Admin Authentication APIs', function () {
 
 		res = await changePassword('123Abc456', '123aBc456', token);
 		expect(res.error).to.be.false;
-		expect(res.status).to.be.equal(201);
+		expect(res.status).to.be.equal(200);
 
 		res = await changePassword('123aBc456', '123Abc456', token);
 		expect(res.error).to.be.false;
-		expect(res.status).to.be.equal(201);
+		expect(res.status).to.be.equal(200);
 	});
 });

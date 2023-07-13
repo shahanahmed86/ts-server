@@ -1,7 +1,7 @@
 import { ObjectSchema } from 'joi';
 import { JwtPayload } from 'jsonwebtoken';
 
-export type EncodePayload = (key: string, password: string, expiresIn?: string | number) => string;
+export type EncodePayload = (key: string, payload: string, expiresIn?: string | number) => string;
 
 export type DecodePayload = (token: string) => Promise<JwtPayload>;
 

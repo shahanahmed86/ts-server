@@ -8,9 +8,6 @@ import { JoiValidator } from '../@types/library.type';
 import { translate } from '../library/i18n.library';
 import { SHOULD_OMIT_PROPS } from './constants.util';
 import { convertUnknownIntoError } from './errors.util';
-import { DeepPartial, QueryRunner } from 'typeorm';
-import { Head } from '../typeorm/entities/head.entity';
-import { HEAD_TABLE } from '../typeorm/constants';
 
 export const formatResponse: FormatResponse = (status, message, data) => {
 	return { status, message: translate(message), data: omitProps(data) };
@@ -49,20 +46,4 @@ export function omitProps<T>(payload: T, props: string[] = SHOULD_OMIT_PROPS): T
 	}
 
 	return payload;
-}
-
-export async function defaultHeads(
-	queryRunner: QueryRunner,
-	_data: DeepPartial<Head[]>,
-): Promise<void> {
-	await queryRunner.manager.createQueryBuilder(Head, HEAD_TABLE).insert().values(_data).execute();
-
-	for (const data of _data) {
-		if (!data.children || !Array.isArray(data.children)) continue;
-
-		const l = data.children.length;
-		for (let i = 0; i < l; i++) data.children[i].parentId = data.id;
-
-		await defaultHeads(queryRunner, data.children);
-	}
 }
