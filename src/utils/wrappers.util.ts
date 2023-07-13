@@ -1,14 +1,26 @@
 import { GraphQLError } from 'graphql';
 import { ContextFunction, Controller, ControllerFunction } from '../@types/wrapper.type';
 import { convertUnknownIntoError } from './errors.util';
+import { formatResponse } from './logics.util';
 
-export function restWrapper<T, S>(controller: Controller<T, S>): ContextFunction<T> {
-	return (req, res, next) => {
-		const root = null;
-		const args = Object.assign({}, req.params, req.query, req.body);
-		const context = { req, res, next };
+export function restWrapper<T, S>(
+	controller: Controller<T, S>,
+	message: string,
+	status = 200,
+): ContextFunction {
+	return async (req, res, next) => {
+		try {
+			const root = null;
+			const args = Object.assign({}, req.params, req.query, req.body);
+			const context = { req, res, next };
 
-		return controller(root, args, context);
+			const payload = await controller(root, args, context);
+			const result = formatResponse(status, message, payload);
+			res.status(result.status).send(result);
+		} catch (e) {
+			const error = convertUnknownIntoError(e);
+			next(error);
+		}
 	};
 }
 

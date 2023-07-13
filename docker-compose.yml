@@ -6,39 +6,7 @@ services:
       - db
     networks:
       - app
-    secrets:
-      - APP_PORT
-      - APP_PROTOCOL
-      - APP_HOST
-      - BCRYPT_SALT
-      - BCRYPT_MAX_BYTES
-      - JWT_SECRET
-      - JWT_EXPIRES
-      - DB_HOST
-      - DB_USER
-      - DB_PASS
-      - DB_NAME
-      - DB_PORT
-      - REDIS_PASSWORD
-      - REDIS_HOST
-      - REDIS_PORT
-    environment:
-      - APP_PORT_FILE=/run/secrets/APP_PORT
-      - APP_PROTOCOL_FILE=/run/secrets/APP_PROTOCOL
-      - APP_HOST_FILE=/run/secrets/APP_HOST
-      - BCRYPT_SALT_FILE=/run/secrets/BCRYPT_SALT
-      - BCRYPT_MAX_BYTES_FILE=/run/secrets/BCRYPT_MAX_BYTES
-      - JWT_SECRET_FILE=/run/secrets/JWT_SECRET
-      - JWT_EXPIRES_FILE=/run/secrets/JWT_EXPIRES
-      - DB_HOST_FILE=/run/secrets/DB_HOST
-      - DB_USER_FILE=/run/secrets/DB_USER
-      - DB_PASS_FILE=/run/secrets/DB_PASS
-      - DB_NAME_FILE=/run/secrets/DB_NAME
-      - DB_PORT_FILE=/run/secrets/DB_PORT
-      - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
-      - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
-      - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
-
+    
   db:
     image: postgres:15.1-bullseye
     healthcheck:
@@ -48,24 +16,9 @@ services:
       retries: 5
     networks:
       - app
-    secrets:
-      - DB_USER
-      - DB_PASS
-      - DB_NAME
-    environment:
-      - POSTGRES_PASSWORD_FILE=/run/secrets/DB_PASS
-      - POSTGRES_USER_FILE=/run/secrets/DB_USER
-      - POSTGRES_DB_FILE=/run/secrets/DB_NAME
 
   cache:
     image: redis:7-bullseye
-    command:
-      - bash
-      - -c
-      - |
-        [ "$$REDIS_PASSWORD_FILE" ] \
-          && (cat "$$REDIS_PASSWORD_FILE" | xargs -0 redis-server --appendonly yes --requirepass) \
-          || redis-server --appendonly yes
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
@@ -73,62 +26,3 @@ services:
       retries: 5
     networks:
       - app
-    secrets:
-      - REDIS_PASSWORD
-    environment:
-      - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
-
-secrets:
-  APP_PORT:
-    file: ./secrets/APP_PORT
-    name: APP_PORT_20230209113700
-  APP_PROTOCOL:
-    file: ./secrets/APP_PROTOCOL
-    name: APP_PROTOCOL_20230209113700
-  APP_HOST:
-    file: ./secrets/APP_HOST
-    name: APP_HOST_20230209113700
-  BCRYPT_SALT:
-    file: ./secrets/BCRYPT_SALT
-    name: BCRYPT_SALT_20230209113700
-  BCRYPT_MAX_BYTES:
-    file: ./secrets/BCRYPT_MAX_BYTES
-    name: BCRYPT_MAX_BYTES_20230209113700
-  JWT_SECRET:
-    file: ./secrets/JWT_SECRET
-    name: JWT_SECRET_20230209113700
-  JWT_EXPIRES:
-    file: ./secrets/JWT_EXPIRES
-    name: JWT_EXPIRES_20230209113700
-  DB_HOST:
-    file: ./secrets/DB_HOST
-    name: DB_HOST_20230209113700
-  DB_USER:
-    file: ./secrets/DB_USER
-    name: DB_USER_20230209113700
-  DB_PASS:
-    file: ./secrets/DB_PASS
-    name: DB_PASS_20230209113700
-  DB_NAME:
-    file: ./secrets/DB_NAME
-    name: DB_NAME_20230209113700
-  DB_PORT:
-    file: ./secrets/DB_PORT
-    name: DB_PORT_20230209113700
-  REDIS_PASSWORD:
-    file: ./secrets/REDIS_PASSWORD
-    name: REDIS_PASSWORD_20230209113700
-  REDIS_HOST:
-    file: ./secrets/REDIS_HOST
-    name: REDIS_HOST_20230209113700
-  REDIS_PORT:
-    file: ./secrets/REDIS_PORT
-    name: REDIS_PORT_20230209113700
-
-configs:
-  NGINX_CONFIG:
-    file: ./nginx/default.conf
-    name: NGINX_CONFIG_20230209113700
-  NGINX_HTML:
-    file: ./nginx/default.html
-    name: NGINX_HTML_20230209113700

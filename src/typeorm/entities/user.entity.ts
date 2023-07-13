@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { AuthPayload } from '../../@types/api.type';
 import { compareSync } from '../../library/bcrypt.library';
 import { encodePayload } from '../../library/jwt.library';
@@ -8,7 +8,6 @@ import { Admin } from './admin.entity';
 import { Base } from './base.entity';
 import { Gender } from './gender.entity';
 import { Role } from './role.entity';
-import { Head } from './head.entity';
 
 @Entity(USER_TABLE)
 export class User extends Base {
@@ -35,9 +34,6 @@ export class User extends Base {
 
 	@Column('boolean', { default: false })
 	phoneVerified?: boolean;
-
-	@OneToMany(() => Head, (entity) => entity.user)
-	heads?: Head[];
 
 	@Column('uuid')
 	roleId!: string;

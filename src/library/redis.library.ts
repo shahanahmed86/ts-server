@@ -2,12 +2,12 @@ import { createClient } from 'redis';
 import configs from '../config';
 import { JWT_EXPIRY_IN_SECONDS } from '../utils/constants.util';
 
-const { DB_HOST, REDIS_PASSWORD, REDIS_URL } = configs.BASE_CONFIG;
+const { redis, db } = configs;
 
-const redisClient = createClient({ password: REDIS_PASSWORD, url: REDIS_URL });
+const redisClient = createClient({ password: redis.pass, url: redis.url });
 
 redisClient.get('isConnected').catch((e: Error) => {
-	const hasRunSync = DB_HOST === 'localhost';
+	const hasRunSync = db.host === 'localhost';
 	if (e.message === 'The client is closed' && !hasRunSync) {
 		redisClient.connect().catch(console.error);
 	}

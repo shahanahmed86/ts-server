@@ -66,7 +66,7 @@ describe('RESTful - App Authentication APIs', function () {
 
 		const res = await updateProfile(payload, token);
 		expect(res.error).to.be.false;
-		expect(res.status).to.be.equal(201);
+		expect(res.status).to.be.equal(200);
 	});
 
 	it('app changePassword', async () => {
@@ -79,11 +79,11 @@ describe('RESTful - App Authentication APIs', function () {
 
 		res = await changePassword('123Abc456', '123aBc456', token);
 		expect(res.error).to.be.false;
-		expect(res.status).to.be.equal(201);
+		expect(res.status).to.be.equal(200);
 
 		res = await changePassword('123aBc456', '123Abc456', token);
 		expect(res.error).to.be.false;
-		expect(res.status).to.be.equal(201);
+		expect(res.status).to.be.equal(200);
 	});
 
 	after(() => deleteUsers());

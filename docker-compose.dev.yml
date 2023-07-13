@@ -12,11 +12,9 @@ services:
       - app
     ports:
       - 80:80
-    configs:
-      - source: NGINX_CONFIG
-        target: /etc/nginx/conf.d/default.conf
-      - source: NGINX_HTML
-        target: /usr/share/nginx/html/index.html
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/default.html:/usr/share/nginx/html/index.html
 
   server:
     tty: true
@@ -32,6 +30,8 @@ services:
     volumes:
       - /app/node_modules
       - ./:/app
+    env_file:
+      - .env
     command: npm run start:dev
 
   db:
@@ -39,6 +39,12 @@ services:
     restart: unless-stopped
     volumes:
       - db_dev:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASS
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_DB=$DB_NAME
     ports:
       - '5433:5432'
 
@@ -55,10 +61,13 @@ services:
       - app
 
   cache:
+    command: redis-server --appendonly yes --requirepass $REDIS_PASSWORD
     tty: true
     restart: unless-stopped
     volumes:
       - cache_dev:/data
+    env_file:
+      - .env
 
 volumes:
   db_dev:

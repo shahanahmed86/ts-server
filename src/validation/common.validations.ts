@@ -3,7 +3,7 @@ import { ChangePasswordArgs, ImageParams } from '../@types/api.type';
 import configs from '../config';
 import { PASSWORD_REGEX } from '../utils/constants.util';
 
-const { BCRYPT_MAX_BYTES } = configs.BASE_CONFIG;
+const { maxBytes } = configs.bcrypt;
 
 export const uuidSchema = Joi.string().uuid().disallow('');
 
@@ -11,7 +11,7 @@ export const emailSchema = Joi.string().email().label('email').disallow('');
 
 export const passwordSchema = Joi.string()
 	.trim()
-	.max(BCRYPT_MAX_BYTES, 'utf8')
+	.max(+maxBytes, 'utf8')
 	.regex(PASSWORD_REGEX)
 	.label('password')
 	.messages({

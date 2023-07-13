@@ -17,5 +17,7 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-      - run: node setup -FY
+      - run: npm exec init -- -FY
+      - run: npm run prettify
+      - run: npm run lint
       - run: npm run test

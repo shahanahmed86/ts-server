@@ -2,27 +2,35 @@ version: '3.7'
 
 services:
   server:
-    tty: true
-    restart: 'no'
     depends_on:
       db:
         condition: service_healthy
       cache:
         condition: service_healthy
+    env_file:
+      - .env
+    restart: 'no'
     build:
       context: .
       target: test
     command: npm run exec-tests
 
   db:
-    tty: true
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASS
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_DB=$DB_NAME
     restart: 'no'
     volumes:
       - db_test:/var/lib/postgresql/data
 
   cache:
-    tty: true
     restart: 'no'
+    env_file:
+      - .env
+    command: redis-server --appendonly yes --requirepass $REDIS_PASSWORD
     volumes:
       - cache_test:/data
 

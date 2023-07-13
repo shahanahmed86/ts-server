@@ -10,7 +10,7 @@ run-dev-up:
 run-dev-up-rebuild:
 	docker compose -p app-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
-	up -d --build --renew-anon-volumes server
+	up -d --build --renew-anon-volumes
 run-dev-down:
 	docker compose -p app-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \

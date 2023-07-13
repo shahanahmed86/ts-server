@@ -1,6 +1,6 @@
 import configs from '../config';
 
-const { JWT_EXPIRY } = configs.BASE_CONFIG;
+const { expiry } = configs.jwt;
 
 export const GRAPHQL_ROUTE = '/graphql';
 
@@ -26,9 +26,9 @@ export const MORGAN_TOKENS: string = [
 	':error',
 ].join(' ');
 
-export const MS = 1000;
+export const ONE_SECOND = 1000;
 
-export const JWT_EXPIRY_IN_SECONDS = JWT_EXPIRY / MS;
+export const JWT_EXPIRY_IN_SECONDS = +expiry / ONE_SECOND;
 
 export const SIZE_LIMIT = 10 * 1024 * 1024;
 

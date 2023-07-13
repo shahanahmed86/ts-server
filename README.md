@@ -34,7 +34,6 @@ npm exec init -- -FY
 # flags
 --yes || -Y # to skip question and go with default options
 --force-reinstall || -F # to reinstall
---from-cloud || -C # store envs from infisical to your secrets, and it'll prompt to insert the token.
 
 # make a docker image, you can call multiple make script like this
 make create-server-image

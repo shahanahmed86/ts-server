@@ -17,7 +17,6 @@ export type BaseEnvironment = {
 };
 
 export interface SetupOptions extends BaseEnvironment {
-	fromCloud: boolean;
 	forceReInstall: boolean;
 	skipPrompts: boolean;
 	args?: string;

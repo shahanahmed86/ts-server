@@ -1,75 +1,29 @@
-import express from 'express';
+import { Router } from 'express';
 import controllers from '../../../../controllers';
+import { ROLES } from '../../../../utils/constants.util';
 import { restWrapper } from '../../../../utils/wrappers.util';
 import { auth, guest, includeRole } from '../../../middleware/auth.middleware';
-import { ROLES } from '../../../../utils/constants.util';
-import { formatResponse } from '../../../../utils/logics.util';
-import { restCatch } from '../../../../utils/errors.util';
 
 const { user } = ROLES;
 
-const router = express.Router();
+const router = Router();
 
-router.post('/', guest, includeRole(user), async (...args) => {
-	const [, res] = args;
-	try {
-		const payload = await restWrapper(controllers.user.login)(...args);
-		const result = formatResponse(200, 'auth.login', payload);
+router.post('/', guest, includeRole(user), restWrapper(controllers.user.login, 'auth.login'));
 
-		res.status(result.status).send(result);
-	} catch (e) {
-		restCatch(e, res);
-	}
-});
-
-router.post('/signup', guest, includeRole(user), async (...args) => {
-	const [, res] = args;
-	try {
-		const payload = await restWrapper(controllers.user.signup)(...args);
-		const result = formatResponse(201, 'auth.signup', payload);
-
-		res.status(result.status).send(result);
-	} catch (e) {
-		restCatch(e, res);
-	}
-});
+router.post(
+	'/signup',
+	guest,
+	includeRole(user),
+	restWrapper(controllers.user.signup, 'auth.signup', 201),
+);
 
 router.use(auth(user));
 
-router.get('/', async (...args) => {
-	const [, res] = args;
-	try {
-		const payload = await restWrapper(controllers.user.loggedIn)(...args);
-		const result = formatResponse(200, 'auth.loggedIn', payload);
+router
+	.route('/')
+	.get(restWrapper(controllers.user.loggedIn, 'auth.loggedIn'))
+	.put(restWrapper(controllers.user.updateProfile, 'auth.updateProfile'));
 
-		res.status(result.status).send(result);
-	} catch (e) {
-		restCatch(e, res);
-	}
-});
-
-router.put('/', async (...args) => {
-	const [, res] = args;
-	try {
-		const message = await restWrapper(controllers.user.updateProfile)(...args);
-		const result = formatResponse(201, message, null);
-
-		res.status(result.status).send(result);
-	} catch (e) {
-		restCatch(e, res);
-	}
-});
-
-router.put('/change-password', async (...args) => {
-	const [, res] = args;
-	try {
-		const message = await restWrapper(controllers.user.changePassword)(...args);
-		const result = formatResponse(201, message, null);
-
-		res.status(result.status).send(result);
-	} catch (e) {
-		restCatch(e, res);
-	}
-});
+router.put('/change-password', restWrapper(controllers.user.changePassword, 'auth.changePassword'));
 
 export default router;
