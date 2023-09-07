@@ -12,8 +12,14 @@ export const Configs = z.object({
 		baseUrl: z.string().url('Invalid Base URL').default('http://localhost:7000'),
 	}),
 	jwt: z.object({
-		secret: z.string().min(1).default('billa-mama'),
-		expiry: z.string().min(1).default('3600000'),
+		access: z.object({
+			secret: z.string().min(1).default('jwt-access-secret'),
+			expiry: z.string().min(1).default('3600000'),
+		}),
+		refresh: z.object({
+			secret: z.string().min(1).default('jwt-refresh-secret'),
+			expiry: z.string().min(1).default('3600000'),
+		}),
 	}),
 	db: z.object({
 		host: z.string().min(1).default('db'),
@@ -33,6 +39,9 @@ export const Configs = z.object({
 		pass: z.string().min(1).default('lmelg8'),
 		url: z.string().min(1).default('redis://cache:6379'),
 	}),
+	session: z.object({
+		secret: z.string().min(1).default('session-secret'),
+	}),
 	cron: z.object({
 		removeTempAt: z.string().min(9).default('15 10 * * *'),
 	}),
@@ -50,8 +59,14 @@ const allEnvs = {
 		// baseUrl: `${process.env.APP_PROTOCOL}//${process.env.APP_HOST}`,
 	},
 	jwt: {
-		secret: process.env.JWT_SECRET,
-		expiry: process.env.JWT_EXPIRY,
+		access: {
+			secret: process.env.JWT_ACCESS_SECRET,
+			expiry: process.env.JWT_ACCESS_EXPIRY,
+		},
+		refresh: {
+			secret: process.env.JWT_REFRESH_SECRET,
+			expiry: process.env.JWT_REFRESH_EXPIRY,
+		},
 	},
 	db: {
 		host: process.env.DB_HOST,
@@ -70,6 +85,9 @@ const allEnvs = {
 		port: process.env.REDIS_PORT,
 		pass: process.env.REDIS_PASSWORD,
 		url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+	},
+	session: {
+		secret: process.env.SESSION_SECRET,
 	},
 	cron: {
 		removeTempAt: process.env.REOMOVE_TEMP_AT,

@@ -1,6 +1,6 @@
 import configs from '../config';
 
-const { expiry } = configs.jwt;
+const { expiry } = configs.jwt.access;
 
 export const GRAPHQL_ROUTE = '/graphql';
 
@@ -28,7 +28,7 @@ export const MORGAN_TOKENS: string = [
 
 export const ONE_SECOND = 1000;
 
-export const JWT_EXPIRY_IN_SECONDS = +expiry / ONE_SECOND;
+export const JWT_ACCESS_EXPIRY_IN_SECONDS = +expiry / ONE_SECOND;
 
 export const SIZE_LIMIT = 10 * 1024 * 1024;
 
@@ -53,3 +53,5 @@ export const ROLES = {
 export const LANGUAGES = ['en'];
 
 export const LANGUAGE_HEADER = 'LANGUAGE';
+
+export const SESSION_MAX_AGE = 1000 * 60; // 30 seconds

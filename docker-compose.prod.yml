@@ -54,8 +54,10 @@ services:
       - APP_HOST
       - BCRYPT_SALT
       - BCRYPT_MAX_BYTES
-      - JWT_SECRET
-      - JWT_EXPIRY
+      - JWT_ACCESS_SECRET
+      - JWT_ACCESS_EXPIRY
+      - JWT_REFRESH_SECRET
+      - JWT_REFRESH_EXPIRY
       - DB_HOST
       - DB_USER
       - DB_PASS
@@ -64,14 +66,17 @@ services:
       - REDIS_PASSWORD
       - REDIS_HOST
       - REDIS_PORT
+      - SESSION_SECRET
     environment:
       - APP_PORT_FILE=/run/secrets/APP_PORT
       - APP_PROTOCOL_FILE=/run/secrets/APP_PROTOCOL
       - APP_HOST_FILE=/run/secrets/APP_HOST
       - BCRYPT_SALT_FILE=/run/secrets/BCRYPT_SALT
       - BCRYPT_MAX_BYTES_FILE=/run/secrets/BCRYPT_MAX_BYTES
-      - JWT_SECRET_FILE=/run/secrets/JWT_SECRET
-      - JWT_EXPIRY_FILE=/run/secrets/JWT_EXPIRY
+      - JWT_ACCESS_SECRET_FILE=/run/secrets/JWT_ACCESS_SECRET
+      - JWT_ACCESS_EXPIRY_FILE=/run/secrets/JWT_ACCESS_EXPIRY
+      - JWT_REFRESH_SECRET_FILE=/run/secrets/JWT_REFRESH_SECRET
+      - JWT_REFRESH_EXPIRY_FILE=/run/secrets/JWT_REFRESH_EXPIRY
       - DB_HOST_FILE=/run/secrets/DB_HOST
       - DB_USER_FILE=/run/secrets/DB_USER
       - DB_PASS_FILE=/run/secrets/DB_PASS
@@ -80,6 +85,7 @@ services:
       - REDIS_PASSWORD_FILE=/run/secrets/REDIS_PASSWORD
       - REDIS_HOST_FILE=/run/secrets/REDIS_HOST
       - REDIS_PORT_FILE=/run/secrets/REDIS_PORT
+      - SESSION_SECRET_FILE=/run/secrets/SESSION_SECRET
 
   db:
     deploy:
@@ -138,12 +144,18 @@ secrets:
   BCRYPT_MAX_BYTES:
     file: ./secrets/BCRYPT_MAX_BYTES
     name: BCRYPT_MAX_BYTES_20230209113700
-  JWT_SECRET:
-    file: ./secrets/JWT_SECRET
-    name: JWT_SECRET_20230209113700
-  JWT_EXPIRY:
-    file: ./secrets/JWT_EXPIRY
-    name: JWT_EXPIRY_20230209113700
+  JWT_ACCESS:
+    file: ./secrets/JWT_ACCESS
+    name: JWT_ACCESS_20230209113700
+  JWT_ACCESS_LIFE:
+    file: ./secrets/JWT_ACCESS_LIFE
+    name: JWT_ACCESS_LIFE_20230209113700
+  JWT_REFRESH:
+    file: ./secrets/JWT_REFRESH
+    name: JWT_REFRESH_20230209113700
+  JWT_REFRESH_LIFE:
+    file: ./secrets/JWT_REFRESH_LIFE
+    name: JWT_REFRESH_LIFE_20230209113700
   DB_HOST:
     file: ./secrets/DB_HOST
     name: DB_HOST_20230209113700
@@ -168,6 +180,9 @@ secrets:
   REDIS_PORT:
     file: ./secrets/REDIS_PORT
     name: REDIS_PORT_20230209113700
+  SESSION_SECRET:
+    file: ./secrets/SESSION_SECRET
+    name: SESSION_SECRET_20230209113700
 
 configs:
   NGINX_CONFIG:
