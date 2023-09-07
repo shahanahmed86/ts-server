@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
@@ -10,6 +11,7 @@ import swagger from '../library/swagger.library';
 import { SIZE_LIMIT } from '../utils/constants.util';
 import { errorHandler, notFound } from './middleware/error.middleware';
 import routes from './routes';
+import cacheService from '../library/session.library';
 
 const { inProd } = configs.app;
 
@@ -18,9 +20,16 @@ const app = express();
 // parser
 app.use(express.urlencoded({ extended: true, limit: SIZE_LIMIT }));
 app.use(express.json({ limit: SIZE_LIMIT }));
+app.use(cookieParser());
 
 // cors
 app.use(cors());
+
+// enable proxy if it's in prod.
+if (inProd) app.set('trust proxy', 1);
+
+// cache
+cacheService(app);
 
 // middleware for express-fileupload
 app.use(fileUpload({ limits: { fileSize: SIZE_LIMIT } }));

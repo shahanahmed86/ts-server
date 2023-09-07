@@ -4,8 +4,10 @@ export type BaseEnvironment = {
 	APP_PORT: number;
 	BCRYPT_SALT: number;
 	BCRYPT_MAX_BYTES: number;
-	JWT_SECRET: string;
-	JWT_EXPIRY: number;
+	JWT_ACCESS_SECRET: string;
+	JWT_ACCESS_EXPIRY: number;
+	JWT_REFRESH_SECRET: string;
+	JWT_REFRESH_EXPIRY: number;
 	DB_HOST: string;
 	DB_USER: string;
 	DB_PASS: string;
@@ -14,6 +16,7 @@ export type BaseEnvironment = {
 	REDIS_HOST: string;
 	REDIS_PASSWORD: string;
 	REDIS_PORT: number;
+	SESSION_SECRET: string;
 };
 
 export interface SetupOptions extends BaseEnvironment {

@@ -44,9 +44,14 @@ const server = new ApolloServer({
 AppDataSource.initialize()
 	.then(async () => {
 		await server.start();
+
 		app.use(expressMiddleware(server, { context: async ({ req, res }) => ({ req, res }) }));
 
-		if (httpServer.listening) return console.log('Already listening to the port');
+		if (httpServer.listening) {
+			console.log('Already listening to the port');
+			return;
+		}
+
 		httpServer.listen(port, () => console.log(`⚡️[server]: ${baseUrl}`));
 	})
 	.catch(console.error);

@@ -1,11 +1,15 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { DecodePayload, EncodePayload } from '../@types/library.type';
 import configs from '../config';
-import { JWT_EXPIRY_IN_SECONDS } from '../utils/constants.util';
+import { JWT_ACCESS_EXPIRY_IN_SECONDS } from '../utils/constants.util';
 
-const { secret } = configs.jwt;
+const { secret } = configs.jwt.access;
 
-export const encodePayload: EncodePayload = (key, payload, expiresIn = JWT_EXPIRY_IN_SECONDS) => {
+export const encodePayload: EncodePayload = (
+	key,
+	payload,
+	expiresIn = JWT_ACCESS_EXPIRY_IN_SECONDS,
+) => {
 	return jwt.sign({ [key]: payload }, secret, { expiresIn });
 };
 

@@ -5,7 +5,7 @@ import { NotAuthenticated, NotAuthorized } from '../../utils/errors.util';
 import { joiValidator } from '../../utils/logics.util';
 import { loginSchema } from '../../validation';
 
-export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { res }) => {
+export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { req, res }) => {
 	await joiValidator(loginSchema, args);
 
 	const admin = await Dao.admin.findOne({
@@ -21,5 +21,13 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { res }
 	const isMatched = admin.comparePassword(args.password);
 	if (!isMatched) throw new NotAuthenticated();
 
-	return admin.postLogin(admin.role!.name);
+	const payload = await admin.postLogin(admin.role!.name);
+
+	console.log(req.session);
+	console.log(req.sessionID);
+	console.log(req.sessionStore);
+
+	req.session.user = payload;
+
+	return payload;
 };
