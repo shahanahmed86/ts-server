@@ -1,6 +1,6 @@
 {
 	"watch": ["src"],
-	"ext": ".ts,.js",
-	"ignore": ["dist", "*.spec.ts", "*.migration.ts", "__tests__/**/*.ts"],
+	"ext": ".ts,.js,.ejs,.json",
+	"ignore": ["*.migration.ts"],
 	"exec": "ts-node src/index.ts"
 }

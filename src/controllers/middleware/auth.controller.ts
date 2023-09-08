@@ -14,17 +14,11 @@ import {
 	NotAuthorized,
 } from '../../utils/errors.util';
 
-const hasToken: HasToken = (req) => req.headers.authorization;
+const hasToken: HasToken = (req) => req.session.token;
 
-const validateToken: ValidateToken = async (bearerToken, key) => {
+const validateToken: ValidateToken = async (token, key) => {
 	const role = await Dao.role.findOne({ where: { name: key } });
 	if (!role) throw new BadRequest(['auth.invalidRole', key]);
-
-	if (!bearerToken.includes('Bearer ')) {
-		throw new NotAuthenticated('auth.invalidSession');
-	}
-
-	const token = bearerToken.split(' ')[1];
 
 	const payload = await decodePayload(token);
 	if (!payload) throw new NotAuthenticated('auth.invalidSession');

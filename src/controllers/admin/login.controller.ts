@@ -23,11 +23,7 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { req, 
 
 	const payload = await admin.postLogin(admin.role!.name);
 
-	console.log(req.session);
-	console.log(req.sessionID);
-	console.log(req.sessionStore);
-
-	req.session.user = payload;
+	req.session.token = payload.token;
 
 	return payload;
 };

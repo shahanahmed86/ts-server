@@ -1,9 +1,7 @@
-import { AuthPayload } from '../api.type';
+import 'express-session';
 
 declare module 'express-session' {
-	interface SessionData {
-		user?: AuthPayload | null;
+	interface Session {
+		token?: string | null;
 	}
 }
-
-export {};

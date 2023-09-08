@@ -60,12 +60,12 @@ const allEnvs = {
 	},
 	jwt: {
 		access: {
-			secret: process.env.JWT_ACCESS_SECRET,
-			expiry: process.env.JWT_ACCESS_EXPIRY,
+			secret: process.env.JWT_ACCESS,
+			expiry: process.env.JWT_ACCESS_LIFE,
 		},
 		refresh: {
-			secret: process.env.JWT_REFRESH_SECRET,
-			expiry: process.env.JWT_REFRESH_EXPIRY,
+			secret: process.env.JWT_REFRESH,
+			expiry: process.env.JWT_REFRESH_LIFE,
 		},
 	},
 	db: {

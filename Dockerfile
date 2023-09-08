@@ -1,6 +1,6 @@
 FROM node:18-bullseye-slim as base
 ENV NODE_ENV=production
-RUN apt-get update \
+RUN apt-get update --fix-missing \
   && apt-get install -y --no-install-recommends postgresql postgresql-contrib curl \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
@@ -17,6 +17,7 @@ HEALTHCHECK --retries=5 --timeout=5s CMD curl -f localhost:7000/api/healthcheck 
 ### dev stage
 FROM base as dev
 ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
 ENV PATH=/app/node_modules/.bin:$PATH
 RUN npm ci && npm cache clean --force
 COPY --chown=node:node . .
