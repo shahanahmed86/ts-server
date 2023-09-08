@@ -27,6 +27,8 @@ services:
       context: .
       target: dev
     restart: unless-stopped
+    networks:
+      - app
     volumes:
       - /app/node_modules
       - ./:/app
@@ -64,6 +66,8 @@ services:
     command: redis-server --appendonly yes --requirepass $REDIS_PASSWORD
     tty: true
     restart: unless-stopped
+    ports:
+      - 6380:6379
     volumes:
       - cache_dev:/data
     env_file:

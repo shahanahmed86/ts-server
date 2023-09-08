@@ -10,6 +10,8 @@ services:
     env_file:
       - .env
     restart: 'no'
+    networks:
+      - app
     build:
       context: .
       target: test

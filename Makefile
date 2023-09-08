@@ -4,39 +4,25 @@ create-image:
 
 # development
 run-dev-up:
-	docker compose -p app-dev \
-	-f docker-compose.yml -f docker-compose.dev.yml \
-	up -d
-run-dev-up-rebuild:
-	docker compose -p app-dev \
-	-f docker-compose.yml -f docker-compose.dev.yml \
-	up -d --build server --renew-anon-volumes --no-deps
+	docker compose -p app-dev -f docker-compose.yml -f docker-compose.dev.yml up -d
+run-dev-rebuild:
+	docker compose -p app-dev -f docker-compose.yml -f docker-compose.dev.yml up -d --build server --renew-anon-volumes
 run-dev-down:
-	docker compose -p app-dev \
-	-f docker-compose.yml -f docker-compose.dev.yml \
-	down
+	docker compose -p app-dev -f docker-compose.yml -f docker-compose.dev.yml down
 run-dev-down-hard:
-	docker compose -p app-dev \
-	-f docker-compose.yml -f docker-compose.dev.yml \
-	down -v
+	docker compose -p app-dev -f docker-compose.yml -f docker-compose.dev.yml down -v
 
 # test
 run-test-up:
-	docker compose -p app-test \
-	-f docker-compose.yml -f docker-compose.test.yml up \
-	--abort-on-container-exit --renew-anon-volumes --build
+	docker compose -p app-test -f docker-compose.yml -f docker-compose.test.yml up --abort-on-container-exit --renew-anon-volumes --build
 run-test-down:
-	docker compose -p app-test \
-	-f docker-compose.yml -f docker-compose.test.yml down \
-	-v
+	docker compose -p app-test -f docker-compose.yml -f docker-compose.test.yml down -v
 run-test:
 	DB_HOST="localhost" npm run --ignore-scripts exec-tests
 
 # production
 run-prod-up:
-	docker stack deploy \
-	-c docker-compose.yml -c docker-compose.prod.yml \
-	app
+	docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml app
 run-prod-down:
 	docker stack rm app
 
