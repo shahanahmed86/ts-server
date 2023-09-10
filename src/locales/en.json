@@ -12,6 +12,7 @@
 		"signup": "You've successfully signed up!",
 		"login": "You've logged in successfully!",
 		"loggedIn": "You have a valid logged in session!",
+		"logout": "You have successfully log out!",
 		"updateProfile": "You've successfully updated your account!",
 		"updateProfileFailed": "Unable to update the account!",
 		"changePassword": "You've successfully updated the password!",
