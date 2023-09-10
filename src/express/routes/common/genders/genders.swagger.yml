@@ -1,0 +1,12 @@
+tags:
+  - name: Common
+    description: Common APIs
+
+paths:
+  /api/common/genders:
+    get:
+      summary: Get Genders
+      tags: [Common]
+      responses:
+        200:
+          description: Returns genders list
