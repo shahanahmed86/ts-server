@@ -73,27 +73,9 @@ const questions = [
 	},
 	{
 		type: 'password',
-		name: 'JWT_ACCESS',
-		message: 'Please enter the secret for JWT access token',
-		default: 'jwt-access-secret',
-	},
-	{
-		type: 'number',
-		name: 'JWT_ACCESS_LIFE',
-		message: 'Please enter the milliseconds to expire the JWT access token',
-		default: '300000',
-	},
-	{
-		type: 'password',
-		name: 'JWT_REFRESH',
-		message: 'Please enter the secret for JWT refresh token',
-		default: 'jwt-refresh-secret',
-	},
-	{
-		type: 'number',
-		name: 'JWT_REFRESH_LIFE',
-		message: 'Please enter the milliseconds to expire the JWT refresh token',
-		default: '86400000',
+		name: 'JWT_SECRET',
+		message: 'Please enter the secret for JWT token',
+		default: 'jwt-secret',
 	},
 	{
 		type: 'input',
@@ -147,7 +129,13 @@ const questions = [
 		type: 'password',
 		name: 'SESSION_SECRET',
 		message: 'Please enter the session secret',
-		default: 'redis-secret',
+		default: 'session-secret',
+	},
+	{
+		type: 'input',
+		name: 'SESSION_LIFE',
+		message: "Please enter the session's life",
+		default: '300000',
 	},
 ];
 
