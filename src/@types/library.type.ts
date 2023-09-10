@@ -1,8 +1,9 @@
 import { ObjectSchema } from 'joi';
-import { JwtPayload } from 'jsonwebtoken';
+import { Role } from './common.type';
 
-export type EncodePayload = (key: string, payload: string, expiresIn?: string | number) => string;
-
-export type DecodePayload = (token: string) => Promise<JwtPayload>;
+export type SessionPayload = {
+	userId: string;
+	role: Role;
+};
 
 export type JoiValidator = <T>(schema: ObjectSchema<T>, payload: T) => Promise<void>;

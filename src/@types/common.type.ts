@@ -30,3 +30,5 @@ export type Pagination = {
 	limit?: string;
 	search?: string;
 };
+
+export type Role = 'admin' | 'user';

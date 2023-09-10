@@ -1,8 +1,10 @@
 import { Request, Response } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
+import { SessionPayload } from './library.type';
 
-export type HasToken = (req: Request) => string | undefined | null;
+export type HasSession = (req: Request) => SessionPayload | undefined | null;
 
-export type ValidateToken = (bearerToken: string, key: string) => Promise<string>;
+export type ValidateToken = (token: string, key: string) => Promise<JwtPayload>;
 
 export type GuestController = (req: Request) => void;
 

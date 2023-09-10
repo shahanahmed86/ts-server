@@ -6,10 +6,7 @@ import { Result } from './wrapper.type';
 
 export type FormatResponse = <T>(status: number, message: string, data: T) => Result<T>;
 
-export type AuthPayload = {
-	token: string;
-	user: User | Admin;
-};
+export type AuthPayload = User | Admin;
 
 export type ImageParams = {
 	filename: string;
