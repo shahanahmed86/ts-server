@@ -21,9 +21,12 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { req, 
 	const isMatched = admin.comparePassword(args.password);
 	if (!isMatched) throw new NotAuthenticated();
 
-	const payload = await admin.postLogin(admin.role!.name);
+	const payload = {
+		userId: admin.id,
+		role: admin.role!.name,
+	};
 
-	req.session.token = payload.token;
+	req.session.payload = payload;
 
-	return payload;
+	return admin;
 };

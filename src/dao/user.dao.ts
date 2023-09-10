@@ -1,4 +1,4 @@
-import { AuthPayload, UserArgs } from '../@types/api.type';
+import { UserArgs } from '../@types/api.type';
 import configs from '../config';
 import { hashSync } from '../library/bcrypt.library';
 import file from '../library/file.library';
@@ -10,7 +10,7 @@ import BaseDao from './base.dao';
 const { env } = configs.app;
 
 class UsersDao extends BaseDao<User> {
-	async signup(payload: UserArgs, role: string): Promise<AuthPayload> {
+	async signup(payload: UserArgs): Promise<User> {
 		const { password, avatar } = payload;
 
 		payload.password = hashSync(password!);
@@ -24,7 +24,7 @@ class UsersDao extends BaseDao<User> {
 			relations: { role: true, gender: true },
 		});
 
-		return user!.postLogin(role);
+		return user!;
 	}
 }
 

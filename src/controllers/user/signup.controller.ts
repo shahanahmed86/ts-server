@@ -15,7 +15,7 @@ export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { res }
 	if (!role) throw new NotFound(['common.notFound', 'Role']);
 
 	args.roleId = role.id;
-	const payload = await Dao.user.signup(args, role.name);
+	const payload = await Dao.user.signup(args);
 
 	return payload;
 };

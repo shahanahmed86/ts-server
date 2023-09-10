@@ -1,7 +1,5 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { AuthPayload } from '../../@types/api.type';
 import { compareSync } from '../../library/bcrypt.library';
-import { encodePayload } from '../../library/jwt.library';
 import { USER_TABLE } from '../constants';
 import { Admin } from './admin.entity';
 import { Base } from './base.entity';
@@ -52,11 +50,5 @@ export class User extends Base {
 	// custom hooks
 	comparePassword(password: string): boolean {
 		return compareSync(password, this.password);
-	}
-
-	async postLogin(role: string): Promise<AuthPayload> {
-		const token = encodePayload(role, this.id);
-
-		return { token, user: this };
 	}
 }
