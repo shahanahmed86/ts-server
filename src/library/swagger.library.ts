@@ -26,7 +26,7 @@ const options: SwaggerOptions = {
 			},
 		],
 	},
-	apis: ['./src/express/routes/**/*.swagger.ts'], // files containing annotations as above
+	apis: ['**/*.swagger.yml'], // files containing annotations as above
 };
 
 // swagger setup

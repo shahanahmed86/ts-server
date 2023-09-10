@@ -1,0 +1,8 @@
+components:
+  schemas:
+    Role:
+      $ref: '#/components/schemas/Role'
+    Admin:
+      $ref: '#/components/schemas/Admin'
+    Error:
+      $ref: '#/components/schemas/Error'
