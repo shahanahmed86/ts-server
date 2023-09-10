@@ -1,11 +1,12 @@
 import {
 	AuthController,
 	GuestController,
-	HasToken,
+	HasSession as HasSession,
 	ValidateToken,
 } from '../../@types/middleware.type';
 import * as Dao from '../../dao';
 import { decodePayload } from '../../library/jwt.library';
+import { User } from '../../typeorm/entities/user.entity';
 import { ONE_SECOND } from '../../utils/constants.util';
 import {
 	BadRequest,
@@ -14,12 +15,9 @@ import {
 	NotAuthorized,
 } from '../../utils/errors.util';
 
-const hasToken: HasToken = (req) => req.session.token;
+const hasSession: HasSession = (req) => req.session.payload;
 
-const validateToken: ValidateToken = async (token, key) => {
-	const role = await Dao.role.findOne({ where: { name: key } });
-	if (!role) throw new BadRequest(['auth.invalidRole', key]);
-
+export const validateToken: ValidateToken = async (token) => {
 	const payload = await decodePayload(token);
 	if (!payload) throw new NotAuthenticated('auth.invalidSession');
 
@@ -29,49 +27,30 @@ const validateToken: ValidateToken = async (token, key) => {
 		if (isSessionExpired) throw new NotAuthenticated('auth.invalidSession');
 	}
 
-	return payload[key];
+	return payload;
 };
 
 export const guestController: GuestController = (req) => {
-	const token = hasToken(req);
-	if (token) throw new BadRequest('auth.alreadyLoggedIn');
+	const payload = hasSession(req);
+	if (payload) throw new BadRequest('auth.alreadyLoggedIn');
 };
 
 export const authController: AuthController = async (key, req, res) => {
-	const token = hasToken(req);
-	if (!token) throw new NotAuthorized('auth.requiredLogin');
+	const payload = hasSession(req);
+	if (!payload) throw new NotAuthorized('auth.requiredLogin');
 
-	const userId = await validateToken(token, key);
+	const { userId, role } = payload;
 
-	let userPayload;
+	if (!role || role !== key) throw new NotAuthorized();
 
-	switch (key) {
-		case 'admin': {
-			const admin = await Dao.admin.findOne({
-				where: { id: userId },
-				relations: { role: true },
-			});
-			if (!admin) throw new NotAuthenticated();
+	const user = await Dao[role].findOne({
+		where: { id: userId, role: { name: role } },
+		relations: { role: true },
+	});
+	if (!user) throw new NotAuthenticated();
 
-			userPayload = admin;
-			break;
-		}
-		case 'user': {
-			const user = await Dao.user.findOne({
-				where: { id: userId },
-				relations: { role: true, gender: true },
-			});
-			if (!user) throw new NotAuthenticated();
-			if (user.role!.name !== key) throw new NotAuthorized();
-			if (!user.emailVerified) throw new ConflictError('auth.verifyEmail');
+	const isUnverifiedUser = user instanceof User && !user.emailVerified;
+	if (isUnverifiedUser) throw new ConflictError('auth.verifyEmail');
 
-			userPayload = user;
-			break;
-		}
-		default: {
-			throw new NotAuthorized();
-		}
-	}
-
-	res.locals.user = userPayload;
+	res.locals.user = user;
 };

@@ -19,7 +19,7 @@ export const passwordSchema = Joi.string()
 	});
 
 export const changePasswordSchema = Joi.object<ChangePasswordArgs>({
-	oldPassword: passwordSchema.required().label('old password'),
+	oldPassword: Joi.string().label('old password').disallow('').required(),
 	password: passwordSchema
 		.disallow(Joi.ref('oldPassword'))
 		.label('new password')
