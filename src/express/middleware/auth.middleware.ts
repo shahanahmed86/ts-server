@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import controllers from '../../controllers';
+import { Role } from '../../@types/common.type';
 
 export const guest = (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -25,7 +26,7 @@ export const auth = (key: string) => {
 
 export const includeRole = (key: string) => {
 	return (req: Request, res: Response, next: NextFunction) => {
-		res.locals.role = key;
+		res.locals.role = key as Role;
 		next();
 	};
 };

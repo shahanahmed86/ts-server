@@ -1,12 +1,11 @@
 import RedisStore from 'connect-redis';
-import { randomUUID } from 'crypto';
 import { Express } from 'express';
 import session from 'express-session';
 import configs from '../config';
-import { SESSION_MAX_AGE } from '../utils/constants.util';
+import { getUniqueId } from '../utils/logics.util';
 import client from './redis.library';
 
-const { secret } = configs.session;
+const { secret, expiry } = configs.session;
 
 const cacheService = async (app: Express) => {
 	const store = new RedisStore({ client });
@@ -14,14 +13,15 @@ const cacheService = async (app: Express) => {
 	app.use(
 		session({
 			store,
-			genid: () => randomUUID(),
+			genid: () => getUniqueId(),
 			secret,
 			resave: false,
-			saveUninitialized: true,
+			rolling: true,
+			saveUninitialized: false,
 			cookie: {
 				secure: configs.app.inProd,
 				httpOnly: true,
-				maxAge: SESSION_MAX_AGE,
+				maxAge: expiry,
 			},
 		}),
 	);
