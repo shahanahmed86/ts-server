@@ -1,7 +1,8 @@
 import 'express-session';
+import { SessionPayload } from '../common.type';
 
 declare module 'express-session' {
 	interface Session {
-		token?: string | null;
+		payload?: SessionPayload | null;
 	}
 }
