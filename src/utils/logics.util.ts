@@ -1,4 +1,5 @@
 import { randomUUID } from 'crypto';
+import { Request, Response } from 'express';
 import isArray from 'lodash/isArray';
 import isDate from 'lodash/isDate';
 import isObject from 'lodash/isObject';
@@ -46,4 +47,16 @@ export function omitProps<T>(payload: T, props: string[] = SHOULD_OMIT_PROPS): T
 	}
 
 	return payload;
+}
+
+export function clearSession(req: Request, res: Response): Promise<void> {
+	return new Promise((resolve, reject) => {
+		req.session.destroy((err: Error) => {
+			if (err) reject(err);
+
+			res.clearCookie(`sess:${req.sessionID}`);
+
+			resolve();
+		});
+	});
 }

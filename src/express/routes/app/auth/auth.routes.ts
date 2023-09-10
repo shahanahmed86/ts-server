@@ -26,4 +26,6 @@ router
 
 router.put('/change-password', restWrapper(controllers.user.changePassword, 'auth.changePassword'));
 
+router.delete('/', restWrapper(controllers.user.logout, 'auth.logout'));
+
 export default router;
