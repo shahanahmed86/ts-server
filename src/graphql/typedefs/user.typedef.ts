@@ -13,11 +13,6 @@ const userSchema = `#graphql
     createdAt: Date!
     updatedAt: Date!
   }
- 
-  type AuthUser {
-    token: String!
-    user: User!
-  }
 `;
 
 export default userSchema;

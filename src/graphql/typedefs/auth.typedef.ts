@@ -14,7 +14,7 @@ const authSchema = `#graphql
   extend type Mutation {
     # admin
     adminChangePassword(oldPassword: String!, password: String!): String! @auth(type: "${admin}")
-    adminLogin(email: String!, password: String!): AuthAdmin! @guest(type: "${admin}")
+    adminLogin(email: String!, password: String!): Admin! @guest(type: "${admin}")
 
     # user
     userUpdateProfile(
@@ -25,7 +25,7 @@ const authSchema = `#graphql
       genderId: String
     ): String! @auth(type: "${user}")
     userChangePassword(oldPassword: String!, password: String!): String! @auth(type: "${user}")
-    userLogin(email: String!, password: String!): AuthUser! @guest(type: "${user}")
+    userLogin(email: String!, password: String!): User! @guest(type: "${user}")
     userSignup(
       email: String!
       password: String!
@@ -34,7 +34,7 @@ const authSchema = `#graphql
       avatar: String
       phone: String
       genderId: String!
-    ): AuthUser! @guest(type: "${user}")
+    ): User! @guest(type: "${user}")
   }
 `;
 

@@ -7,11 +7,6 @@ const adminSchema = `#graphql
     createdAt: Date!
     updatedAt: Date!
   }
- 
-  type AuthAdmin {
-    token: String!
-    user: Admin!
-  }
 `;
 
 export default adminSchema;
