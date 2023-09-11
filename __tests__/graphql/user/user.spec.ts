@@ -2,10 +2,10 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { UserArgs } from '../../../src/@types/api.type';
 import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
-import * as userHelper from './user.helper';
+import { signup, login, logout, loggedIn, changePassword, updateProfile } from './user.helper';
 import { uploadImage } from '../../images/images.helper';
 import { GENDER_DATA } from '../../../src/typeorm/constants/gender.constant';
-import { deleteUsers } from '../../helper';
+import { deleteUsers, getCookieValue } from '../../helper';
 
 chai.use(chaiHttp);
 
@@ -15,7 +15,7 @@ describe('Graphql - User Authentication APIs', function () {
 	it('user signup', async () => {
 		const { body: imageBody } = await uploadImage();
 
-		const { body } = await userHelper.signup({
+		const { body, header } = await signup({
 			avatar: imageBody.data,
 			firstName: 'Shahan',
 			lastName: 'Ahmed Khan',
@@ -26,42 +26,56 @@ describe('Graphql - User Authentication APIs', function () {
 		});
 		expect(body.data.values).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
+
+		const cookie = getCookieValue(header);
+		await logout(cookie);
 	});
 
 	it('user login', async () => {
-		const res = await userHelper.login('shahan.khaan@gmail.com', 'shahan'); // should fail
+		const res = await login('shahan.khaan@gmail.com', 'shahan'); // should fail
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
-		const { body } = await userHelper.login(); // should success
+		const { body, header } = await login(); // should success
+		const cookie = getCookieValue(header);
+
 		expect(body.data.values).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
+
+		await logout(cookie);
 	});
 
 	it('user loggedIn', async () => {
-		await userHelper.login();
+		const { header } = await login();
+		const cookie = getCookieValue(header);
 
-		const { body } = await userHelper.loggedIn();
+		const { body } = await loggedIn(cookie);
 		expect(body.data.values).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
+
+		await logout(cookie);
 	});
 
 	it('user changePassword', async () => {
-		await userHelper.login();
+		const { header } = await login();
+		const cookie = getCookieValue(header);
 
-		let res = await userHelper.changePassword('123abc456', 'shahan');
+		let res = await changePassword('123abc456', 'shahan', cookie);
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
-		res = await userHelper.changePassword('123Abc456', '123aBc456');
+		res = await changePassword('123Abc456', '123aBc456', cookie);
 		expect(res.body.data.values).to.be.a('string');
 
-		res = await userHelper.changePassword('123aBc456', '123Abc456');
+		res = await changePassword('123aBc456', '123Abc456', cookie);
 		expect(res.body.data.values).to.be.a('string');
+
+		await logout(cookie);
 	});
 
 	it('user updateProfile', async () => {
-		await userHelper.login();
+		const { header } = await login();
+		const cookie = getCookieValue(header);
 
-		let res = await userHelper.updateProfile({});
+		let res = await updateProfile({}, cookie);
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
 		const { body: imageBody } = await uploadImage();
@@ -73,8 +87,10 @@ describe('Graphql - User Authentication APIs', function () {
 			phone: '+923362122588',
 			genderId: GENDER_DATA.at(-1)!.id!,
 		};
-		res = await userHelper.updateProfile(PAYLOAD);
+		res = await updateProfile(PAYLOAD, cookie);
 		expect(res.body.data.values).to.be.a('string');
+
+		await logout(cookie);
 	});
 
 	after(() => deleteUsers());

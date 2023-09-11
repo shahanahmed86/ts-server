@@ -12,7 +12,6 @@ export const signup = async (payload: UserArgs) => {
 		.request(httpServer)
 		.post(`${BASE_URL}/signup`)
 		.set('content-type', 'application/json')
-		.withCredentials()
 		.send(payload);
 };
 
@@ -21,32 +20,39 @@ export const login = async (email = 'shahan.khaan@gmail.com', password = '123Abc
 		.request(httpServer)
 		.post(BASE_URL)
 		.set('content-type', 'application/json')
-		.withCredentials()
 		.send({ email, password });
 };
 
-export const loggedIn = () => {
+export const loggedIn = (cookie: string) => {
 	return chai
 		.request(httpServer)
 		.get(BASE_URL)
 		.set('content-type', 'application/json')
-		.withCredentials();
+		.set('Cookie', cookie);
 };
 
-export const updateProfile = async (payload: UserArgs) => {
+export const updateProfile = async (payload: UserArgs, cookie: string) => {
 	return chai
 		.request(httpServer)
 		.put(BASE_URL)
 		.set('content-type', 'application/json')
-		.withCredentials()
+		.set('Cookie', cookie)
 		.send(payload);
 };
 
-export const changePassword = async (oldPassword: string, password: string) => {
+export const changePassword = async (oldPassword: string, password: string, cookie: string) => {
 	return chai
 		.request(httpServer)
 		.put(`${BASE_URL}/change-password`)
 		.set('content-type', 'application/json')
-		.withCredentials()
+		.set('Cookie', cookie)
 		.send({ oldPassword, password });
+};
+
+export const logout = async (cookie: string) => {
+	return chai
+		.request(httpServer)
+		.delete(BASE_URL)
+		.set('content-type', 'application/json')
+		.set('Cookie', cookie);
 };

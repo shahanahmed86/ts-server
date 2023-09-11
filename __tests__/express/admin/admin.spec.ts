@@ -1,6 +1,7 @@
 import chai from 'chai';
 import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
-import { changePassword, loggedIn, login } from './admin.helper';
+import { changePassword, loggedIn, login, logout } from './admin.helper';
+import { getCookieValue } from '../../helper';
 
 const { expect } = chai;
 
@@ -13,34 +14,42 @@ describe('RESTful - Admin Authentication APIs', function () {
 		res = await login(); // should success
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
-		expect(res.body.data.token).to.be.a('string');
 		expect(res.body.data).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data).not.to.have.property(prop));
+
+		const cookie = getCookieValue(res.header);
+		await logout(cookie);
 	});
 
 	it('admin loggedIn', async () => {
-		await login();
+		const { header } = await login();
+		const cookie = getCookieValue(header);
 
-		const res = await loggedIn();
+		const res = await loggedIn(cookie);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 		expect(res.body.data).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(res.body).not.to.have.property(prop));
+
+		await logout(cookie);
 	});
 
 	it('admin changePassword', async () => {
-		await login();
+		const { header } = await login();
+		const cookie = getCookieValue(header);
 
-		let res = await changePassword('123abc456', 'shahan');
+		let res = await changePassword('123abc456', 'shahan', cookie);
 		expect(res.error).not.to.be.false;
 		expect(res.status).to.be.equal(409);
 
-		res = await changePassword('123Abc456', '123aBc456');
+		res = await changePassword('123Abc456', '123aBc456', cookie);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 
-		res = await changePassword('123aBc456', '123Abc456');
+		res = await changePassword('123aBc456', '123Abc456', cookie);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
+
+		await logout(cookie);
 	});
 });
