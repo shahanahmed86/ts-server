@@ -24,10 +24,8 @@ describe('Graphql - User Authentication APIs', function () {
 			email: 'shahan.khaan@gmail.com',
 			password: '123Abc456',
 		});
-		['token', 'user'].map((prop) => expect(body.data.values).to.have.property(prop));
-		expect(body.data.values.token).to.be.a('string');
-		expect(body.data.values.user).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values.user).not.to.have.property(prop));
+		expect(body.data.values).to.be.an('object');
+		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
 	});
 
 	it('user login', async () => {
@@ -35,40 +33,35 @@ describe('Graphql - User Authentication APIs', function () {
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
 		const { body } = await userHelper.login(); // should success
-		['token', 'user'].map((prop) => expect(body.data.values).to.have.property(prop));
-		expect(body.data.values.token).to.be.a('string');
-		expect(body.data.values.user).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values.user).not.to.have.property(prop));
+		expect(body.data.values).to.be.an('object');
+		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
 	});
 
 	it('user loggedIn', async () => {
-		const { body: loginBody } = await userHelper.login();
-		const token = loginBody.data.values.token;
+		await userHelper.login();
 
-		const { body } = await userHelper.loggedIn(token);
+		const { body } = await userHelper.loggedIn();
 		expect(body.data.values).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
 	});
 
 	it('user changePassword', async () => {
-		const { body: loginBody } = await userHelper.login();
-		const token = loginBody.data.values.token;
+		await userHelper.login();
 
-		let res = await userHelper.changePassword('123abc456', 'shahan', token);
+		let res = await userHelper.changePassword('123abc456', 'shahan');
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
-		res = await userHelper.changePassword('123Abc456', '123aBc456', token);
+		res = await userHelper.changePassword('123Abc456', '123aBc456');
 		expect(res.body.data.values).to.be.a('string');
 
-		res = await userHelper.changePassword('123aBc456', '123Abc456', token);
+		res = await userHelper.changePassword('123aBc456', '123Abc456');
 		expect(res.body.data.values).to.be.a('string');
 	});
 
 	it('user updateProfile', async () => {
-		const { body: loginBody } = await userHelper.login();
-		const token = loginBody.data.values.token;
+		await userHelper.login();
 
-		let res = await userHelper.updateProfile({}, token);
+		let res = await userHelper.updateProfile({});
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
 		const { body: imageBody } = await uploadImage();
@@ -80,7 +73,7 @@ describe('Graphql - User Authentication APIs', function () {
 			phone: '+923362122588',
 			genderId: GENDER_DATA.at(-1)!.id!,
 		};
-		res = await userHelper.updateProfile(PAYLOAD, token);
+		res = await userHelper.updateProfile(PAYLOAD);
 		expect(res.body.data.values).to.be.a('string');
 	});
 

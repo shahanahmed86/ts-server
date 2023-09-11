@@ -12,6 +12,7 @@ export const signup = async (payload: UserArgs) => {
 		.request(httpServer)
 		.post(`${BASE_URL}/signup`)
 		.set('content-type', 'application/json')
+		.withCredentials()
 		.send(payload);
 };
 
@@ -20,31 +21,32 @@ export const login = async (email = 'shahan.khaan@gmail.com', password = '123Abc
 		.request(httpServer)
 		.post(BASE_URL)
 		.set('content-type', 'application/json')
+		.withCredentials()
 		.send({ email, password });
 };
 
-export const loggedIn = (token: string) => {
+export const loggedIn = () => {
 	return chai
 		.request(httpServer)
 		.get(BASE_URL)
 		.set('content-type', 'application/json')
-		.set('Authorization', `Bearer ${token}`);
+		.withCredentials();
 };
 
-export const updateProfile = async (payload: UserArgs, token: string) => {
+export const updateProfile = async (payload: UserArgs) => {
 	return chai
 		.request(httpServer)
 		.put(BASE_URL)
 		.set('content-type', 'application/json')
-		.set('Authorization', `Bearer ${token}`)
+		.withCredentials()
 		.send(payload);
 };
 
-export const changePassword = async (oldPassword: string, password: string, token: string) => {
+export const changePassword = async (oldPassword: string, password: string) => {
 	return chai
 		.request(httpServer)
 		.put(`${BASE_URL}/change-password`)
 		.set('content-type', 'application/json')
-		.set('Authorization', `Bearer ${token}`)
+		.withCredentials()
 		.send({ oldPassword, password });
 };

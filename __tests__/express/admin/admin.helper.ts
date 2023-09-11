@@ -11,22 +11,23 @@ export const login = async (email = 'admin@accounts.com.pk', password = '123Abc4
 		.request(httpServer)
 		.post(BASE_URL)
 		.set('content-type', 'application/json')
+		.withCredentials()
 		.send({ email, password });
 };
 
-export const loggedIn = (token: string) => {
+export const loggedIn = () => {
 	return chai
 		.request(httpServer)
 		.get(BASE_URL)
 		.set('content-type', 'application/json')
-		.set('Authorization', `Bearer ${token}`);
+		.withCredentials();
 };
 
-export const changePassword = async (oldPassword: string, password: string, token: string) => {
+export const changePassword = async (oldPassword: string, password: string) => {
 	return chai
 		.request(httpServer)
 		.put(`${BASE_URL}/change-password`)
 		.set('content-type', 'application/json')
-		.set('Authorization', `Bearer ${token}`)
+		.withCredentials()
 		.send({ oldPassword, password });
 };
