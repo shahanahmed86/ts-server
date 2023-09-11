@@ -36,7 +36,10 @@ run-test-down:
 	-f docker-compose.yml -f docker-compose.test.yml \
 	down -v
 run-test:
-	DB_HOST="localhost" npm run --ignore-scripts exec-tests
+	NODE_ENV="test" \
+	DB_HOST="localhost" DB_PORT="5433" \
+	REDIS_HOST="localhost" REDIS_PORT="6380" \
+	npm run exec-tests --ignore-scripts
 
 # production
 run-prod-up:
@@ -54,6 +57,6 @@ run-restore:
 
 # migration scripts
 run-typeorm-up:
-	DB_HOST="localhost" DB_PORT=5433 npm run typeorm:up
+	DB_HOST="localhost" DB_PORT="5433" npm run typeorm:up
 run-typeorm-down:
-	DB_HOST="localhost" DB_PORT=5433 npm run typeorm:down
+	DB_HOST="localhost" DB_PORT="5433" npm run typeorm:down
