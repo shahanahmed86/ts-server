@@ -64,6 +64,12 @@ paths:
       responses:
         200:
           description: Returns update profile success message
+    delete:
+      summary: Log out
+      tags: [User Auth]
+      responses:
+        200:
+          description: Logs out a user
 
   /api/app/auth/change-password:
     put:
