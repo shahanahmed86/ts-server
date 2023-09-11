@@ -1,5 +1,6 @@
 import {
 	DeepPartial,
+	EntityTarget,
 	FindManyOptions,
 	FindOneOptions,
 	FindOptionsWhere,
@@ -8,6 +9,7 @@ import {
 	Repository,
 } from 'typeorm';
 import { Paginated } from '../@types/api.type';
+import AppDataSource from '../typeorm';
 import { Base } from '../typeorm/entities/base.entity';
 import { CHUNK_SIZE, LIMIT, OFFSET } from '../utils/constants.util';
 import { getISODate } from '../utils/logics.util';
@@ -18,8 +20,8 @@ class BaseDao<BaseEntity extends ObjectLiteral> {
 	model: Repository<BaseEntity>;
 	modelName: string;
 
-	constructor(model: Repository<BaseEntity>, modelName: string) {
-		this.model = model;
+	constructor(target: EntityTarget<BaseEntity>, modelName: string) {
+		this.model = AppDataSource.getRepository(target);
 		this.modelName = modelName;
 	}
 

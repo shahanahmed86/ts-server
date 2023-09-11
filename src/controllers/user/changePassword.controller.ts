@@ -17,7 +17,9 @@ export const changePassword: Controller<string, ChangePasswordArgs> = async (_, 
 	if (!isMatched) throw new ConflictError('auth.oldPasswordMismatched');
 
 	const password = hashSync(args.password);
-	const isUpdated = await Dao.user.update(user.id, { password });
+	const userDao = new Dao.User();
+
+	const isUpdated = await userDao.update(user.id, { password });
 	if (!isUpdated) throw new ConflictError('auth.changePasswordFailed');
 
 	return translate('auth.changePassword');
