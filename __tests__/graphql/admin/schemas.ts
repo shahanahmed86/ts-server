@@ -35,3 +35,9 @@ export const CHANGE_PASSWORD = `#graphql
     values: adminChangePassword(oldPassword: $oldPassword, password: $password)
   }
 `;
+
+export const LOGOUT = `#graphql
+  mutation LogOut {
+    values: adminLogout
+  }
+`;

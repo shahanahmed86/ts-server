@@ -112,3 +112,9 @@ export const SIGNUP = `#graphql
     }
   }
 `;
+
+export const LOGOUT = `#graphql
+  mutation LogOut {
+    values: userLogout
+  }
+`;

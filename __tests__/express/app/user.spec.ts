@@ -2,12 +2,12 @@ import chai from 'chai';
 import { UserArgs } from '../../../src/@types/api.type';
 import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
 import { uploadImage } from '../../images/images.helper';
-import { changePassword, loggedIn, login, signup, updateProfile } from './user.helper';
-import { deleteUsers } from '../../helper';
+import { changePassword, loggedIn, login, logout, signup, updateProfile } from './user.helper';
+import { deleteUsers, getCookieValue } from '../../helper';
 
 const { expect } = chai;
 
-const SIGNUP_DATA: UserArgs = {
+export const SIGNUP_DATA: UserArgs = {
 	firstName: 'Shahan Ahmed',
 	lastName: 'Khan',
 	phone: '+923362122588',
@@ -26,9 +26,11 @@ describe('RESTful - App Authentication APIs', function () {
 		const res = await signup(payload); // should success
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(201);
-		expect(res.body.data.token).to.be.a('string');
 		expect(res.body.data).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data).not.to.have.property(prop));
+
+		const cookie = getCookieValue(res.header);
+		await logout(cookie);
 	});
 
 	it('app login', async () => {
@@ -39,23 +41,29 @@ describe('RESTful - App Authentication APIs', function () {
 		res = await login(); // should success
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
-		expect(res.body.data.token).to.be.a('string');
 		expect(res.body.data).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data).not.to.have.property(prop));
+
+		const cookie = getCookieValue(res.header);
+		await logout(cookie);
 	});
 
 	it('app loggedIn', async () => {
-		await login();
+		const { header } = await login();
+		const cookie = getCookieValue(header);
 
-		const res = await loggedIn();
+		const res = await loggedIn(cookie);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 		expect(res.body).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(res.body).not.to.have.property(prop));
+
+		await logout(cookie);
 	});
 
 	it('app updateProfile', async () => {
-		await login();
+		const { header } = await login();
+		const cookie = getCookieValue(header);
 
 		const { body: uploadedFile } = await uploadImage();
 
@@ -63,25 +71,30 @@ describe('RESTful - App Authentication APIs', function () {
 			avatar: uploadedFile.data,
 		});
 
-		const res = await updateProfile(payload);
+		const res = await updateProfile(payload, cookie);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
+
+		await logout(cookie);
 	});
 
 	it('app changePassword', async () => {
-		await login();
+		const { header } = await login();
+		const cookie = getCookieValue(header);
 
-		let res = await changePassword('123abc456', 'shahan');
+		let res = await changePassword('123abc456', 'shahan', cookie);
 		expect(res.error).not.to.be.false;
 		expect(res.status).to.be.equal(409);
 
-		res = await changePassword('123Abc456', '123aBc456');
+		res = await changePassword('123Abc456', '123aBc456', cookie);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 
-		res = await changePassword('123aBc456', '123Abc456');
+		res = await changePassword('123aBc456', '123Abc456', cookie);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
+
+		await logout(cookie);
 	});
 
 	after(() => deleteUsers());
