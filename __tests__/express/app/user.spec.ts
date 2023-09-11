@@ -27,8 +27,8 @@ describe('RESTful - App Authentication APIs', function () {
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(201);
 		expect(res.body.data.token).to.be.a('string');
-		['token', 'user'].map((prop) => expect(res.body.data).to.have.property(prop));
-		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data.user).not.to.have.property(prop));
+		expect(res.body.data).to.be.an('object');
+		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data).not.to.have.property(prop));
 	});
 
 	it('app login', async () => {
@@ -40,23 +40,22 @@ describe('RESTful - App Authentication APIs', function () {
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 		expect(res.body.data.token).to.be.a('string');
-		['token', 'user'].map((prop) => expect(res.body.data).to.have.property(prop));
-		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data.user).not.to.have.property(prop));
+		expect(res.body.data).to.be.an('object');
+		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data).not.to.have.property(prop));
 	});
 
 	it('app loggedIn', async () => {
-		const { body } = await login();
-		const token = body.data.token;
+		await login();
 
-		const res = await loggedIn(token);
+		const res = await loggedIn();
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
+		expect(res.body).to.be.an('object');
 		SHOULD_OMIT_PROPS.map((prop) => expect(res.body).not.to.have.property(prop));
 	});
 
 	it('app updateProfile', async () => {
-		const { body } = await login();
-		const token = body.data.token;
+		await login();
 
 		const { body: uploadedFile } = await uploadImage();
 
@@ -64,24 +63,23 @@ describe('RESTful - App Authentication APIs', function () {
 			avatar: uploadedFile.data,
 		});
 
-		const res = await updateProfile(payload, token);
+		const res = await updateProfile(payload);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 	});
 
 	it('app changePassword', async () => {
-		const { body } = await login();
-		const token = body.data.token;
+		await login();
 
-		let res = await changePassword('123abc456', 'shahan', token);
+		let res = await changePassword('123abc456', 'shahan');
 		expect(res.error).not.to.be.false;
 		expect(res.status).to.be.equal(409);
 
-		res = await changePassword('123Abc456', '123aBc456', token);
+		res = await changePassword('123Abc456', '123aBc456');
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 
-		res = await changePassword('123aBc456', '123Abc456', token);
+		res = await changePassword('123aBc456', '123Abc456');
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 	});

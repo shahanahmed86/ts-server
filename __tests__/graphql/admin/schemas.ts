@@ -1,18 +1,15 @@
 export const LOGIN = `#graphql
   mutation Login($email: String!, $password: String!) {
     values: adminLogin(email: $email, password: $password) {
-      token
-      user {
+      id
+      email
+      roleId
+      role {
         id
-        email
-        roleId
-        role {
-          id
-          name
-        }
-        createdAt
-        updatedAt
+        name
       }
+      createdAt
+      updatedAt
     }
   }
 `;
