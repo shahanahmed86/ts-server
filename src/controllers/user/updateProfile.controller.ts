@@ -15,7 +15,9 @@ export const updateProfile: Controller<string, UserArgs> = async (_, args, { res
 
 	const user = res.locals.user as User;
 
-	const isUpdated = await Dao.user.update(user.id, args);
+	const userDao = new Dao.User();
+
+	const isUpdated = await userDao.update(user.id, args);
 	if (!isUpdated) throw new ConflictError('auth.updateProfileFailed');
 
 	return translate('auth.updateProfile');

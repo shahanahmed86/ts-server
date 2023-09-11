@@ -2,14 +2,17 @@ import { UserArgs } from '../@types/api.type';
 import configs from '../config';
 import { hashSync } from '../library/bcrypt.library';
 import file from '../library/file.library';
-import AppDataSource from '../typeorm';
 import { USER_TABLE } from '../typeorm/constants';
 import { User } from '../typeorm/entities/user.entity';
 import BaseDao from './base.dao';
 
 const { env } = configs.app;
 
-class UsersDao extends BaseDao<User> {
+class UserDao extends BaseDao<User> {
+	constructor() {
+		super(User, USER_TABLE);
+	}
+
 	async signup(payload: UserArgs): Promise<User> {
 		const { password, avatar } = payload;
 
@@ -28,5 +31,4 @@ class UsersDao extends BaseDao<User> {
 	}
 }
 
-const repository = AppDataSource.getRepository(User);
-export const user = new UsersDao(repository, USER_TABLE);
+export default UserDao;

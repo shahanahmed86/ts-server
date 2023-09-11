@@ -5,6 +5,7 @@ import {
 	ValidateToken,
 } from '../../@types/middleware.type';
 import * as Dao from '../../dao';
+import { User as UserDao, Admin as AdminDao } from '../../dao';
 import { decodePayload } from '../../library/jwt.library';
 import { User } from '../../typeorm/entities/user.entity';
 import { ONE_SECOND } from '../../utils/constants.util';
@@ -43,7 +44,11 @@ export const authController: AuthController = async (key, req, res) => {
 
 	if (!role || role !== key) throw new NotAuthorized();
 
-	const user = await Dao[role].findOne({
+	let dao: UserDao | AdminDao;
+	if (role === 'admin') dao = new Dao.Admin();
+	else dao = new Dao.User();
+
+	const user = await dao.findOne({
 		where: { id: userId, role: { name: role } },
 		relations: { role: true },
 	});
