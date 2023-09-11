@@ -15,6 +15,7 @@ const authSchema = `#graphql
     # admin
     adminChangePassword(oldPassword: String!, password: String!): String! @auth(type: "${admin}")
     adminLogin(email: String!, password: String!): Admin! @guest(type: "${admin}")
+    adminLogout: String! @auth(type: "${admin}")
 
     # user
     userUpdateProfile(
@@ -35,6 +36,7 @@ const authSchema = `#graphql
       phone: String
       genderId: String!
     ): User! @guest(type: "${user}")
+    userLogout: String! @auth(type: "${user}")
   }
 `;
 
