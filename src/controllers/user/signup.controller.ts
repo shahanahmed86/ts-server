@@ -5,7 +5,7 @@ import { ConflictError, NotFound } from '../../utils/errors.util';
 import { joiValidator } from '../../utils/logics.util';
 import { signupSchema } from '../../validation';
 
-export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { res }) => {
+export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { req, res }) => {
 	await joiValidator(signupSchema, args);
 
 	const userDao = new Dao.User();
@@ -20,6 +20,8 @@ export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { res }
 
 	args.roleId = role.id;
 	const payload = await userDao.signup(args);
+
+	req.session.payload = payload;
 
 	return payload;
 };
