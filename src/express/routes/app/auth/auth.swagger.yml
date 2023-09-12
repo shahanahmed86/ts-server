@@ -23,7 +23,7 @@ paths:
                 email:
                   type: string
                   description: email
-                  example: shahan.ahmed@apify.ai
+                  example: shahan.khaan@gmail.com
                 password:
                   type: string
                   description: password
@@ -108,7 +108,7 @@ paths:
                 email:
                   type: string
                   description: email
-                  example: shahan.ahmed@apify.ai
+                  example: shahan.khaan@gmail.com
                 password:
                   type: string
                   description: password
