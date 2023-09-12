@@ -1,11 +1,11 @@
 import { Request } from 'express';
 import file from '../../library/file.library';
-import { joiValidator } from '../../utils/logics.util';
-import * as validation from '../../validation';
+import { validateRequest } from '../../utils/logics.util';
+import { FileRef } from '../../validations';
 
 export const getImage = async (req: Request) => {
-	const args = Object.assign({}, req.params, req.query);
-	await joiValidator(validation.fileRef, args);
+	const _args = Object.assign({}, req.params, req.query);
+	const args = await validateRequest(FileRef, _args);
 
 	const { filename } = args;
 	const path = file.getFilePath(filename);

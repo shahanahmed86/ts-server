@@ -58,9 +58,11 @@ export const convertUnknownIntoError = (e: unknown): HttpError => {
 	let err;
 
 	if (e instanceof HttpError) err = e;
-	else if (e instanceof Error) err = new ConflictError(e.message);
 	else if (typeof e === 'string' && e) err = new ConflictError(e);
-	else if (e instanceof ZodError) err = new ConflictError(e.message);
+	else if (e instanceof ZodError) {
+		const message = e.errors.map(({ message: m }) => m).join(', ');
+		err = new ConflictError(message);
+	} else if (e instanceof Error) err = new ConflictError(e.message);
 	else err = new InternalError();
 
 	// this will remove inverted commas from an error string
