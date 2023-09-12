@@ -15,7 +15,7 @@ describe('Graphql - User Authentication APIs', function () {
 	it('user signup', async () => {
 		const { body: imageBody } = await uploadImage();
 
-		const { body, header } = await signup({
+		const { body } = await signup({
 			avatar: imageBody.data,
 			firstName: 'Shahan',
 			lastName: 'Ahmed Khan',
@@ -24,15 +24,11 @@ describe('Graphql - User Authentication APIs', function () {
 			email: 'shahan.khaan@gmail.com',
 			password: '123Abc456',
 		});
-		expect(body.data.values).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
-
-		const cookie = getCookieValue(header);
-		await logout(cookie);
+		expect(body.data.values).to.be.a('string');
 	});
 
 	it('user login', async () => {
-		const res = await login('shahan.khaan@gmail.com', 'shahan'); // should fail
+		const res = await login('shahan.khaan@gmail.com', 'fake'); // should fail
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
 		const { body, header } = await login(); // should success

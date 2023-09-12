@@ -90,26 +90,7 @@ export const SIGNUP = `#graphql
       lastName: $lastName
       avatar: $avatar
       phone: $phone
-    ) {
-      avatar
-      createdAt
-      email
-      firstName
-      genderId
-      id
-      lastName
-      phone
-      roleId
-      updatedAt
-      gender {
-        id
-        name
-      }
-      role {
-        id
-        name
-      }
-    }
+    )
   }
 `;
 
