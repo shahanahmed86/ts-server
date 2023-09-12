@@ -4,11 +4,10 @@ import isArray from 'lodash/isArray';
 import isDate from 'lodash/isDate';
 import isObject from 'lodash/isObject';
 import omit from 'lodash/omit';
-import { FormatResponse } from '../@types/api.type';
-import { JoiValidator } from '../@types/library.type';
+import { FormatResponse, UserArgs } from '../@types/api.type';
 import { translate } from '../library/i18n.library';
 import { SHOULD_OMIT_PROPS } from './constants.util';
-import { convertUnknownIntoError } from './errors.util';
+import { ZodValidator } from '../@types/library.type';
 
 export const formatResponse: FormatResponse = (status, message, data) => {
 	return { status, message: translate(message), data: omitProps(data) };
@@ -18,13 +17,13 @@ export const getISODate = (dt: string | Date | number = Date.now()) => new Date(
 
 export const getUniqueId = () => randomUUID();
 
-export const joiValidator: JoiValidator = async (schema, payload) => {
-	try {
-		await schema.validateAsync(payload, { abortEarly: false });
-	} catch (e) {
-		throw convertUnknownIntoError(e);
-	}
-};
+export function validateRequest<T, A>(validators: ZodValidator<T>, args: A) {
+	return validators.parseAsync(args) as Promise<A>;
+}
+
+export function notVerifiedUser<T>(user: T extends UserArgs ? T : UserArgs): boolean {
+	return !user.emailVerified && !user.phoneVerified;
+}
 
 export function omitProps<T>(payload: T, props: string[] = SHOULD_OMIT_PROPS): T {
 	if (isArray(payload)) {

@@ -2,11 +2,11 @@ import { AuthPayload, LoginArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
 import { NotAuthenticated, NotAuthorized } from '../../utils/errors.util';
-import { joiValidator } from '../../utils/logics.util';
-import { loginSchema } from '../../validation';
+import { notVerifiedUser, validateRequest } from '../../utils/logics.util';
+import { Login } from '../../validations';
 
-export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { req, res }) => {
-	await joiValidator(loginSchema, args);
+export const login: Controller<AuthPayload, LoginArgs> = async (_, _args, { req, res }) => {
+	const args = await validateRequest(Login, _args);
 
 	const userDao = new Dao.User();
 	const user = await userDao.findOne({
@@ -21,6 +21,9 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, args, { req, 
 
 	const isMatched = user.comparePassword(args.password);
 	if (!isMatched) throw new NotAuthenticated();
+
+	const notVerified = notVerifiedUser(user);
+	if (notVerified) throw new NotAuthorized('auth.verifyEmail');
 
 	const payload = { userId: user.id, role: user.role!.name };
 

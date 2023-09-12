@@ -1,9 +1,8 @@
-import { ObjectSchema } from 'joi';
-import { Role } from './common.type';
+import { AnyZodObject } from 'zod';
 
 export type SessionPayload = {
 	userId: string;
-	role: Role;
+	role: string;
 };
 
-export type JoiValidator = <T>(schema: ObjectSchema<T>, payload: T) => Promise<void>;
+export type ZodValidator<T> = T extends AnyZodObject ? T : AnyZodObject;

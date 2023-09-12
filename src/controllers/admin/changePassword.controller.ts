@@ -2,14 +2,13 @@ import { ChangePasswordArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
 import { hashSync } from '../../library/bcrypt.library';
-import { translate } from '../../library/i18n.library';
 import { Admin } from '../../typeorm/entities/admin.entity';
 import { ConflictError } from '../../utils/errors.util';
-import { joiValidator } from '../../utils/logics.util';
-import { changePasswordSchema } from '../../validation';
+import { validateRequest } from '../../utils/logics.util';
+import { ChangePassword } from '../../validations';
 
-export const changePassword: Controller<string, ChangePasswordArgs> = async (_, args, { res }) => {
-	await joiValidator(changePasswordSchema, args);
+export const changePassword: Controller<string, ChangePasswordArgs> = async (_, _args, { res }) => {
+	const args = await validateRequest(ChangePassword, _args);
 
 	const admin = res.locals.user as Admin;
 
@@ -22,5 +21,5 @@ export const changePassword: Controller<string, ChangePasswordArgs> = async (_, 
 	const isUpdated = await adminDao.update(admin.id, { password });
 	if (!isUpdated) throw new ConflictError('auth.changePasswordFailed');
 
-	return translate('auth.changePassword');
+	return 'auth.changePassword';
 };

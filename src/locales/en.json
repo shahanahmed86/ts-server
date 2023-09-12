@@ -23,6 +23,7 @@
 		"requiredLogin": "You must be logged in!",
 		"verifyEmail": "Please verify your email address first!",
 		"oldPasswordMismatched": "Old password mismatched!",
+		"repeatedPassword": "New password cannot be same as the old one!",
 		"insufficientPriviledge": "A user with '{{role}}' role cannot login from here!",
 		"userExists": "User already exists with this email address!"
 	},

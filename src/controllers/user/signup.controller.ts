@@ -1,12 +1,12 @@
-import { AuthPayload, UserArgs } from '../../@types/api.type';
+import { UserArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
 import { ConflictError, NotFound } from '../../utils/errors.util';
-import { joiValidator } from '../../utils/logics.util';
-import { signupSchema } from '../../validation';
+import { validateRequest } from '../../utils/logics.util';
+import { SignUp } from '../../validations';
 
-export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { req, res }) => {
-	await joiValidator(signupSchema, args);
+export const signup: Controller<string, UserArgs> = async (_, _args, { res }) => {
+	const args = await validateRequest(SignUp, _args);
 
 	const userDao = new Dao.User();
 
@@ -19,9 +19,8 @@ export const signup: Controller<AuthPayload, UserArgs> = async (_, args, { req, 
 	if (!role) throw new NotFound(['common.notFound', 'Role']);
 
 	args.roleId = role.id;
-	const payload = await userDao.signup(args);
 
-	req.session.payload = payload;
+	await userDao.signup(args);
 
-	return payload;
+	return 'auth.signup';
 };
