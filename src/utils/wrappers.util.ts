@@ -2,6 +2,7 @@ import { GraphQLError } from 'graphql';
 import { ContextFunction, Controller, ControllerFunction } from '../@types/wrapper.type';
 import { convertUnknownIntoError } from './errors.util';
 import { formatResponse } from './logics.util';
+import { translate } from '../library/i18n.library';
 
 export function restWrapper<T, S>(
 	controller: Controller<T, S>,
@@ -28,7 +29,8 @@ export function graphqlWrapper<T, S>(controller: Controller<T, S>): ControllerFu
 	return async (...args) => {
 		try {
 			const result = await controller(...args);
-			return result;
+
+			return (typeof result === 'string' ? translate(result) : result) as T;
 		} catch (e) {
 			const error = convertUnknownIntoError(e);
 			throw new GraphQLError(error.message, { extensions: { code: error.status } });
