@@ -35,7 +35,7 @@ const authSchema = `#graphql
       avatar: String
       phone: String
       genderId: String!
-    ): User! @guest(type: "${user}")
+    ): String! @guest(type: "${user}")
     userLogout: String! @auth(type: "${user}")
   }
 `;
