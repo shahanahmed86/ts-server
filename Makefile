@@ -35,11 +35,6 @@ run-test-down:
 	-p app-test \
 	-f docker-compose.yml -f docker-compose.test.yml \
 	down -v
-run-test:
-	NODE_ENV="test" \
-	DB_HOST="localhost" DB_PORT="5433" \
-	REDIS_HOST="localhost" REDIS_PORT="6380" \
-	npm run exec-tests --ignore-scripts
 
 # production
 run-prod-up:

@@ -10,7 +10,7 @@ const { expect } = chai;
 
 describe('Graphql - Admin Authentication APIs', function () {
 	it('admin login', async () => {
-		const res = await login('admin@accounts.com.pk', 'shahan'); // should fail
+		const res = await login('admin@accounts.com.pk', 'fake'); // should fail
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
 		const { body, header } = await login(); // should success

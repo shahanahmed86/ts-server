@@ -7,7 +7,11 @@ const { expect } = chai;
 
 describe('RESTful - Admin Authentication APIs', function () {
 	it('admin login', async () => {
-		let res = await login('shahan', 'shahan'); // should fail
+		let res = await login('invalid-email', 'fake'); // should fail
+		expect(res.error).not.to.be.false;
+		expect(res.status).to.be.equal(409);
+
+		res = await login('fake@fake.com', 'fake'); // should fail
 		expect(res.error).not.to.be.false;
 		expect(res.status).to.be.equal(401);
 

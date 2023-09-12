@@ -26,15 +26,15 @@ describe('RESTful - App Authentication APIs', function () {
 		const res = await signup(payload); // should success
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(201);
-		expect(res.body.data).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data).not.to.have.property(prop));
-
-		const cookie = getCookieValue(res.header);
-		await logout(cookie);
+		expect(res.body.data).to.be.a('string');
 	});
 
 	it('app login', async () => {
-		let res = await login('shahan', 'shahan'); // should fail
+		let res = await login('fake', 'fake'); // should fail
+		expect(res.error).not.to.be.false;
+		expect(res.status).to.be.equal(409);
+
+		res = await login('fake@fake.com', 'fake'); // should fail
 		expect(res.error).not.to.be.false;
 		expect(res.status).to.be.equal(401);
 
