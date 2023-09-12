@@ -1,20 +1,16 @@
 import {
 	AuthController,
 	GuestController,
-	HasSession as HasSession,
+	HasSession,
 	ValidateToken,
 } from '../../@types/middleware.type';
 import * as Dao from '../../dao';
-import { User as UserDao, Admin as AdminDao } from '../../dao';
+import { Admin as AdminDao, User as UserDao } from '../../dao';
 import { decodePayload } from '../../library/jwt.library';
 import { User } from '../../typeorm/entities/user.entity';
 import { ONE_SECOND } from '../../utils/constants.util';
-import {
-	BadRequest,
-	ConflictError,
-	NotAuthenticated,
-	NotAuthorized,
-} from '../../utils/errors.util';
+import { BadRequest, NotAuthenticated, NotAuthorized } from '../../utils/errors.util';
+import { notVerifiedUser } from '../../utils/logics.util';
 
 const hasSession: HasSession = (req) => req.session.payload;
 
@@ -54,8 +50,8 @@ export const authController: AuthController = async (key, req, res) => {
 	});
 	if (!user) throw new NotAuthenticated();
 
-	const isUnverifiedUser = user instanceof User && !user.emailVerified;
-	if (isUnverifiedUser) throw new ConflictError('auth.verifyEmail');
+	const isUnverifiedUser = user instanceof User && notVerifiedUser(user);
+	if (isUnverifiedUser) throw new NotAuthorized('auth.verifyEmail');
 
 	res.locals.user = user;
 };
