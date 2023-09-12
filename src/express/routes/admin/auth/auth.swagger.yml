@@ -31,39 +31,6 @@ paths:
       responses:
         200:
           description: Returns token and admin's payload
-    put:
-      summary: Update Profile
-      tags: [Admin Auth]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                avatar:
-                  type: string
-                  description: avatar
-                  example: temp/uuid-filename.ext
-                firstName:
-                  type: string
-                  description: first name
-                  example: Shahan
-                lastName:
-                  type: string
-                  description: last name
-                  example: Ahmed
-                phone:
-                  type: string
-                  description: phone
-                  example: '+923331234563'
-                genderId:
-                  type: string
-                  description: gender Id
-                  example: 04521c7b-a128-4f5f-bfb2-96053c0a31b0
-      responses:
-        200:
-          description: Returns update profile success message
     delete:
       summary: Log out
       tags: [Admin Auth]
