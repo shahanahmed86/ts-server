@@ -1,5 +1,5 @@
 import 'express-session';
-import { SessionPayload } from '../common.type';
+import { SessionPayload } from '../library.type';
 
 declare module 'express-session' {
 	interface Session {
