@@ -17,7 +17,7 @@ import { SIZE_LIMIT } from '../utils/constants.util';
 import { errorHandler, notFound } from './middleware/error.middleware';
 import routes from './routes';
 
-const { inProd } = configs.app;
+const { inProd, inTest } = configs.app;
 
 const app = express();
 
@@ -26,14 +26,16 @@ app.use(express.urlencoded({ extended: true, limit: SIZE_LIMIT }));
 app.use(express.json({ limit: SIZE_LIMIT }));
 app.use(cookieParser());
 
-// helmet
-app.use(helmet());
+if (!inTest) {
+	// helmet
+	app.use(helmet());
 
-// too-busy
-app.use(tooBusy);
+	// too-busy
+	app.use(tooBusy);
 
-// express-rate-limit
-app.use(rateLimiter);
+	// express-rate-limit
+	app.use(rateLimiter);
+}
 
 // cors
 app.use(cors());

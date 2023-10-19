@@ -13,6 +13,7 @@ export const Configs = z.object({
 			.transform((arg) => parseInt(arg, 10))
 			.default('7000'),
 		inProd: z.boolean().default(false),
+		inTest: z.boolean().default(false),
 		baseUrl: z.string().url('Invalid Base URL').default('http://localhost:7000'),
 	}),
 	jwt: z.object({
@@ -79,6 +80,7 @@ const allEnvs = {
 		host: process.env.APP_HOST,
 		port: process.env.APP_PORT,
 		inProd: process.env.NODE_ENV === 'production',
+		inTest: process.env.NODE_ENV === 'test',
 		baseUrl: `${process.env.APP_PROTOCOL}//${process.env.APP_HOST}`,
 	},
 	jwt: {
