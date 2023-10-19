@@ -6,7 +6,7 @@ import { USER_TABLE } from '../typeorm/constants';
 import { User } from '../typeorm/entities/user.entity';
 import BaseDao from './base.dao';
 
-const { env } = configs.app;
+const { inTest } = configs.app;
 
 class UserDao extends BaseDao<User> {
 	constructor() {
@@ -19,7 +19,7 @@ class UserDao extends BaseDao<User> {
 		payload.password = hashSync(password!);
 		if (avatar) payload.avatar = await file.moveImageFromTmp(avatar);
 
-		if (env === 'test') payload.emailVerified = true;
+		if (inTest) payload.emailVerified = true;
 
 		const saved = await this.model.save(payload);
 		const user = await this.findOne({
