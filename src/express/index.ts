@@ -1,17 +1,21 @@
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
+import helmet from 'helmet';
 import path from 'path';
 import configs from '../config';
 import scheduledJobs from '../library/cron.library';
 import { setLanguage } from '../library/i18n.library';
 import logger from '../library/morgan.library';
+import rateLimiter from '../library/rate-limiter.library';
+import cacheService from '../library/session.library';
 import swagger from '../library/swagger.library';
+import tooBusy from '../library/toobusy.library';
 import { SIZE_LIMIT } from '../utils/constants.util';
 import { errorHandler, notFound } from './middleware/error.middleware';
 import routes from './routes';
-import cacheService from '../library/session.library';
 
 const { inProd } = configs.app;
 
@@ -22,11 +26,26 @@ app.use(express.urlencoded({ extended: true, limit: SIZE_LIMIT }));
 app.use(express.json({ limit: SIZE_LIMIT }));
 app.use(cookieParser());
 
+// helmet
+app.use(helmet());
+
+// too-busy
+app.use(tooBusy);
+
+// express-rate-limit
+app.use(rateLimiter);
+
 // cors
 app.use(cors());
 
+// compression
+app.use(compression());
+
 // enable proxy if it's in prod.
-if (inProd) app.set('trust proxy', 1);
+if (inProd) {
+	const NUMBER_OF_PROXY = 1;
+	app.set('trust proxy', NUMBER_OF_PROXY);
+}
 
 // cache
 cacheService(app);

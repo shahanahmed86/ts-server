@@ -5,7 +5,9 @@
 		"conflict": "Conflict Error!",
 		"notAuthorized": "Not Authorized!",
 		"notAuthenticated": "Not Authenticated!",
+		"serverBusy": "Server is busy!",
 		"internalError": "Internal server error!",
+		"tooManyRequests": "You have exceeded the 20 requests in 15 minutes limit!",
 		"invalidLanguage": "Invalid language!"
 	},
 	"auth": {

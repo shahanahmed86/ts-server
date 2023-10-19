@@ -54,6 +54,18 @@ export class InternalError extends HttpError {
 	}
 }
 
+export class ServerBusyError extends HttpError {
+	constructor(message: string | string[] = 'error.serverBusy') {
+		super(503, message);
+	}
+}
+
+export class TooManyRequest extends HttpError {
+	constructor(message: string | string[] = 'error.tooManyRequests') {
+		super(429, message);
+	}
+}
+
 export const convertUnknownIntoError = (e: unknown): HttpError => {
 	let err;
 
