@@ -1,7 +1,7 @@
 import { UserArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
-import { User } from '../../typeorm/entities/user.entity';
+import { User } from '../../database/schemas/user.schema';
 import { ConflictError } from '../../utils/errors.util';
 import { validateRequest } from '../../utils/logics.util';
 import { UpdateProfile } from '../../validations';

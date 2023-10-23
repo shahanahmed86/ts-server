@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { existsSync, rmSync } from 'fs';
 import cron from 'node-cron';
 import configs from '../config';
 import { TEMP_FOLDER_PATH } from '../utils/constants.util';
@@ -12,10 +12,10 @@ function scheduledJobs(): void {
 function removeTempFolder() {
 	console.log(`removing temp folder at ${new Date().toISOString()}`);
 
-	const isTempExists = fs.existsSync(TEMP_FOLDER_PATH);
+	const isTempExists = existsSync(TEMP_FOLDER_PATH);
 	if (!isTempExists) return;
 
-	fs.rmSync(TEMP_FOLDER_PATH, { recursive: true });
+	rmSync(TEMP_FOLDER_PATH, { recursive: true });
 }
 
 export default scheduledJobs;

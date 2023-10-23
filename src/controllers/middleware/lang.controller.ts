@@ -4,6 +4,7 @@ import { LANGUAGES, LANGUAGE_HEADER } from '../../utils/constants.util';
 import { BadRequest } from '../../utils/errors.util';
 
 export const checkLanguage = (req: Request, res: Response) => {
+	// eslint-disable-next-line security/detect-object-injection
 	const lang = (req.get(LANGUAGE_HEADER) || req.headers[LANGUAGE_HEADER] || 'en').toString();
 	const isValidLang = LANGUAGES.includes(lang);
 

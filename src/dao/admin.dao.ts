@@ -1,10 +1,10 @@
-import { ADMIN_TABLE } from '../typeorm/constants';
-import { Admin } from '../typeorm/entities/admin.entity';
+import { ADMIN_TABLE } from '../database/constants';
+import { AdminModel } from '../database/schemas/admin.schema';
 import BaseDao from './base.dao';
 
 class AdminDao extends BaseDao<Admin> {
 	constructor() {
-		super(Admin, ADMIN_TABLE);
+		super(AdminModel, ADMIN_TABLE);
 	}
 }
 

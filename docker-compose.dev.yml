@@ -40,25 +40,34 @@ services:
     tty: true
     restart: unless-stopped
     volumes:
-      - db_dev:/var/lib/postgresql/data
+      - db_dev:/data/db
+      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+      - ./dump:/dump
     env_file:
       - .env
     environment:
-      - POSTGRES_PASSWORD=$DB_PASS
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_DB=$DB_NAME
+      - MONGO_INITDB_ROOT_USERNAME=$DB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE=$DB_NAME
+      - MONGO_USERNAME=$DB_USER
+      - MONGO_PASSWORD=$DB_PASSWORD
     ports:
-      - '5433:5432'
+      - '27017:27017'
 
-  adminer:
-    tty: true
+  db-gui:
+    image: mongoclient/mongoclient:4.0.0
     restart: unless-stopped
-    image: adminer:4.8.1-standalone
-    ports:
-      - 8080:8080
     depends_on:
       db:
         condition: service_healthy
+    ports:
+      - 8080:3000
+    env_file:
+      - .env
+    environment:
+      MONGO_URL: mongodb://$MONGO_INITDB_ROOT_USERNAME:$MONGO_INITDB_ROOT_PASSWORD@db:27017/$MONGO_INITDB_DATABASE?ssl=false
+    volumes:
+      - db_gui_data:/data/db
     networks:
       - app
 
@@ -67,7 +76,7 @@ services:
     tty: true
     restart: unless-stopped
     ports:
-      - 6380:6379
+      - 6379:6379
     volumes:
       - cache_dev:/data
     env_file:
@@ -75,6 +84,8 @@ services:
 
 volumes:
   db_dev:
+    driver: local
+  db_gui_data:
     driver: local
   cache_dev:
     driver: local

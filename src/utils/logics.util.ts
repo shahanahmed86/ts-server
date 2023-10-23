@@ -25,7 +25,7 @@ export function notVerifiedUser<T>(user: T extends UserArgs ? T : UserArgs): boo
 	return !user.emailVerified && !user.phoneVerified;
 }
 
-export function omitProps<T>(payload: T, props: string[] = SHOULD_OMIT_PROPS): T {
+export function omitProps<T extends object>(payload: T, props: string[] = SHOULD_OMIT_PROPS): T {
 	if (isArray(payload)) {
 		for (let i = 0; i < payload.length; i++) {
 			const value = payload[i];

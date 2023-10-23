@@ -1,5 +1,4 @@
 import {
-	DeepPartial,
 	EntityTarget,
 	FindManyOptions,
 	FindOneOptions,
@@ -9,12 +8,12 @@ import {
 	Repository,
 } from 'typeorm';
 import { Paginated } from '../@types/api.type';
-import AppDataSource from '../typeorm';
-import { Base } from '../typeorm/entities/base.entity';
+import AppDataSource from '../database';
+import { BaseSchema } from '../database/schemas/base.schema';
 import { CHUNK_SIZE, LIMIT, OFFSET } from '../utils/constants.util';
 import { getISODate } from '../utils/logics.util';
 
-type BaseArgs = DeepPartial<Base>;
+type BaseArgs = Partial<BaseSchema>;
 
 class BaseDao<BaseEntity extends ObjectLiteral> {
 	model: Repository<BaseEntity>;

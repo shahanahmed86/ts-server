@@ -9,7 +9,7 @@ import configs from './config';
 import app from './express';
 import graphQLSchema from './graphql';
 import directives from './graphql/directives';
-import AppDataSource from './typeorm';
+import AppDataSource from './database';
 
 const { port, baseUrl, env } = configs.app;
 
@@ -41,7 +41,7 @@ const server = new ApolloServer({
 	],
 });
 
-AppDataSource.initialize()
+AppDataSource()
 	.then(async () => {
 		await server.start();
 

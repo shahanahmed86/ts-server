@@ -1,5 +1,5 @@
 import { DeepPartial } from 'typeorm';
-import { Gender } from '../entities/gender.entity';
+import { Gender } from '../schemas/gender.schema';
 
 export const GENDER_TABLE = 'gender';
 export const GENDER_TABLE_INDEXED_COLUMNS = ['name'];

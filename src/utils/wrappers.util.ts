@@ -16,7 +16,7 @@ export function restWrapper<T, S>(
 			const context = { req, res, next };
 
 			const payload = await controller(root, args, context);
-			const result = formatResponse(status, message, payload);
+			const result = formatResponse(status, message, payload as object);
 			res.status(result.status).send(result);
 		} catch (e) {
 			const error = convertUnknownIntoError(e);

@@ -1,22 +1,25 @@
-import { DeepPartial } from 'typeorm';
-import { Admin } from '../typeorm/entities/admin.entity';
-import { Gender } from '../typeorm/entities/gender.entity';
-import { User } from '../typeorm/entities/user.entity';
+import { AdminSchema } from '../database/schemas/admin.schema';
+import { GenderSchema } from '../database/schemas/gender.schema';
+import { UserSchema } from '../database/schemas/user.schema';
 import { Result } from './wrapper.type';
 
-export type FormatResponse = <T>(status: number, message: string, data: T) => Result<T>;
+export type FormatResponse = <T extends object>(
+	status: number,
+	message: string,
+	data: T,
+) => Result<T>;
 
-export type AuthPayload = User | Admin;
+export type AuthPayload = UserSchema | AdminSchema;
 
 export type ImageParams = {
 	filename: string;
 };
 
-export type UserArgs = DeepPartial<User>;
+export type UserArgs = Partial<UserSchema>;
 
-export type AdminArgs = DeepPartial<Admin>;
+export type AdminArgs = Partial<AdminSchema>;
 
-export type GenderArgs = DeepPartial<Gender>;
+export type GenderArgs = Partial<GenderSchema>;
 
 export type Paginated<T> = {
 	count: number;

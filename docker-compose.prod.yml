@@ -3,15 +3,23 @@ version: '3.7'
 services:
   db:
     volumes:
-      - db_prod:/var/lib/postgresql/data
+      - db_prod:/data/db
+      - ./dump:/dump
     secrets:
-      - DB_USER
-      - DB_PASS
+      - DB_ROOT_USERNAME
+      - DB_ROOT_PASSWORD
       - DB_NAME
+      - DB_USERNAME
+      - DB_PASSWORD
     environment:
-      - POSTGRES_PASSWORD_FILE=/run/secrets/DB_PASS
-      - POSTGRES_USER_FILE=/run/secrets/DB_USER
-      - POSTGRES_DB_FILE=/run/secrets/DB_NAME
+      - MONGO_INITDB_ROOT_USERNAME=/run/secrets/DB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=/run/secrets/DB_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE=/run/secrets/DB_NAME
+      - MONGO_USERNAME=/run/secrets/DB_USER
+      - MONGO_PASSWORD=/run/secrets/DB_PASSWORD
+    configs:
+      - source: MONGO_CONFIG
+        target: /docker-entrypoint-initdb.d/mongo-init.sh:ro
 
   cache:
     command:
@@ -35,18 +43,29 @@ volumes:
     driver: local
 
 secrets:
-  DB_USER:
-    file: ./secrets/DB_USER
-    name: DB_USER_20230209113700
-  DB_PASS:
-    file: ./secrets/DB_PASS
-    name: DB_PASS_20230209113700
+  DB_ROOT_USER:
+    file: ./secrets/DB_ROOT_USER
+    name: DB_ROOT_USER_20231023T163900
+  DB_ROOT_PASSWORD:
+    file: ./secrets/DB_ROOT_PASSWORD
+    name: DB_ROOT_PASSWORD_20231023T163900
   DB_NAME:
     file: ./secrets/DB_NAME
-    name: DB_NAME_20230209113700
+    name: DB_NAME_20231023T163900
+  DB_USER:
+    file: ./secrets/DB_USER
+    name: DB_USER_20231023T163900
+  DB_PASSWORD:
+    file: ./secrets/DB_PASSWORD
+    name: DB_PASSWORD_20231023T163900
   REDIS_PASSWORD:
     file: ./secrets/REDIS_PASSWORD
-    name: REDIS_PASSWORD_20230209113700
+    name: REDIS_PASSWORD_20231023T163900
+
+configs:
+  MONGO_CONFIG:
+    file: ./mongo-init.sh
+    name: MONGO_CONFIG_20230209113700
 
 networks:
   app:

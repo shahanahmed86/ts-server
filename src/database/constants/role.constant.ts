@@ -1,5 +1,5 @@
 import { DeepPartial } from 'typeorm';
-import { Role } from '../entities/role.entity';
+import { Role } from '../schemas/role.schema';
 
 export const ROLE_TABLE = 'role';
 export const ROLE_TABLE_INDEXED_COLUMNS = ['name'];

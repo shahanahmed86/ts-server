@@ -2,8 +2,8 @@ import { UserArgs } from '../@types/api.type';
 import configs from '../config';
 import { hashSync } from '../library/bcrypt.library';
 import file from '../library/file.library';
-import { USER_TABLE } from '../typeorm/constants';
-import { User } from '../typeorm/entities/user.entity';
+import { USER_TABLE } from '../database/constants';
+import { User } from '../database/schemas/user.schema';
 import BaseDao from './base.dao';
 
 const { inTest } = configs.app;

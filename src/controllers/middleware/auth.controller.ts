@@ -7,7 +7,7 @@ import {
 import * as Dao from '../../dao';
 import { Admin as AdminDao, User as UserDao } from '../../dao';
 import { decodePayload } from '../../library/jwt.library';
-import { User } from '../../typeorm/entities/user.entity';
+import { User } from '../../database/schemas/user.schema';
 import { ONE_SECOND } from '../../utils/constants.util';
 import { BadRequest, NotAuthenticated, NotAuthorized } from '../../utils/errors.util';
 import { notVerifiedUser } from '../../utils/logics.util';

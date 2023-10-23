@@ -1,5 +1,5 @@
-import { ROLE_TABLE } from '../typeorm/constants';
-import { Role } from '../typeorm/entities/role.entity';
+import { ROLE_TABLE } from '../database/constants';
+import { Role } from '../database/schemas/role.schema';
 import BaseDao from './base.dao';
 
 class RoleDao extends BaseDao<Role> {
