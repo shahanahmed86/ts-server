@@ -1,10 +1,10 @@
 import { ADMIN_TABLE } from '../database/constants';
-import { AdminModel } from '../database/schemas/admin.schema';
+import { Admin, AdminDocument } from '../database/schemas/admin.schema';
 import BaseDao from './base.dao';
 
-class AdminDao extends BaseDao<Admin> {
+class AdminDao extends BaseDao<AdminDocument> {
 	constructor() {
-		super(AdminModel, ADMIN_TABLE);
+		super(Admin, ADMIN_TABLE);
 	}
 }
 

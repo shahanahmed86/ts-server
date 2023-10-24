@@ -1,13 +1,13 @@
 import 'express';
-import { AdminSchema } from '../../database/schemas/admin.schema';
-import { UserSchema } from '../../database/schemas/user.schema';
+import { AdminDocument } from '../../database/schemas/admin.schema';
+import { UserDocument } from '../../database/schemas/user.schema';
 import { HttpError } from '../../utils/errors.util';
 import { Role } from '../common.type';
 
 declare global {
 	namespace Express {
 		interface Locals {
-			user?: AdminSchema | UserSchema | null;
+			user?: AdminDocument | UserDocument | null;
 			error?: HttpError | null;
 			role?: Role;
 		}

@@ -1,21 +1,18 @@
+import { Model, Schema, model } from 'mongoose';
 import { ADMIN_TABLE, GENDER_TABLE } from '../constants';
-import { AdminSchema } from './admin.schema';
-import { BaseSchema } from './base.schema';
-import { UserSchema } from './user.schema';
-import { Schema, model } from 'mongoose';
+import { AdminDocument } from './admin.schema';
+import { BaseDocument } from './base.schema';
+import { UserDocument } from './user.schema';
 
-export interface GenderSchema extends BaseSchema {
+export interface GenderDocument extends BaseDocument {
 	name: string;
-	deletedBy?: AdminSchema | null;
-	users: UserSchema[];
+	deletedBy?: AdminDocument | null;
+	users: UserDocument[];
 }
 
-const genderSchema = new Schema<GenderSchema>({
-	id: {
-		type: Schema.Types.ObjectId,
-		index: true,
-		required: true,
-	},
+export type GenderModelType = Model<GenderDocument>;
+
+const genderSchema = new Schema<GenderDocument, GenderModelType>({
 	name: {
 		type: String,
 		index: true,
@@ -40,6 +37,6 @@ const genderSchema = new Schema<GenderSchema>({
 	},
 });
 
-export const GenderModel = model<GenderSchema>(GENDER_TABLE, genderSchema);
+export const Gender = model<GenderDocument>(GENDER_TABLE, genderSchema);
 
-export default GenderModel;
+export default Gender;

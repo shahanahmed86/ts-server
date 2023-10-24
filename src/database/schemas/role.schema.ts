@@ -1,21 +1,18 @@
-import { Schema, model } from 'mongoose';
+import { Model, Schema, model } from 'mongoose';
 import { ADMIN_TABLE, ROLE_TABLE } from '../constants';
-import { AdminSchema } from './admin.schema';
-import { BaseSchema } from './base.schema';
-import { UserSchema } from './user.schema';
+import { AdminDocument } from './admin.schema';
+import { BaseDocument } from './base.schema';
+import { UserDocument } from './user.schema';
 
-export interface RoleSchema extends BaseSchema {
+export interface RoleDocument extends BaseDocument {
 	name: string;
-	deletedBy?: AdminSchema | null;
-	users: UserSchema[];
+	deletedBy?: AdminDocument | null;
+	users: UserDocument[];
 }
 
-const roleSchema = new Schema<RoleSchema>({
-	id: {
-		type: Schema.Types.ObjectId,
-		index: true,
-		required: true,
-	},
+export type RoleModelType = Model<RoleDocument>;
+
+const roleSchema = new Schema<RoleDocument, RoleModelType>({
 	name: {
 		type: String,
 		index: true,
@@ -40,6 +37,6 @@ const roleSchema = new Schema<RoleSchema>({
 	},
 });
 
-export const RoleModel = model<RoleSchema>(ROLE_TABLE, roleSchema);
+export const Role = model<RoleDocument>(ROLE_TABLE, roleSchema);
 
-export default RoleModel;
+export default Role;

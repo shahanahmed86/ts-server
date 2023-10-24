@@ -28,9 +28,9 @@ export const Configs = z.object({
 		host: z.string().min(1).default('db'),
 		port: z
 			.string()
-			.length(4)
+			.length(5)
 			.transform((arg) => parseInt(arg, 10))
-			.default('5432'),
+			.default('27017'),
 		rootUsername: z.string().min(1).default('root'),
 		rootPassword: z.string().min(1).default('example'),
 		username: z.string().min(1).default('admin'),
@@ -95,7 +95,7 @@ const allEnvs = {
 		rootUser: process.env.DB_ROOT_USERNAME,
 		rootPassword: process.env.DB_ROOT_PASSWORD,
 		user: process.env.DB_USER,
-		pass: process.env.DB_PASS,
+		pass: process.env.DB_PASSWORD,
 		name: process.env.DB_NAME,
 		logging: process.env.NODE_ENV !== 'test',
 	},

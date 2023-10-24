@@ -1,10 +1,10 @@
-import { Types } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
-export interface BaseSchema {
-	id: Types.ObjectId;
-	createdAt: Date;
-	updatedAt: Date;
-	deletedAt?: Date | null;
+export interface BaseDocument extends Document {
+	_id: Types.ObjectId;
+	createdAt: Date | string;
+	updatedAt: Date | string;
+	deletedAt?: Date | string | null;
 }
 
-export default BaseSchema;
+export default BaseDocument;

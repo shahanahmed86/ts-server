@@ -4,7 +4,7 @@ import { UserArgs } from '../../../src/@types/api.type';
 import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
 import { signup, login, logout, loggedIn, changePassword, updateProfile } from './user.helper';
 import { uploadImage } from '../../images/images.helper';
-import { GENDER_DATA } from '../../../src/typeorm/constants/gender.constant';
+// import { GENDER_DATA } from '../../../src/database/constants/gender.constant';
 import { deleteUsers, getCookieValue } from '../../helper';
 
 chai.use(chaiHttp);
@@ -19,7 +19,7 @@ describe('Graphql - User Authentication APIs', function () {
 			avatar: imageBody.data,
 			firstName: 'Shahan',
 			lastName: 'Ahmed Khan',
-			genderId: GENDER_DATA[0]!.id!,
+			// genderId: GENDER_DATA[0]!.id!, // TODO need to change it
 			phone: '+923332122588',
 			email: 'shahan.khaan@gmail.com',
 			password: '123Abc456',
@@ -81,7 +81,7 @@ describe('Graphql - User Authentication APIs', function () {
 			lastName: 'last name',
 			avatar: imageBody.data,
 			phone: '+923362122588',
-			genderId: GENDER_DATA.at(-1)!.id!,
+			// genderId: GENDER_DATA.at(-1)!.id!, // TODO need to change it
 		};
 		res = await updateProfile(PAYLOAD, cookie);
 		expect(res.body.data.values).to.be.a('string');

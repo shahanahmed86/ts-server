@@ -1,6 +1,7 @@
-import { GenderModel as Gender } from './gender.schema';
-import { RoleModel as Role } from './role.schema';
-import { AdminModel as Admin } from './admin.schema';
-import { UserModel as User } from './user.schema';
+export * from './gender.schema';
 
-export default [Admin, User, Role, Gender];
+export * from './role.schema';
+
+export * from './admin.schema';
+
+export * from './user.schema';

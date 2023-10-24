@@ -35,9 +35,6 @@ npm exec init -- -FY
 --yes || -Y # to skip question and go with default options
 --force-reinstall || -F # to reinstall
 
-# make a docker image, you can call multiple make script like this
-make create-server-image
-
 # to rebuild the image
 make run-dev-up-rebuild
 
@@ -57,35 +54,26 @@ make run-prod-down # end
 # execute bash inside of the container
 docker exec -it <container_name> bash
 
-# migrations can only run in development environment
-# because start script has a pre script that run migration for it
-# copy the DATABASE_URL from your secrets or .env file and
-# paste the url and replace the @<host> with @localhost
-# for example:
-DB_HOST="localhost" DB_PORT=5433 npm run typeorm:up
-# or replace the run-migration value in the Makefile like above and run
-make run-typeorm:up
-
 # to run test cases while development run like:
 DB_HOST="localhost" npm run --ignore-scripts exec-tests
 # or replace the run-test value in the Makefile like above and run
 make run-test
 ```
 
-## psql
+## mongo
 
 ```sh
-# execute bash inside of the container
-docker exec -it <container_name> bash
-
-# execute  open psql
-docker exec -it <container_name> psql --username=<user> -W --host=<host> --port=<port> <name>
-
-# <name> is the database name
-
+# docker
+docker exec -it {{container_name}} mongo -u {{username}} -p {{password}} {{database}}
 # flags
 -it # for interactive
--W  # force password prompt (should happen automatically)
+-u # for username
+-p # password
+auth # is the name of database
+
+# mongo terminal commands
+db.users.find({}).pretty()
+db.users.deleteMany({})
 ```
 
 ## redis

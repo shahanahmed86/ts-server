@@ -1,28 +1,27 @@
-import { Schema, model } from 'mongoose';
+import { Model, Schema, Types, model } from 'mongoose';
+import { compare } from '../../library/bcrypt.library';
 import { ADMIN_TABLE, GENDER_TABLE, ROLE_TABLE, USER_TABLE } from '../constants';
-import { BaseSchema } from './base.schema';
-import { GenderSchema } from './gender.schema';
-import { RoleSchema } from './role.schema';
-import { UserSchema } from './user.schema';
+import { BaseDocument } from './base.schema';
+import { GenderDocument } from './gender.schema';
+import { RoleDocument } from './role.schema';
+import { UserDocument } from './user.schema';
 
-export interface AdminSchema extends BaseSchema {
+export interface AdminDocument extends BaseDocument {
 	email: string;
 	password: string;
 	isSuper: boolean;
-	role: RoleSchema;
-	deletedBy?: AdminSchema | null;
-	deletedAdmins: AdminSchema[];
-	deletedRoles: RoleSchema[];
-	deletedGenders: GenderSchema[];
-	deletedUsers: UserSchema[];
+	role: Types.ObjectId | RoleDocument;
+	deletedBy?: AdminDocument | null;
+	deletedAdmins: AdminDocument[];
+	deletedRoles: RoleDocument[];
+	deletedGenders: GenderDocument[];
+	deletedUsers: UserDocument[];
+	matchPassword: (password: string) => Promise<boolean>;
 }
 
-const adminSchema = new Schema<AdminSchema>({
-	id: {
-		type: Schema.Types.ObjectId,
-		index: true,
-		required: true,
-	},
+export type AdminModelType = Model<AdminDocument>;
+
+const adminSchema = new Schema<AdminDocument, AdminModelType>({
 	email: {
 		type: String,
 		index: true,
@@ -37,30 +36,6 @@ const adminSchema = new Schema<AdminSchema>({
 		required: false,
 		default: false,
 	},
-	role: {
-		type: Schema.Types.ObjectId,
-		index: true,
-		ref: ROLE_TABLE,
-		required: true,
-	},
-	deletedRoles: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: ROLE_TABLE,
-		},
-	],
-	deletedGenders: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: GENDER_TABLE,
-		},
-	],
-	deletedUsers: [
-		{
-			type: Schema.Types.ObjectId,
-			ref: USER_TABLE,
-		},
-	],
 	createdAt: {
 		type: Date,
 		required: true,
@@ -73,6 +48,15 @@ const adminSchema = new Schema<AdminSchema>({
 		type: Date,
 		required: false,
 	},
+	role: {
+		type: Schema.Types.ObjectId,
+		index: true,
+		ref: ROLE_TABLE,
+		required: true,
+	},
+	deletedRoles: [{ type: Schema.Types.ObjectId, ref: ROLE_TABLE }],
+	deletedGenders: [{ type: Schema.Types.ObjectId, ref: GENDER_TABLE }],
+	deletedUsers: [{ type: Schema.Types.ObjectId, ref: USER_TABLE }],
 	deletedBy: {
 		type: Schema.Types.ObjectId,
 		required: false,
@@ -80,6 +64,10 @@ const adminSchema = new Schema<AdminSchema>({
 	},
 });
 
-export const AdminModel = model<AdminSchema>(ADMIN_TABLE, adminSchema);
+adminSchema.methods.matchPassword = function (password: string) {
+	return compare(password, this.password);
+};
 
-export default AdminModel;
+export const Admin = model<AdminDocument>(ADMIN_TABLE, adminSchema);
+
+export default Admin;

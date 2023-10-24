@@ -52,7 +52,7 @@ services:
       - MONGO_USERNAME=$DB_USER
       - MONGO_PASSWORD=$DB_PASSWORD
     ports:
-      - '27017:27017'
+      - '$DB_PORT:27017'
 
   db-gui:
     image: mongoclient/mongoclient:4.0.0
@@ -65,7 +65,7 @@ services:
     env_file:
       - .env
     environment:
-      MONGO_URL: mongodb://$MONGO_INITDB_ROOT_USERNAME:$MONGO_INITDB_ROOT_PASSWORD@db:27017/$MONGO_INITDB_DATABASE?ssl=false
+      MONGO_URL: mongodb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?ssl=false
     volumes:
       - db_gui_data:/data/db
     networks:
@@ -76,7 +76,7 @@ services:
     tty: true
     restart: unless-stopped
     ports:
-      - 6379:6379
+      - $REDIS_PORT:6379
     volumes:
       - cache_dev:/data
     env_file:

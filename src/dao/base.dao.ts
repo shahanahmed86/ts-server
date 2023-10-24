@@ -1,94 +1,94 @@
-import {
-	EntityTarget,
-	FindManyOptions,
-	FindOneOptions,
-	FindOptionsWhere,
-	IsNull,
-	ObjectLiteral,
-	Repository,
-} from 'typeorm';
+import { FilterQuery, Model, QueryOptions, Types } from 'mongoose';
 import { Paginated } from '../@types/api.type';
-import AppDataSource from '../database';
-import { BaseSchema } from '../database/schemas/base.schema';
-import { CHUNK_SIZE, LIMIT, OFFSET } from '../utils/constants.util';
+import { BaseDocument } from '../database/schemas/base.schema';
+import { LIMIT, OFFSET } from '../utils/constants.util';
 import { getISODate } from '../utils/logics.util';
 
-type BaseArgs = Partial<BaseSchema>;
-
-class BaseDao<BaseEntity extends ObjectLiteral> {
-	model: Repository<BaseEntity>;
+class BaseDao<Document extends BaseDocument> {
+	model: Model<Document>;
 	modelName: string;
 
-	constructor(target: EntityTarget<BaseEntity>, modelName: string) {
-		this.model = AppDataSource.getRepository(target);
+	constructor(target: Model<Document>, modelName: string) {
+		this.model = target;
 		this.modelName = modelName;
 	}
 
-	deleteParams<T>() {
-		return { deletedAt: IsNull(), deletedById: IsNull() } as T;
+	async exists(filter: FilterQuery<Document>): Promise<boolean> {
+		const isExists = await this.model.exists(filter);
+		return !!isExists;
 	}
 
-	preDeleteParams(where?: FindOptionsWhere<BaseEntity> | FindOptionsWhere<BaseEntity>[]) {
-		if (where) Object.assign(where, this.deleteParams());
-		where ||= this.deleteParams();
-
-		return where!;
+	deleteParams<T extends BaseDocument>(args: T): BaseDocument {
+		return Object.assign(args, { deletedAt: null, deletedBy: null });
 	}
 
-	findOne(options: FindOneOptions<BaseEntity>): Promise<BaseEntity | null> {
-		options.where = this.preDeleteParams(options.where);
-
-		return this.model.findOne(options);
+	findOne(
+		filter: FilterQuery<Document>,
+		options: QueryOptions<Document>,
+	): Promise<Document | null> {
+		return this.model.findOne(filter, undefined, options);
 	}
 
-	async findManyAndCount(options: FindManyOptions<BaseEntity>): Promise<Paginated<BaseEntity>> {
-		const { order = { createdAt: 'DESC' } } = options;
-
-		options.take ??= +LIMIT;
+	async findManyAndCount(
+		filter: FilterQuery<Document> = {},
+		options: QueryOptions<Document> = {},
+	): Promise<Paginated<Document>> {
+		options.limit ??= +LIMIT;
 		options.skip ??= +OFFSET;
+		options.sort ??= { createdAt: -1 };
 
-		options.where = this.preDeleteParams(options.where);
+		const { skip, limit, sort } = options;
+		Object.assign(options, { skip: (skip - 1) * limit, limit, sort });
 
-		const { skip, take } = options;
+		const rows = await this.model.find(filter, options);
+		const count = await this.model.countDocuments(filter, options);
 
-		Object.assign(options, { skip: (skip - 1) * take, take, order });
-
-		const [rows, count] = await this.model.findAndCount(options);
-		return { count, pages: Math.ceil(count / take), page: +skip, rows };
+		return { count, pages: Math.ceil(count / skip), page: +skip, rows };
 	}
 
-	findMany(options: FindManyOptions<BaseEntity>): Promise<BaseEntity[]> {
-		const { order = { createdAt: 'DESC' } } = options;
-
-		Object.assign(options, { order });
-		options.where = this.preDeleteParams(options.where);
-
-		return this.model.find(options);
+	findMany(
+		filter: FilterQuery<Document> = {},
+		options: QueryOptions<Document> = {},
+	): Promise<Document[]> {
+		options.sort ??= { createdAt: -1 };
+		return this.model.find(filter, options);
 	}
 
-	async save<T extends BaseEntity>(data: T): Promise<T> {
-		return this.model.save<T>(data, { chunk: CHUNK_SIZE });
+	async save(data: Partial<Document>): Promise<Document> {
+		data.createdAt = getISODate();
+		data.updatedAt = getISODate();
+
+		return this.model.create(data);
 	}
 
-	async update<T>(criteria: FindOptionsWhere<string>, data: T): Promise<boolean> {
-		const postData: BaseArgs = { updatedAt: getISODate() };
-		const payload = Object.assign<ObjectLiteral, T, BaseArgs>({}, data, postData);
+	async update(
+		filter: FilterQuery<Document>,
+		options: QueryOptions<Document> = {},
+		data: Partial<Document>,
+	): Promise<boolean> {
+		data.updatedAt = getISODate();
 
-		const result = await this.model.update(criteria, payload);
-		return !!result.affected;
+		const result = await this.model.updateOne(filter, { $set: { data } }, options);
+		return !!result.modifiedCount;
 	}
 
-	async delete(criteria: FindOptionsWhere<string>, userId: string): Promise<boolean> {
-		const postData: BaseArgs = { deletedAt: getISODate(), deletedById: userId };
-		const payload = Object.assign<ObjectLiteral, BaseArgs>({}, postData);
+	async delete(
+		filter: FilterQuery<Document>,
+		options: QueryOptions<Document> = {},
+		userId: Types.ObjectId,
+	): Promise<boolean> {
+		const data = {
+			deletedAt: getISODate(),
+			deletedBy: userId,
+		};
 
-		const result = await this.model.update(criteria, payload);
-		return !!result.affected;
+		const result = await this.model.updateOne(filter, { $set: { data } }, options);
+		return !!result.modifiedCount;
 	}
 
-	async hardDelete(criteria: FindOptionsWhere<string>): Promise<boolean> {
-		const result = await this.model.delete(criteria);
-		return !!result.affected;
+	async hardDelete(filter: FilterQuery<Document>): Promise<boolean> {
+		const result = await this.model.deleteOne(filter);
+		return !!result.deletedCount;
 	}
 }
 

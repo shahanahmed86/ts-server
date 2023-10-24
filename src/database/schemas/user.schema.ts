@@ -1,11 +1,12 @@
-import { Schema, model } from 'mongoose';
+import { Model, Schema, model } from 'mongoose';
+import { compare } from '../../library/bcrypt.library';
 import { ADMIN_TABLE, GENDER_TABLE, ROLE_TABLE, USER_TABLE } from '../constants';
-import { AdminSchema } from './admin.schema';
-import { BaseSchema } from './base.schema';
-import { GenderSchema } from './gender.schema';
-import { RoleSchema } from './role.schema';
+import { AdminDocument } from './admin.schema';
+import { BaseDocument } from './base.schema';
+import { GenderDocument } from './gender.schema';
+import { RoleDocument } from './role.schema';
 
-export interface UserSchema extends BaseSchema {
+export interface UserDocument extends BaseDocument {
 	firstName?: string | null;
 	lastName?: string | null;
 	avatar?: string | null;
@@ -14,17 +15,15 @@ export interface UserSchema extends BaseSchema {
 	password: string;
 	phone?: string;
 	phoneVerified: boolean;
-	role: RoleSchema;
-	gender: GenderSchema;
-	deletedBy?: AdminSchema | null;
+	role: RoleDocument;
+	gender: GenderDocument;
+	deletedBy?: AdminDocument | null;
+	matchPassword: (password: string) => Promise<boolean>;
 }
 
-const userSchema = new Schema<UserSchema>({
-	id: {
-		type: Schema.Types.ObjectId,
-		index: true,
-		required: true,
-	},
+export type UserModelType = Model<UserDocument>;
+
+const userSchema = new Schema<UserDocument, UserModelType>({
 	firstName: {
 		type: String,
 		required: false,
@@ -61,17 +60,6 @@ const userSchema = new Schema<UserSchema>({
 		required: false,
 		default: false,
 	},
-	role: {
-		type: Schema.Types.ObjectId,
-		ref: ROLE_TABLE,
-		required: true,
-		index: true,
-	},
-	gender: {
-		type: Schema.Types.ObjectId,
-		ref: GENDER_TABLE,
-		required: true,
-	},
 	createdAt: {
 		type: Date,
 		required: true,
@@ -89,8 +77,23 @@ const userSchema = new Schema<UserSchema>({
 		required: false,
 		ref: ADMIN_TABLE,
 	},
+	role: {
+		type: Schema.Types.ObjectId,
+		ref: ROLE_TABLE,
+		required: true,
+		index: true,
+	},
+	gender: {
+		type: Schema.Types.ObjectId,
+		ref: GENDER_TABLE,
+		required: true,
+	},
 });
 
-export const UserModel = model<UserSchema>(USER_TABLE, userSchema);
+userSchema.methods.matchPassword = function (password: string) {
+	return compare(password, this.password);
+};
 
-export default UserModel;
+export const User = model<UserDocument>(USER_TABLE, userSchema);
+
+export default User;

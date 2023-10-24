@@ -1,8 +1,8 @@
 import { ROLE_TABLE } from '../database/constants';
-import { Role } from '../database/schemas/role.schema';
+import { Role, RoleDocument } from '../database/schemas/role.schema';
 import BaseDao from './base.dao';
 
-class RoleDao extends BaseDao<Role> {
+class RoleDao extends BaseDao<RoleDocument> {
 	constructor() {
 		super(Role, ROLE_TABLE);
 	}

@@ -14,11 +14,9 @@
 	"engineStrict": true,
 	"scripts": {
 		"prepare": "echo 'installing husky...' && husky install",
-		"prestart:dev": "npm run typeorm:up",
 		"start:dev": "nodemon --legacy-watch",
 		"build": "rimraf ./dist && tsc",
 		"postbuild": "node ./copy-assets",
-		"prestart": "npm run typeorm-prod:up",
 		"start": "node .",
 		"lint": "eslint src --ext .ts",
 		"lint:fix": "eslint src --ext .ts --fix",
@@ -31,13 +29,7 @@
 		"dev:down_hard": "make run-dev-down-hard",
 		"test": "make run-test-up",
 		"posttest": "make run-test-down",
-		"preexec-tests": "npm run typeorm:up",
 		"exec-tests": "mocha -r ts-node/register '__tests__/**/*.spec.ts' --exit",
-		"typeorm-prod": "typeorm-ts-node-commonjs -d dist/typeorm",
-		"typeorm-prod:up": "npm run typeorm-prod migration:run",
-		"typeorm": "typeorm-ts-node-commonjs -d src/typeorm",
-		"typeorm:up": "npm run typeorm migration:run",
-		"typeorm:down": "npm run typeorm migration:revert",
 		"commit": "commit"
 	},
 	"repository": {
@@ -87,7 +79,6 @@
 		"swagger-jsdoc": "^6.2.8",
 		"swagger-ui-express": "^4.6.0",
 		"toobusy-js": "^0.5.1",
-		"typeorm": "0.3.11",
 		"ws": "^8.13.0",
 		"zod": "^3.21.4"
 	},

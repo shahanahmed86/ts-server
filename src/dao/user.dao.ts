@@ -1,31 +1,25 @@
-import { UserArgs } from '../@types/api.type';
 import configs from '../config';
-import { hashSync } from '../library/bcrypt.library';
 import file from '../library/file.library';
 import { USER_TABLE } from '../database/constants';
-import { User } from '../database/schemas/user.schema';
+import { User, UserDocument } from '../database/schemas/user.schema';
 import BaseDao from './base.dao';
 
 const { inTest } = configs.app;
 
-class UserDao extends BaseDao<User> {
+class UserDao extends BaseDao<UserDocument> {
 	constructor() {
 		super(User, USER_TABLE);
 	}
 
-	async signup(payload: UserArgs): Promise<User> {
-		const { password, avatar } = payload;
+	async signup(payload: UserDocument): Promise<UserDocument> {
+		const { avatar } = payload;
 
-		payload.password = hashSync(password!);
 		if (avatar) payload.avatar = await file.moveImageFromTmp(avatar);
 
 		if (inTest) payload.emailVerified = true;
 
-		const saved = await this.model.save(payload);
-		const user = await this.findOne({
-			where: { id: saved.id },
-			relations: { role: true, gender: true },
-		});
+		const savedUser = await this.save(payload);
+		const user = await this.findOne({ id: savedUser.id }, { populate: ['role', 'gender'] });
 
 		return user!;
 	}

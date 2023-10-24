@@ -1,6 +1,6 @@
-import { AdminSchema } from '../database/schemas/admin.schema';
-import { GenderSchema } from '../database/schemas/gender.schema';
-import { UserSchema } from '../database/schemas/user.schema';
+import { AdminDocument } from '../database/schemas/admin.schema';
+import { GenderDocument } from '../database/schemas/gender.schema';
+import { UserDocument } from '../database/schemas/user.schema';
 import { Result } from './wrapper.type';
 
 export type FormatResponse = <T extends object>(
@@ -9,17 +9,17 @@ export type FormatResponse = <T extends object>(
 	data: T,
 ) => Result<T>;
 
-export type AuthPayload = UserSchema | AdminSchema;
+export type AuthPayload = UserDocument | AdminDocument;
 
 export type ImageParams = {
 	filename: string;
 };
 
-export type UserArgs = Partial<UserSchema>;
+export type UserArgs = Partial<UserDocument>;
 
-export type AdminArgs = Partial<AdminSchema>;
+export type AdminArgs = Partial<AdminDocument>;
 
-export type GenderArgs = Partial<GenderSchema>;
+export type GenderArgs = Partial<GenderDocument>;
 
 export type Paginated<T> = {
 	count: number;

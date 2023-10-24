@@ -1,7 +1,3 @@
-create-image:
-	docker build -t 127.0.0.1:5000/ts-server:1.0.0 . && \
-	docker push 127.0.0.1:5000/ts-server:1.0.0
-
 # development
 run-dev-up:
 	docker compose \
@@ -48,11 +44,3 @@ run-backup:
 	docker exec -t app-dev-db-1 pg_dumpall -c --username="admin" > dumps/`date +%d-%m-%Y"_"%H_%M_%S`.sql
 run-restore:
 	cat ${DUMP} | docker exec -i app-dev-db-1 psql --username="admin"
-
-# only for dev environment
-
-# migration scripts
-run-typeorm-up:
-	DB_HOST="localhost" DB_PORT="5433" npm run typeorm:up
-run-typeorm-down:
-	DB_HOST="localhost" DB_PORT="5433" npm run typeorm:down

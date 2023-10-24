@@ -9,17 +9,17 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, _args, { req,
 	const args = await validateRequest(Login, _args);
 
 	const userDao = new Dao.User();
-	const user = await userDao.findOne({
-		where: { email: args.email, role: userDao.preDeleteParams() },
-		relations: { role: true, gender: true },
-	});
+	const user = await userDao.findOne(
+		{ email: args.email, role: { deletedAt: null, deletedBy: null } },
+		{ populate: ['role', 'gender'] },
+	);
 	if (!user) throw new NotAuthenticated();
 
 	if (user.role!.name !== res.locals.role) {
 		throw new NotAuthorized(['auth.insufficientPriviledge', user.role!.name]);
 	}
 
-	const isMatched = user.comparePassword(args.password);
+	const isMatched = user.matchPassword(args.password);
 	if (!isMatched) throw new NotAuthenticated();
 
 	const notVerified = notVerifiedUser(user);

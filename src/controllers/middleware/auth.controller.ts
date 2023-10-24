@@ -6,8 +6,8 @@ import {
 } from '../../@types/middleware.type';
 import * as Dao from '../../dao';
 import { Admin as AdminDao, User as UserDao } from '../../dao';
+import { UserDocument } from '../../database/schemas/user.schema';
 import { decodePayload } from '../../library/jwt.library';
-import { User } from '../../database/schemas/user.schema';
 import { ONE_SECOND } from '../../utils/constants.util';
 import { BadRequest, NotAuthenticated, NotAuthorized } from '../../utils/errors.util';
 import { notVerifiedUser } from '../../utils/logics.util';
@@ -44,14 +44,17 @@ export const authController: AuthController = async (key, req, res) => {
 	if (role === 'admin') dao = new Dao.Admin();
 	else dao = new Dao.User();
 
-	const user = await dao.findOne({
-		where: { id: userId, role: { name: role } },
-		relations: { role: true },
-	});
+	const user = await dao.findOne(
+		{ where: { id: userId, role: { name: role } } },
+		{ populate: 'role' },
+	);
 	if (!user) throw new NotAuthenticated();
 
-	const isUnverifiedUser = user instanceof User && notVerifiedUser(user);
-	if (isUnverifiedUser) throw new NotAuthorized('auth.verifyEmail');
+	const isUser = 'firstName' in user;
+	if (isUser) {
+		const isUnverifiedUser = notVerifiedUser(user as UserDocument);
+		if (isUnverifiedUser) throw new NotAuthorized('auth.verifyEmail');
+	}
 
 	res.locals.user = user;
 };
