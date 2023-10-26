@@ -5,19 +5,18 @@ import isDate from 'lodash/isDate';
 import isObject from 'lodash/isObject';
 import omit from 'lodash/omit';
 import { FormatResponse, UserArgs } from '../@types/api.type';
-import { translate } from '../library/i18n.library';
-import { SHOULD_OMIT_PROPS } from './constants.util';
 import { ZodValidator } from '../@types/library.type';
+import { translate } from '../library/i18n.library';
 
 export const formatResponse: FormatResponse = (status, message, data) => {
-	return { status, message: translate(message), data: omitProps(data) };
+	return { status, message: translate(message), data };
 };
 
 export const getISODate = (dt: string | Date | number = Date.now()) => new Date(dt).toISOString();
 
 export const getUniqueId = () => randomUUID();
 
-export function validateRequest<T, A>(validators: ZodValidator<T>, args: A) {
+export function validateRequest<T, A extends object>(validators: ZodValidator<T>, args: A) {
 	return validators.parseAsync(args) as Promise<A>;
 }
 
@@ -25,7 +24,7 @@ export function notVerifiedUser<T>(user: T extends UserArgs ? T : UserArgs): boo
 	return !user.emailVerified && !user.phoneVerified;
 }
 
-export function omitProps<T extends object>(payload: T, props: string[] = SHOULD_OMIT_PROPS): T {
+export function omitProps<T extends object>(payload: T, props: string[] = []): T {
 	if (isArray(payload)) {
 		for (let i = 0; i < payload.length; i++) {
 			const value = payload[i];

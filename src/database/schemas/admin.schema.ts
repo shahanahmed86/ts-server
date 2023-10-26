@@ -11,11 +11,11 @@ export interface AdminDocument extends BaseDocument {
 	password: string;
 	isSuper: boolean;
 	role: Types.ObjectId | RoleDocument;
-	deletedBy?: AdminDocument | null;
-	deletedAdmins: AdminDocument[];
-	deletedRoles: RoleDocument[];
-	deletedGenders: GenderDocument[];
-	deletedUsers: UserDocument[];
+	deletedBy?: (Types.ObjectId | AdminDocument) | null;
+	deletedAdmins: (Types.ObjectId | AdminDocument)[];
+	deletedRoles: (Types.ObjectId | RoleDocument)[];
+	deletedGenders: (Types.ObjectId | GenderDocument)[];
+	deletedUsers: (Types.ObjectId | UserDocument)[];
 	matchPassword: (password: string) => Promise<boolean>;
 }
 
@@ -33,7 +33,7 @@ const adminSchema = new Schema<AdminDocument, AdminModelType>({
 	},
 	isSuper: {
 		type: Boolean,
-		required: false,
+		required: true,
 		default: false,
 	},
 	createdAt: {
@@ -47,6 +47,7 @@ const adminSchema = new Schema<AdminDocument, AdminModelType>({
 	deletedAt: {
 		type: Date,
 		required: false,
+		default: null,
 	},
 	role: {
 		type: Schema.Types.ObjectId,
@@ -54,14 +55,15 @@ const adminSchema = new Schema<AdminDocument, AdminModelType>({
 		ref: ROLE_TABLE,
 		required: true,
 	},
-	deletedRoles: [{ type: Schema.Types.ObjectId, ref: ROLE_TABLE }],
-	deletedGenders: [{ type: Schema.Types.ObjectId, ref: GENDER_TABLE }],
-	deletedUsers: [{ type: Schema.Types.ObjectId, ref: USER_TABLE }],
 	deletedBy: {
 		type: Schema.Types.ObjectId,
 		required: false,
 		ref: ADMIN_TABLE,
+		default: null,
 	},
+	deletedRoles: [{ type: Schema.Types.ObjectId, ref: ROLE_TABLE }],
+	deletedGenders: [{ type: Schema.Types.ObjectId, ref: GENDER_TABLE }],
+	deletedUsers: [{ type: Schema.Types.ObjectId, ref: USER_TABLE }],
 });
 
 adminSchema.methods.matchPassword = function (password: string) {

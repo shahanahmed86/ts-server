@@ -85,15 +85,21 @@ const questions = [
 	},
 	{
 		type: 'input',
-		name: 'DB_USER',
-		message: "Please enter the username of Database's host",
-		default: 'admin',
+		name: 'DB_PORT',
+		message: "Please enter the port where Database's host",
+		default: '27017',
+	},
+	{
+		type: 'input',
+		name: 'DB_ROOT_USERNAME',
+		message: "Please enter the root username of Database's host",
+		default: 'root',
 	},
 	{
 		type: 'password',
-		name: 'DB_PASS',
-		message: "Please enter the password of Database's host",
-		default: 'lmelg8',
+		name: 'DB_ROOT_PASSWORD',
+		message: "Please enter the root password of Database's host",
+		default: 'example',
 	},
 	{
 		type: 'input',
@@ -103,9 +109,15 @@ const questions = [
 	},
 	{
 		type: 'input',
-		name: 'DB_PORT',
-		message: "Please enter the port where Database's host",
-		default: '5432',
+		name: 'DB_USER',
+		message: "Please enter the username of Database's host",
+		default: 'admin',
+	},
+	{
+		type: 'password',
+		name: 'DB_PASSWORD',
+		message: "Please enter the password of Database's host",
+		default: 'lmelg8',
 	},
 	{
 		type: 'input',
@@ -260,7 +272,7 @@ async function promptForMissingOptions(opts) {
  * @returns {void} void
  */
 function shouldInstallModules() {
-	executeCommand('npm install');
+	executeCommand('npm ci');
 }
 
 /**

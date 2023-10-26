@@ -5,7 +5,6 @@ import {
 	ValidateToken,
 } from '../../@types/middleware.type';
 import * as Dao from '../../dao';
-import { Admin as AdminDao, User as UserDao } from '../../dao';
 import { UserDocument } from '../../database/schemas/user.schema';
 import { decodePayload } from '../../library/jwt.library';
 import { ONE_SECOND } from '../../utils/constants.util';
@@ -40,21 +39,24 @@ export const authController: AuthController = async (key, req, res) => {
 
 	if (!role || role !== key) throw new NotAuthorized();
 
-	let dao: UserDao | AdminDao;
-	if (role === 'admin') dao = new Dao.Admin();
-	else dao = new Dao.User();
+	if (role === 'admin') {
+		const dao = new Dao.Admin();
 
-	const user = await dao.findOne(
-		{ where: { id: userId, role: { name: role } } },
-		{ populate: 'role' },
-	);
-	if (!user) throw new NotAuthenticated();
+		const admin = await dao.findOne({ _id: userId, 'role.name': role }, { populate: 'role' });
+		if (!admin) throw new NotAuthenticated();
 
-	const isUser = 'firstName' in user;
-	if (isUser) {
-		const isUnverifiedUser = notVerifiedUser(user as UserDocument);
-		if (isUnverifiedUser) throw new NotAuthorized('auth.verifyEmail');
+		res.locals.user = admin;
+	} else {
+		const dao = new Dao.User();
+		const user = await dao.findOne({ _id: userId, 'role.name': role }, { populate: 'role' });
+		if (!user) throw new NotAuthenticated();
+
+		const isUser = 'firstName' in user;
+		if (isUser) {
+			const isUnverifiedUser = notVerifiedUser(user as UserDocument);
+			if (isUnverifiedUser) throw new NotAuthorized('auth.verifyEmail');
+		}
+
+		res.locals.user = user;
 	}
-
-	res.locals.user = user;
 };

@@ -1,4 +1,4 @@
-import { Model, Schema, model } from 'mongoose';
+import { Model, Schema, Types, model } from 'mongoose';
 import { ADMIN_TABLE, GENDER_TABLE } from '../constants';
 import { AdminDocument } from './admin.schema';
 import { BaseDocument } from './base.schema';
@@ -6,8 +6,8 @@ import { UserDocument } from './user.schema';
 
 export interface GenderDocument extends BaseDocument {
 	name: string;
-	deletedBy?: AdminDocument | null;
-	users: UserDocument[];
+	deletedBy?: (Types.ObjectId | AdminDocument) | null;
+	users: (Types.ObjectId | UserDocument)[];
 }
 
 export type GenderModelType = Model<GenderDocument>;
@@ -29,11 +29,13 @@ const genderSchema = new Schema<GenderDocument, GenderModelType>({
 	deletedAt: {
 		type: Date,
 		required: false,
+		default: null,
 	},
 	deletedBy: {
 		type: Schema.Types.ObjectId,
 		required: false,
 		ref: ADMIN_TABLE,
+		default: null,
 	},
 });
 

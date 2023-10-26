@@ -9,7 +9,7 @@ export type FormatResponse = <T extends object>(
 	data: T,
 ) => Result<T>;
 
-export type AuthPayload = UserDocument | AdminDocument;
+export type AuthPayload = Partial<UserDocument | AdminDocument>;
 
 export type ImageParams = {
 	filename: string;

@@ -1,4 +1,4 @@
-import { Model, Schema, model } from 'mongoose';
+import { Model, Schema, Types, model } from 'mongoose';
 import { compare } from '../../library/bcrypt.library';
 import { ADMIN_TABLE, GENDER_TABLE, ROLE_TABLE, USER_TABLE } from '../constants';
 import { AdminDocument } from './admin.schema';
@@ -15,9 +15,9 @@ export interface UserDocument extends BaseDocument {
 	password: string;
 	phone?: string;
 	phoneVerified: boolean;
-	role: RoleDocument;
-	gender: GenderDocument;
-	deletedBy?: AdminDocument | null;
+	role: Types.ObjectId | RoleDocument;
+	gender: Types.ObjectId | GenderDocument;
+	deletedBy?: (Types.ObjectId | AdminDocument) | null;
 	matchPassword: (password: string) => Promise<boolean>;
 }
 
@@ -27,14 +27,17 @@ const userSchema = new Schema<UserDocument, UserModelType>({
 	firstName: {
 		type: String,
 		required: false,
+		default: null,
 	},
 	lastName: {
 		type: String,
 		required: false,
+		default: null,
 	},
 	avatar: {
 		type: String,
 		required: false,
+		default: null,
 	},
 	email: {
 		type: String,
@@ -71,11 +74,13 @@ const userSchema = new Schema<UserDocument, UserModelType>({
 	deletedAt: {
 		type: Date,
 		required: false,
+		default: null,
 	},
 	deletedBy: {
 		type: Schema.Types.ObjectId,
 		required: false,
 		ref: ADMIN_TABLE,
+		default: null,
 	},
 	role: {
 		type: Schema.Types.ObjectId,

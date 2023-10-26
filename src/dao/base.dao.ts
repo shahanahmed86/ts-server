@@ -1,9 +1,10 @@
 import { FilterQuery, Model, QueryOptions, Types } from 'mongoose';
 import { Paginated } from '../@types/api.type';
 import { BaseDocument } from '../database/schemas/base.schema';
-import { LIMIT, OFFSET } from '../utils/constants.util';
+import { LIMIT, OFFSET, COMMON_OMIT_FIELDS } from '../utils/constants.util';
 import { getISODate } from '../utils/logics.util';
 
+type ExtendedBaseDocument = BaseDocument & { deletedBy: Types.ObjectId | null };
 class BaseDao<Document extends BaseDocument> {
 	model: Model<Document>;
 	modelName: string;
@@ -14,24 +15,29 @@ class BaseDao<Document extends BaseDocument> {
 	}
 
 	async exists(filter: FilterQuery<Document>): Promise<boolean> {
-		const isExists = await this.model.exists(filter);
+		const isExists = await this.model.exists(filter).exec();
 		return !!isExists;
 	}
 
-	deleteParams<T extends BaseDocument>(args: T): BaseDocument {
-		return Object.assign(args, { deletedAt: null, deletedBy: null });
+	deleteParams(): Partial<ExtendedBaseDocument> {
+		return { deletedAt: null, deletedBy: null };
 	}
 
 	findOne(
 		filter: FilterQuery<Document>,
-		options: QueryOptions<Document>,
+		options: QueryOptions<Document> = {},
+		exclude: string = COMMON_OMIT_FIELDS,
 	): Promise<Document | null> {
-		return this.model.findOne(filter, undefined, options);
+		const preFields = this.deleteParams();
+		Object.assign(filter, preFields);
+
+		return this.model.findOne(filter, undefined, options).select(exclude).exec();
 	}
 
 	async findManyAndCount(
 		filter: FilterQuery<Document> = {},
 		options: QueryOptions<Document> = {},
+		exclude: string = COMMON_OMIT_FIELDS,
 	): Promise<Paginated<Document>> {
 		options.limit ??= +LIMIT;
 		options.skip ??= +OFFSET;
@@ -40,8 +46,11 @@ class BaseDao<Document extends BaseDocument> {
 		const { skip, limit, sort } = options;
 		Object.assign(options, { skip: (skip - 1) * limit, limit, sort });
 
-		const rows = await this.model.find(filter, options);
-		const count = await this.model.countDocuments(filter, options);
+		const preFields = this.deleteParams();
+		Object.assign(filter, preFields);
+
+		const rows = await this.model.find(filter, options).select(exclude).exec();
+		const count = await this.model.countDocuments(filter, options).exec();
 
 		return { count, pages: Math.ceil(count / skip), page: +skip, rows };
 	}
@@ -49,9 +58,10 @@ class BaseDao<Document extends BaseDocument> {
 	findMany(
 		filter: FilterQuery<Document> = {},
 		options: QueryOptions<Document> = {},
+		exclude: string = COMMON_OMIT_FIELDS,
 	): Promise<Document[]> {
 		options.sort ??= { createdAt: -1 };
-		return this.model.find(filter, options);
+		return this.model.find(filter, options).select(exclude).exec();
 	}
 
 	async save(data: Partial<Document>): Promise<Document> {
@@ -68,7 +78,7 @@ class BaseDao<Document extends BaseDocument> {
 	): Promise<boolean> {
 		data.updatedAt = getISODate();
 
-		const result = await this.model.updateOne(filter, { $set: { data } }, options);
+		const result = await this.model.updateOne(filter, { $set: { data } }, options).exec();
 		return !!result.modifiedCount;
 	}
 
@@ -82,12 +92,12 @@ class BaseDao<Document extends BaseDocument> {
 			deletedBy: userId,
 		};
 
-		const result = await this.model.updateOne(filter, { $set: { data } }, options);
+		const result = await this.model.updateOne(filter, { $set: { data } }, options).exec();
 		return !!result.modifiedCount;
 	}
 
 	async hardDelete(filter: FilterQuery<Document>): Promise<boolean> {
-		const result = await this.model.deleteOne(filter);
+		const result = await this.model.deleteOne(filter).exec();
 		return !!result.deletedCount;
 	}
 }

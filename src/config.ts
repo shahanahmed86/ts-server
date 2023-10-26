@@ -35,7 +35,8 @@ export const Configs = z.object({
 		rootPassword: z.string().min(1).default('example'),
 		username: z.string().min(1).default('admin'),
 		password: z.string().min(1).default('lmelg8'),
-		database: z.string().min(1).default('dev_deenee'),
+		name: z.string().min(1).default('dev_database'),
+		url: z.string().min(1).default('mongodb://admin:lmelg8@db:27017/dev_database'),
 		logging: z.boolean().default(false),
 	}),
 	bcrypt: z.object({
@@ -75,6 +76,10 @@ export const Configs = z.object({
 
 export type Configs = z.infer<typeof Configs>;
 
+const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, REDIS_HOST, REDIS_PORT } = process.env;
+const dbUrl = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
+const cacheUrl = `redis://${REDIS_HOST}:${REDIS_PORT}`;
+
 const allEnvs = {
 	app: {
 		env: process.env.NODE_ENV,
@@ -95,8 +100,9 @@ const allEnvs = {
 		rootUser: process.env.DB_ROOT_USERNAME,
 		rootPassword: process.env.DB_ROOT_PASSWORD,
 		user: process.env.DB_USER,
-		pass: process.env.DB_PASSWORD,
+		password: process.env.DB_PASSWORD,
 		name: process.env.DB_NAME,
+		url: dbUrl,
 		logging: process.env.NODE_ENV !== 'test',
 	},
 	bcrypt: {
@@ -107,7 +113,7 @@ const allEnvs = {
 		host: process.env.REDIS_HOST,
 		port: process.env.REDIS_PORT,
 		pass: process.env.REDIS_PASSWORD,
-		url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+		url: cacheUrl,
 	},
 	session: {
 		secret: process.env.SESSION_SECRET,

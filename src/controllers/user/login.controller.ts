@@ -1,6 +1,7 @@
 import { AuthPayload, LoginArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import * as Dao from '../../dao';
+import { RoleDocument } from '../../database/schemas';
 import { NotAuthenticated, NotAuthorized } from '../../utils/errors.util';
 import { notVerifiedUser, validateRequest } from '../../utils/logics.util';
 import { Login } from '../../validations';
@@ -15,8 +16,9 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, _args, { req,
 	);
 	if (!user) throw new NotAuthenticated();
 
-	if (user.role!.name !== res.locals.role) {
-		throw new NotAuthorized(['auth.insufficientPriviledge', user.role!.name]);
+	const role = user.role as RoleDocument;
+	if (role.name !== res.locals.role) {
+		throw new NotAuthorized(['auth.insufficientPriviledge', role.name]);
 	}
 
 	const isMatched = user.matchPassword(args.password);
@@ -25,7 +27,7 @@ export const login: Controller<AuthPayload, LoginArgs> = async (_, _args, { req,
 	const notVerified = notVerifiedUser(user);
 	if (notVerified) throw new NotAuthorized('auth.verifyEmail');
 
-	const payload = { userId: user.id, role: user.role!.name };
+	const payload = { userId: user.id, role: role.name };
 
 	req.session.payload = payload;
 
