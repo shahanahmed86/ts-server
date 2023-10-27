@@ -6,9 +6,7 @@ const userSchema = `#graphql
     avatar: String
     email: String!
     phone: String
-    roleId: String!
     role: Role
-    genderId: String!
     gender: Gender
     createdAt: Date!
     updatedAt: Date!

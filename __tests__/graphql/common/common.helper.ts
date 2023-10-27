@@ -11,3 +11,10 @@ export const genders = async () => {
 		variables: {},
 	});
 };
+
+export const roles = async () => {
+	return chai.request(httpServer).post('/graphql').set('content-type', 'application/json').send({
+		query: schemas.ROLES,
+		variables: {},
+	});
+};

@@ -1,4 +1,3 @@
 import { getISODate } from '../../utils/logics.util';
 
-const now = getISODate();
-export const common = { createdAt: now, updatedAt: now };
+export const common = () => ({ createdAt: getISODate(), updatedAt: getISODate() });

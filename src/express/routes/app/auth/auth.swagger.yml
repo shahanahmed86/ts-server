@@ -57,9 +57,9 @@ paths:
                   type: string
                   description: phone
                   example: '+923331234563'
-                genderId:
+                gender:
                   type: string
-                  description: gender Id
+                  description: gender ID
                   example: 04521c7b-a128-4f5f-bfb2-96053c0a31b0
       responses:
         200:
@@ -129,9 +129,9 @@ paths:
                   type: string
                   description: phone
                   example: '+923331234563'
-                genderId:
+                gender:
                   type: string
-                  description: gender Id
+                  description: gender ID
                   example: 04521c7b-a128-4f5f-bfb2-96053c0a31b0
       responses:
         200:

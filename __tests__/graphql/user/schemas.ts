@@ -5,7 +5,6 @@ export const LOGIN = `#graphql
       createdAt
       email
       firstName
-      genderId
       id
       lastName
       phone
@@ -30,7 +29,6 @@ export const LOGGED_IN = `#graphql
       createdAt
       email
       firstName
-      genderId
       id
       lastName
       phone
@@ -60,14 +58,14 @@ export const UPDATE_PROFILE = `#graphql
       $lastName: String,
       $avatar: String,
       $phone: String,
-      $genderId: String
+      $gender: String
     ) {
     values: userUpdateProfile(
       firstName: $firstName,
       lastName: $lastName,
       avatar: $avatar,
       phone: $phone,
-      genderId: $genderId
+      gender: $gender
     )
   }
 `;
@@ -76,7 +74,7 @@ export const SIGNUP = `#graphql
   mutation Signup(
     $email: String!
     $password: String!
-    $genderId: String!
+    $gender: String!
     $firstName: String
     $lastName: String
     $avatar: String
@@ -85,7 +83,7 @@ export const SIGNUP = `#graphql
     values: userSignup(
       email: $email
       password: $password
-      genderId: $genderId
+      gender: $gender
       firstName: $firstName
       lastName: $lastName
       avatar: $avatar

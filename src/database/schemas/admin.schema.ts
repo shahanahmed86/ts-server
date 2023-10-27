@@ -1,5 +1,5 @@
 import { Model, Schema, Types, model } from 'mongoose';
-import { compare } from '../../library/bcrypt.library';
+import { compareSync } from '../../library/bcrypt.library';
 import { ADMIN_TABLE, GENDER_TABLE, ROLE_TABLE, USER_TABLE } from '../constants';
 import { BaseDocument } from './base.schema';
 import { GenderDocument } from './gender.schema';
@@ -16,7 +16,7 @@ export interface AdminDocument extends BaseDocument {
 	deletedRoles: (Types.ObjectId | RoleDocument)[];
 	deletedGenders: (Types.ObjectId | GenderDocument)[];
 	deletedUsers: (Types.ObjectId | UserDocument)[];
-	matchPassword: (password: string) => Promise<boolean>;
+	matchPassword: (password: string) => boolean;
 }
 
 export type AdminModelType = Model<AdminDocument>;
@@ -67,7 +67,7 @@ const adminSchema = new Schema<AdminDocument, AdminModelType>({
 });
 
 adminSchema.methods.matchPassword = function (password: string) {
-	return compare(password, this.password);
+	return compareSync(password, this.password);
 };
 
 export const Admin = model<AdminDocument>(ADMIN_TABLE, adminSchema);

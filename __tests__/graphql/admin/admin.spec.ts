@@ -1,6 +1,5 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
 import { login, logout, loggedIn, changePassword } from './admin.helper';
 import { getCookieValue } from '../../helper';
 
@@ -17,7 +16,6 @@ describe('Graphql - Admin Authentication APIs', function () {
 		const cookie = getCookieValue(header);
 
 		expect(body.data.values).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
 
 		await logout(cookie);
 	});
@@ -28,7 +26,6 @@ describe('Graphql - Admin Authentication APIs', function () {
 
 		const { body } = await loggedIn(cookie);
 		expect(body.data.values).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
 
 		await logout(cookie);
 	});

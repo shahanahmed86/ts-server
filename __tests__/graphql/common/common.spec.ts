@@ -11,4 +11,9 @@ describe('Graphql - Common APIs', function () {
 		const res = await commonHelper.genders();
 		expect(res.body.data.values).to.be.an('array');
 	});
+
+	it('common getRoles', async () => {
+		const res = await commonHelper.roles();
+		expect(res.body.data.values).to.be.an('array');
+	});
 });

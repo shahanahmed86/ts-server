@@ -1,18 +1,20 @@
+import mongoose from 'mongoose';
 import * as Dao from '../src/dao';
 import { deleteImage } from './images/images.helper';
 
 export async function deleteUsers() {
 	const userDao = new Dao.User();
 
-	const users = await userDao.findMany({
-		where: {
+	const users = await userDao.findMany(
+		{
 			firstName: 'Shahan Ahmed',
 			lastName: 'Khan',
 			phone: '+923362122588',
-			genderId: '04521c7b-a128-4f5f-bfb2-96053c0a31b0',
+			gender: new mongoose.mongo.ObjectId('6537b3e9d964549cf9dda262'),
 		},
-		select: { id: true, avatar: true },
-	});
+		undefined,
+		'id avatar',
+	);
 
 	for (const user of users) {
 		if (user.avatar) await deleteImage(user.avatar);

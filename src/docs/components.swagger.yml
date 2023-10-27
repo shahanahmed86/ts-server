@@ -1,5 +1,7 @@
 components:
   schemas:
+    Gender:
+      $ref: '#/components/schemas/Gender'
     Role:
       $ref: '#/components/schemas/Role'
     Admin:

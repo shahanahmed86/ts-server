@@ -4,5 +4,5 @@ import * as Dao from '../../dao';
 
 export const getGenders: Controller<GenderArgs[], object> = async () => {
 	const genderDao = new Dao.Gender();
-	return genderDao.findMany({}, { skip: 0, limit: Infinity });
+	return genderDao.findMany(undefined, undefined, undefined, 'name');
 };

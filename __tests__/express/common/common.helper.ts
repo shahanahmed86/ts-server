@@ -7,3 +7,5 @@ const BASE_URL = '/api/common';
 chai.use(chaiHttp);
 
 export const getGenders = () => chai.request(httpServer).get(`${BASE_URL}/genders`);
+
+export const getRoles = () => chai.request(httpServer).get(`${BASE_URL}/roles`);

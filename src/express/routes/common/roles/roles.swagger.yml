@@ -1,0 +1,12 @@
+tags:
+  - name: Common
+    description: Common APIs
+
+paths:
+  /api/common/roles:
+    get:
+      summary: Get Roles
+      tags: [Common]
+      responses:
+        200:
+          description: Returns roles list

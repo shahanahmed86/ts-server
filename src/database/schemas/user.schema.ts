@@ -1,5 +1,5 @@
 import { Model, Schema, Types, model } from 'mongoose';
-import { compare } from '../../library/bcrypt.library';
+import { compareSync } from '../../library/bcrypt.library';
 import { ADMIN_TABLE, GENDER_TABLE, ROLE_TABLE, USER_TABLE } from '../constants';
 import { AdminDocument } from './admin.schema';
 import { BaseDocument } from './base.schema';
@@ -96,7 +96,7 @@ const userSchema = new Schema<UserDocument, UserModelType>({
 });
 
 userSchema.methods.matchPassword = function (password: string) {
-	return compare(password, this.password);
+	return compareSync(password, this.password);
 };
 
 export const User = model<UserDocument>(USER_TABLE, userSchema);

@@ -7,7 +7,8 @@ import { Role } from '../common.type';
 declare global {
 	namespace Express {
 		interface Locals {
-			user?: AdminDocument | UserDocument | null;
+			admin?: AdminDocument | null;
+			user?: UserDocument | null;
 			error?: HttpError | null;
 			role?: Role;
 		}

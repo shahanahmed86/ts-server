@@ -1,29 +1,27 @@
+import mongoose from 'mongoose';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { UserArgs } from '../../../src/@types/api.type';
-import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
 import { signup, login, logout, loggedIn, changePassword, updateProfile } from './user.helper';
 import { uploadImage } from '../../images/images.helper';
-// import { GENDER_DATA } from '../../../src/database/constants/gender.constant';
 import { deleteUsers, getCookieValue } from '../../helper';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
+export const SIGNUP_DATA: UserArgs = {
+	firstName: 'Shahan Ahmed',
+	lastName: 'Khan',
+	phone: '+923362122588',
+	gender: new mongoose.mongo.ObjectId('6537b3e9d964549cf9dda262'),
+};
+
 describe('Graphql - User Authentication APIs', function () {
 	it('user signup', async () => {
 		const { body: imageBody } = await uploadImage();
 
-		const { body } = await signup({
-			avatar: imageBody.data,
-			firstName: 'Shahan',
-			lastName: 'Ahmed Khan',
-			// genderId: GENDER_DATA[0]!.id!, // TODO need to change it
-			phone: '+923332122588',
-			email: 'shahan.khaan@gmail.com',
-			password: '123Abc456',
-		});
+		const { body } = await signup({ ...SIGNUP_DATA, avatar: imageBody.data });
 		expect(body.data.values).to.be.a('string');
 	});
 
@@ -35,7 +33,6 @@ describe('Graphql - User Authentication APIs', function () {
 		const cookie = getCookieValue(header);
 
 		expect(body.data.values).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
 
 		await logout(cookie);
 	});
@@ -46,7 +43,6 @@ describe('Graphql - User Authentication APIs', function () {
 
 		const { body } = await loggedIn(cookie);
 		expect(body.data.values).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(body.data.values).not.to.have.property(prop));
 
 		await logout(cookie);
 	});
@@ -77,11 +73,11 @@ describe('Graphql - User Authentication APIs', function () {
 		const { body: imageBody } = await uploadImage();
 
 		const PAYLOAD: UserArgs = {
-			firstName: 'first name',
-			lastName: 'last name',
+			firstName: 'Shahan Ahmed updated',
+			lastName: 'Khan updated',
 			avatar: imageBody.data,
-			phone: '+923362122588',
-			// genderId: GENDER_DATA.at(-1)!.id!, // TODO need to change it
+			phone: '+923131126908',
+			gender: new mongoose.mongo.ObjectId('6537b4a305c9c80435922c5f'),
 		};
 		res = await updateProfile(PAYLOAD, cookie);
 		expect(res.body.data.values).to.be.a('string');

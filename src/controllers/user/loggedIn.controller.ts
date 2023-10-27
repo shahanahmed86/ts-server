@@ -1,7 +1,10 @@
 import { UserArgs } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
-import { UserDocument } from '../../database/schemas/user.schema';
+import { maskPassword } from '../../utils/db.utils';
 
 export const loggedIn: Controller<UserArgs, object> = async (_, __, { res }) => {
-	return res.locals.user as UserDocument;
+	const user = res.locals.user!;
+	user.password &&= maskPassword(user.password);
+
+	return user;
 };

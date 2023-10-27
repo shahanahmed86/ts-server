@@ -7,4 +7,8 @@ export interface BaseDocument extends Document {
 	deletedAt?: Date | string | null;
 }
 
+export interface ExtendedBaseDocument extends BaseDocument {
+	deletedBy: null;
+}
+
 export default BaseDocument;

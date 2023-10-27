@@ -5,7 +5,11 @@ const roleSchema = `#graphql
     users: [User!]!
     createdAt: Date!
     updatedAt: Date!
-  }  
+  }
+
+  extend type Query {
+    roles: [Role!]!
+  }
 `;
 
 export default roleSchema;

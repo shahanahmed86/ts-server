@@ -25,15 +25,13 @@ export const UpdateProfile = z
 			.describe('Last Name')
 			.optional(),
 		avatar: z.string().describe('Avatar').optional(),
-		genderId: z.string().uuid('Should be a valid ID').describe('Gender ID').optional(),
+		gender: z.string().describe('Gender ID').optional(),
 		phone: Phone.describe('Phone Number').optional(),
 	})
 	.partial();
-
 export type UpdateProfile = z.infer<typeof UpdateProfile>;
 
 export const SignUp = UpdateProfile.merge(Login);
-
 export type SignUp = z.infer<typeof SignUp>;
 
 export const ChangePassword = z

@@ -1,5 +1,15 @@
 components:
   schemas:
+    Gender:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          enum: [Male, Female, 'Prefer not to say']
+
     Role:
       type: object
       properties:
@@ -19,6 +29,28 @@ components:
         email:
           type: string
           format: email
+        role:
+          $ref: '#/components/schemas/Role'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        avatar:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        gender:
+          $ref: '#/components/schemas/Gender'
         role:
           $ref: '#/components/schemas/Role'
 

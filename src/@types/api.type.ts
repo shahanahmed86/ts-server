@@ -1,3 +1,4 @@
+import { RoleDocument } from '../database/schemas';
 import { AdminDocument } from '../database/schemas/admin.schema';
 import { GenderDocument } from '../database/schemas/gender.schema';
 import { UserDocument } from '../database/schemas/user.schema';
@@ -20,6 +21,8 @@ export type UserArgs = Partial<UserDocument>;
 export type AdminArgs = Partial<AdminDocument>;
 
 export type GenderArgs = Partial<GenderDocument>;
+
+export type RoleArgs = Partial<RoleDocument>;
 
 export type Paginated<T> = {
 	count: number;

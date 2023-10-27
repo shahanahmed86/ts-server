@@ -8,3 +8,14 @@ export const GENDERS = `#graphql
     }
   }
 `;
+
+export const ROLES = `#graphql
+  query Roles {
+    values: roles {
+      id
+      name
+      createdAt
+      updatedAt
+    }
+  }
+`;

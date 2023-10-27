@@ -1,5 +1,4 @@
 import chai from 'chai';
-import { SHOULD_OMIT_PROPS } from '../../../src/utils/constants.util';
 import { changePassword, loggedIn, login, logout } from './admin.helper';
 import { getCookieValue } from '../../helper';
 
@@ -19,7 +18,6 @@ describe('RESTful - Admin Authentication APIs', function () {
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 		expect(res.body.data).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(res.body.data).not.to.have.property(prop));
 
 		const cookie = getCookieValue(res.header);
 		await logout(cookie);
@@ -33,7 +31,6 @@ describe('RESTful - Admin Authentication APIs', function () {
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 		expect(res.body.data).to.be.an('object');
-		SHOULD_OMIT_PROPS.map((prop) => expect(res.body).not.to.have.property(prop));
 
 		await logout(cookie);
 	});

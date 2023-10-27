@@ -39,6 +39,9 @@
 		"genders": {
 			"getGenders": "You've successfully fetched genders' list!"
 		},
+		"roles": {
+			"getRoles": "You've successfully fetched roles' list!"
+		},
 		"notFound": "{{entity}} not found!",
 		"emptyArgument": "At least one argument to pass"
 	},

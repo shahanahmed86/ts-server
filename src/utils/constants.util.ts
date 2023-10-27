@@ -4,13 +4,9 @@ const { expiry } = configs.jwt;
 
 export const GRAPHQL_ROUTE = '/graphql';
 
-export const COMMON_OMIT_FIELDS = '-__v -deletedAt -deletedBy';
+export const COMMON_OMIT_FIELDS = '-v -__v -deletedAt -deletedBy';
 
-export const ADMIN_OMIT_FIELDS = COMMON_OMIT_FIELDS.concat(' -password');
-
-export const USER_OMIT_FIELDS = COMMON_OMIT_FIELDS.concat(
-	' -password -emailVerified -phoneVerified',
-);
+export const USER_OMIT_FIELDS = COMMON_OMIT_FIELDS.concat(' -emailVerified -phoneVerified');
 
 export const MORGAN_TOKENS: string = [
 	':host',

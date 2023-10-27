@@ -1,6 +1,7 @@
 import { ImageParams } from '../../@types/api.type';
 import { Controller } from '../../@types/wrapper.type';
 import file from '../../library/file.library';
+import { translate } from '../../library/i18n.library';
 import { NotFound } from '../../utils/errors.util';
 import { validateRequest } from '../../utils/logics.util';
 import { FileRef } from '../../validations';
@@ -12,5 +13,5 @@ export const removeImage: Controller<string, ImageParams> = async (_, _args) => 
 		throw new NotFound('common.images.removeImageFailed');
 	}
 
-	return 'common.images.removeImage';
+	return translate('common.images.removeImage');
 };

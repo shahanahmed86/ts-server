@@ -23,7 +23,7 @@ const authSchema = `#graphql
       lastName: String
       avatar: String
       phone: String
-      genderId: String
+      gender: String
     ): String! @auth(type: "${user}")
     userChangePassword(oldPassword: String!, password: String!): String! @auth(type: "${user}")
     userLogin(email: String!, password: String!): User! @guest(type: "${user}")
@@ -34,7 +34,7 @@ const authSchema = `#graphql
       lastName: String
       avatar: String
       phone: String
-      genderId: String!
+      gender: String!
     ): String! @guest(type: "${user}")
     userLogout: String! @auth(type: "${user}")
   }
