@@ -2,8 +2,9 @@ import { FilterQuery, Model, QueryOptions, Types } from 'mongoose';
 import { Paginated } from '../@types/api.type';
 import { BaseDocument } from '../database/schemas/base.schema';
 import { COMMON_OMIT_FIELDS, LIMIT, OFFSET } from '../utils/constants.util';
-import { getISODate } from '../utils/logics.util';
 import { getDeleteParams } from '../utils/db.utils';
+import { getISODate } from '../utils/logics.util';
+
 class BaseDao<Document extends BaseDocument> {
 	model: Model<Document>;
 	modelName: string;

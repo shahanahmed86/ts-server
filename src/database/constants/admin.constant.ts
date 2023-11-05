@@ -4,7 +4,7 @@ import { common } from './common.constant';
 import { ROLE_DATA } from './role.constant';
 
 export const ADMIN_TABLE = 'admin';
-export const ADMIN_TABLE_INDEXED_COLUMNS = ['email', 'roleId'];
+export const ADMIN_TABLE_INDEXED_COLUMNS = ['email', 'role'];
 
 const commonData = common();
 
