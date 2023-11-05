@@ -14,9 +14,11 @@
 	"engineStrict": true,
 	"scripts": {
 		"prepare": "echo 'installing husky...' && husky install",
+		"prestart:dev": "npm run migrate-dev up",
 		"start:dev": "nodemon --legacy-watch",
 		"build": "rimraf ./dist && tsc",
 		"postbuild": "node ./copy-assets",
+		"prestart": "npm run migrate up",
 		"start": "node .",
 		"lint": "eslint src --ext .ts",
 		"lint:fix": "eslint src --ext .ts --fix",
@@ -25,7 +27,10 @@
 		"prettify:watch": "onchange '**/*.{ts,js,json}' -- prettier --config .prettierrc --write {{changed}}",
 		"test": "make run-test-up",
 		"posttest": "make run-test-down",
+		"preexec-tests": "npm run migrate-dev up",
 		"exec-tests": "mocha -r ts-node/register '__tests__/**/*.spec.ts' --exit",
+		"migrate-dev": "migrate -f src/database/migrate.ts",
+		"migrate": "migrate -f dist/database/migrate.ts",
 		"commit": "commit"
 	},
 	"repository": {
@@ -75,6 +80,7 @@
 		"swagger-jsdoc": "^6.2.8",
 		"swagger-ui-express": "^4.6.0",
 		"toobusy-js": "^0.5.1",
+		"ts-migrate-mongoose": "^3.4.1",
 		"ws": "^8.13.0",
 		"zod": "^3.21.4"
 	},
@@ -96,7 +102,6 @@
 		"@types/jsonwebtoken": "^9.0.1",
 		"@types/lodash": "^4.14.191",
 		"@types/mocha": "^10.0.1",
-		"@types/mongoose": "^5.11.97",
 		"@types/morgan": "^1.9.4",
 		"@types/node": "^18.11.19",
 		"@types/node-cron": "^3.0.7",

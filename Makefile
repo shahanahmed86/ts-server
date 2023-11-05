@@ -26,6 +26,19 @@ run-test-down:
 	docker compose \
 	-f docker-compose.yml -f docker-compose.test.yml \
 	down -v
+run-test:
+	NODE_ENV="test" \
+	DB_HOST="localhost" REDIS_HOST="localhost" \
+	npm run exec-tests --ignore-scripts
+
+run-migrate-create:
+	DB_HOST="localhost" npm run migrate-dev create ${NAME}
+run-migrate-up:
+	DB_HOST="localhost" npm run migrate-dev up
+run-migrate-down:
+	DB_HOST="localhost" npm run migrate-dev down ${NAME}
+run-migrate-prune:
+	DB_HOST="localhost" npm run migrate-dev prune
 
 # production
 run-prod-up:
