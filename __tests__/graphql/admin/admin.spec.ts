@@ -13,10 +13,9 @@ describe('Graphql - Admin Authentication APIs', function () {
 		expect(res.body).to.have.a.property('errors').to.be.an('array');
 
 		const { body, header } = await login(); // should success
-		const cookie = getCookieValue(header);
-
 		expect(body.data.values).to.be.an('object');
 
+		const cookie = getCookieValue(header);
 		await logout(cookie);
 	});
 

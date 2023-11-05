@@ -3,7 +3,6 @@ export const LOGIN = `#graphql
     values: adminLogin(email: $email, password: $password) {
       id
       email
-      roleId
       role {
         id
         name
@@ -19,7 +18,6 @@ export const LOGGED_IN = `#graphql
     values: adminLoggedIn {
       id
       email
-      roleId
       role {
         id
         name

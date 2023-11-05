@@ -1,27 +1,21 @@
-import mongoose from 'mongoose';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { UserArgs } from '../../../src/@types/api.type';
-import { signup, login, logout, loggedIn, changePassword, updateProfile } from './user.helper';
+import { SIGNUP_DATA, UPDATE_USER_PROFILE, deleteUsers, getCookieValue } from '../../helper';
 import { uploadImage } from '../../images/images.helper';
-import { deleteUsers, getCookieValue } from '../../helper';
+import { changePassword, loggedIn, login, logout, signup, updateProfile } from './user.helper';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-export const SIGNUP_DATA: UserArgs = {
-	firstName: 'Shahan Ahmed',
-	lastName: 'Khan',
-	phone: '+923362122588',
-	gender: new mongoose.mongo.ObjectId('6537b3e9d964549cf9dda262'),
-};
-
 describe('Graphql - User Authentication APIs', function () {
 	it('user signup', async () => {
 		const { body: imageBody } = await uploadImage();
 
-		const { body } = await signup({ ...SIGNUP_DATA, avatar: imageBody.data });
+		const payload: UserArgs = { ...SIGNUP_DATA, avatar: imageBody.data };
+
+		const { body } = await signup(payload);
 		expect(body.data.values).to.be.a('string');
 	});
 
@@ -72,14 +66,9 @@ describe('Graphql - User Authentication APIs', function () {
 
 		const { body: imageBody } = await uploadImage();
 
-		const PAYLOAD: UserArgs = {
-			firstName: 'Shahan Ahmed updated',
-			lastName: 'Khan updated',
-			avatar: imageBody.data,
-			phone: '+923131126908',
-			gender: new mongoose.mongo.ObjectId('6537b4a305c9c80435922c5f'),
-		};
-		res = await updateProfile(PAYLOAD, cookie);
+		const payload: UserArgs = { ...UPDATE_USER_PROFILE, avatar: imageBody.data };
+
+		res = await updateProfile(payload, cookie);
 		expect(res.body.data.values).to.be.a('string');
 
 		await logout(cookie);

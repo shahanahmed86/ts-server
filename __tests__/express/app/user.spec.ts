@@ -1,28 +1,16 @@
-import mongoose from 'mongoose';
 import chai from 'chai';
 import { UserArgs } from '../../../src/@types/api.type';
+import { SIGNUP_DATA, UPDATE_USER_PROFILE, deleteUsers, getCookieValue } from '../../helper';
 import { uploadImage } from '../../images/images.helper';
 import { changePassword, loggedIn, login, logout, signup, updateProfile } from './user.helper';
-import { deleteUsers, getCookieValue } from '../../helper';
 
 const { expect } = chai;
-
-export const SIGNUP_DATA: UserArgs = {
-	firstName: 'Shahan Ahmed',
-	lastName: 'Khan',
-	phone: '+923362122588',
-	gender: new mongoose.mongo.ObjectId('6537b3e9d964549cf9dda262'),
-};
 
 describe('RESTful - App Authentication APIs', function () {
 	it('app signup', async () => {
 		const { body: uploadedFile } = await uploadImage();
 
-		const payload = Object.assign<UserArgs, UserArgs, UserArgs>({}, SIGNUP_DATA, {
-			avatar: uploadedFile.data,
-			email: 'shahan.khaan@gmail.com',
-			password: '123Abc456',
-		});
+		const payload: UserArgs = { ...SIGNUP_DATA, avatar: uploadedFile.data };
 		const res = await signup(payload); // should success
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(201);
@@ -65,15 +53,9 @@ describe('RESTful - App Authentication APIs', function () {
 
 		const { body: uploadedFile } = await uploadImage();
 
-		const PAYLOAD: UserArgs = {
-			firstName: 'Shahan Ahmed updated',
-			lastName: 'Khan updated',
-			avatar: uploadedFile.data,
-			phone: '+923131126908',
-			gender: new mongoose.mongo.ObjectId('6537b4a305c9c80435922c5f'),
-		};
+		const payload: UserArgs = { ...UPDATE_USER_PROFILE, avatar: uploadedFile.data };
 
-		const res = await updateProfile(PAYLOAD, cookie);
+		const res = await updateProfile(payload, cookie);
 		expect(res.error).to.be.false;
 		expect(res.status).to.be.equal(200);
 

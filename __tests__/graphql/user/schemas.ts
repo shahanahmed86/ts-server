@@ -8,7 +8,6 @@ export const LOGIN = `#graphql
       id
       lastName
       phone
-      roleId
       updatedAt
       gender {
         id
@@ -32,7 +31,6 @@ export const LOGGED_IN = `#graphql
       id
       lastName
       phone
-      roleId
       updatedAt
       gender {
         id
