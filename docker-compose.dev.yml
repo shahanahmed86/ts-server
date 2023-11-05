@@ -1,4 +1,6 @@
-version: '3.7'
+version: "3.8"
+
+name: app-dev
 
 services:
   web:
@@ -55,19 +57,19 @@ services:
       - '$DB_PORT:27017'
 
   db-gui:
-    image: mongoclient/mongoclient:4.0.0
+    image: mongo-express
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     ports:
-      - 8080:3000
+      - 8081:8081
     env_file:
       - .env
     environment:
-      MONGO_URL: mongodb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME?ssl=false
-    volumes:
-      - db_gui_data:/data/db
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=$DB_ROOT_USERNAME
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=$DB_ROOT_PASSWORD
+      - ME_CONFIG_MONGODB_URL=mongodb://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME
     networks:
       - app
 

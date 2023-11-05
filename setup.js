@@ -105,7 +105,7 @@ const questions = [
 		type: 'input',
 		name: 'DB_NAME',
 		message: "Please enter the name of Database's host like mydb, test or etc",
-		default: 'dev_database',
+		default: 'mydb',
 	},
 	{
 		type: 'input',

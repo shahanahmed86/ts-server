@@ -1,4 +1,6 @@
-version: '3.7'
+version: "3.8"
+
+name: app-test
 
 services:
   server:
@@ -7,34 +9,39 @@ services:
         condition: service_healthy
       cache:
         condition: service_healthy
-    env_file:
-      - .env
-    restart: 'no'
-    networks:
-      - app
     build:
       context: .
       target: test
+    restart: 'no'
+    networks:
+      - app
+    volumes:
+      - /app/node_modules
+    env_file:
+      - .env
     command: npm run exec-tests
 
   db:
+    restart: 'no'
+    volumes:
+      - db_test:/data/db
+      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
     env_file:
       - .env
     environment:
-      - POSTGRES_PASSWORD=$DB_PASS
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_DB=$DB_NAME
-    restart: 'no'
-    volumes:
-      - db_test:/var/lib/postgresql/data
+      - MONGO_INITDB_ROOT_USERNAME=$DB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE=$DB_NAME
+      - MONGO_USERNAME=$DB_USER
+      - MONGO_PASSWORD=$DB_PASSWORD
 
   cache:
-    restart: 'no'
-    env_file:
-      - .env
     command: redis-server --appendonly yes --requirepass $REDIS_PASSWORD
+    restart: 'no'
     volumes:
       - cache_test:/data
+    env_file:
+      - .env
 
 volumes:
   db_test:

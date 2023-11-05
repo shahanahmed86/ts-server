@@ -28,7 +28,8 @@ app.use(cookieParser());
 
 if (!inTest) {
 	// helmet
-	app.use(helmet());
+	const policy = inProd ? undefined : false;
+	app.use(helmet({ contentSecurityPolicy: policy }));
 
 	// too-busy
 	app.use(tooBusy);

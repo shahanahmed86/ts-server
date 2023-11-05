@@ -1,35 +1,29 @@
 # development
 run-dev-up:
 	docker compose \
-	-p app-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	up -d
 run-dev-rebuild:
 	docker compose \
-	-p app-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
-	up -d --build server --renew-anon-volumes --no-deps \
-	&& make run-dev-up
+	up -d --build server --renew-anon-volumes --no-deps && \
+	make run-dev-up
 run-dev-down:
 	docker compose \
-	-p app-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	down
 run-dev-down-hard:
 	docker compose \
-	-p app-dev \
 	-f docker-compose.yml -f docker-compose.dev.yml \
 	down -v
 
 # test
 run-test-up:
 	docker compose \
-	-p app-test \
 	-f docker-compose.yml -f docker-compose.test.yml \
 	up --abort-on-container-exit --renew-anon-volumes --build
 run-test-down:
 	docker compose \
-	-p app-test \
 	-f docker-compose.yml -f docker-compose.test.yml \
 	down -v
 
@@ -38,9 +32,3 @@ run-prod-up:
 	docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml app
 run-prod-down:
 	docker stack rm app
-
-# backup/restore database
-run-backup:
-	docker exec -t app-dev-db-1 pg_dumpall -c --username="admin" > dumps/`date +%d-%m-%Y"_"%H_%M_%S`.sql
-run-restore:
-	cat ${DUMP} | docker exec -i app-dev-db-1 psql --username="admin"

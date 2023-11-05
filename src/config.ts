@@ -35,8 +35,8 @@ export const Configs = z.object({
 		rootPassword: z.string().min(1).default('example'),
 		username: z.string().min(1).default('admin'),
 		password: z.string().min(1).default('lmelg8'),
-		name: z.string().min(1).default('dev_database'),
-		url: z.string().min(1).default('mongodb://admin:lmelg8@db:27017/dev_database'),
+		name: z.string().min(1).default('mydb'),
+		url: z.string().min(1).default('mongodb://admin:lmelg8@db:27017/mydb'),
 		logging: z.boolean().default(false),
 	}),
 	bcrypt: z.object({
