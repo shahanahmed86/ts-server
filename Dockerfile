@@ -1,4 +1,6 @@
 FROM node:18-bullseye-slim as base
+LABEL maintainer="Shahan <shahan.khaan@gmail.com>"
+LABEL description="This is a node-js boilerplate on typescript with GraphQL and ExpressJs."
 ENV NODE_ENV=production
 RUN apt-get update --fix-missing \
   && apt-get install -y --no-install-recommends postgresql postgresql-contrib curl \
